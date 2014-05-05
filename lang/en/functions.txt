@@ -1,0 +1,113 @@
+
+==== dokuwiki.getPagelist ====
+^ Name        | ''dokuwiki.getPagelist'' |
+^ Parameters  | (string) namespace, (array) options |
+^ Description | Lists all pages within a given namespace. The options are passed directly to [[xref>search_allpages()]]. |
+
+==== dokuwiki.search ====
+
+^ Name        | ''dokuwiki.search'' |
+^ Parameters  | (string) a query string as described on [[doku>search]] |
+^ Description | Performs a fulltext search |
+
+==== dokuwiki.appendPage ====
+^ Name        | ''dokuwiki.appendPage '' |
+^ Parameters  | (string) [[doku>:pagename]], (string) raw Wiki text, (array) attrs\\ Where ''attrs'' can contain the following:\\ <code>$attrs['sum'] = (string) change summary
+$attrs['minor'] = (boolean) minor
+</code> |
+^ Description | Appends text to a Wiki Page. |
+
+==== wiki.aclCheck ====
+^ Name        | ''wiki.aclCheck'' |
+^ Parameters  | (string) [[doku>:pagename]] |
+^ Description | Returns the permission of the given wikipage. |
+
+==== wiki.getPage ====
+^ Name        | ''wiki.getPage'' |
+^ Parameters  | (string) [[doku>:pagename]] |
+^ Description | Returns the raw Wiki text for a page. |
+
+
+==== wiki.getPageVersions ====
+^ Name        | ''wiki.getPageVersions'' |
+^ Parameters  | (string) [[doku>:pagename]] , (int) offset |
+^ Description | Returns the available versions of a Wiki page. The number of pages in the result is controlled \\ via the [[doku>:config:recent]] configuration setting. The offset can be used to list earlier versions in the history. |
+
+==== wiki.getPageInfo ====
+^ Name        | ''wiki.getPageInfo'' |
+^ Parameters  | (string) [[doku>:pagename]] |
+^ Description | Returns information about a Wiki page. |
+
+
+==== wiki.getPageHTML ====
+^ Name        | ''wiki.getPageHTML'' |
+^ Parameters  | (string) [[doku>:pagename]] |
+^ Description | Returns the rendered XHTML body of a Wiki page. |
+
+
+==== wiki.putPage ====
+^ Name        | ''wiki.putPage'' |
+^ Parameters  | (string) [[doku>:pagename]] , (string) raw Wiki text, (array) attrs\\ Where ''attrs'' can contain the following:\\ <code>$attrs['sum'] = (string) change summary
+$attrs['minor'] = (boolean) minor
+</code> |
+^ Description | Saves a Wiki Page. |
+
+==== wiki.listLinks ====
+^ Name        | ''wiki.listLinks'' |
+^ Parameters  | (string) [[doku>:pagename]] |
+^ Description | Returns a list of all links contained in a Wiki page. |
+
+==== wiki.getAllPages ====
+^ Name        | ''wiki.getAllPages'' |
+^ Description | Returns a list of all Wiki pages in the remote Wiki. |
+
+==== wiki.getBackLinks ====
+^ Name        | ''wiki.getBackLinks'' |
+^ Parameters  | (string) [[doku>:pagename]] |
+^ Description | Returns a list of [[doku>:backlinks]] of a Wiki page. |
+
+==== wiki.getRecentChanges ====
+^ Name        | ''wiki.getRecentChanges'' |
+^ Parameters  | (int) timestamp |
+^ Description | Returns a list of recent changes since given timestamp.\\ As stated in [[doku>:recent_changes]]: Only the most recent change for each page is listed, \\ regardless of how many times that page was changed. |
+
+==== wiki.getRecentMediaChanges ====
+^ Name        | ''wiki.getRecentMediaChanges'' |
+^ Parameters  | (int) timestamp |
+^ Description | Returns a list of recent changed media since given timestamp. |
+
+==== wiki.getAttachments ====
+^ Name        | ''wiki.getAttachments'' |
+^ Parameters  | (String) namespace, (array) options |
+^ Description | Returns a list of media files in a given namespace. The options are passed directly to [[xref>search_media()]]|
+
+==== wiki.getAttachment ====
+^ Name        | ''wiki.getAttachment'' |
+^ Parameters  | (String) id |
+^ Description | Returns the binary data of a media file |
+
+==== wiki.getAttachmentInfo ====
+^ Name        | ''wiki.getAttachmentInfo'' |
+^ Parameters  | (String) id |
+^ Description | Returns information about a media file |
+
+==== wiki.putAttachment ====
+^ Name        | ''wiki.putAttachment'' |
+^ Parameters  | (String) id, (base64) data, (array) params |
+^ Description | Uploads a file as a given media id. Available parameters are: \\ \\ <code>$params['ow'] = true if file is to overwrite an already existing media object of the given id</code> |
+
+==== wiki.deleteAttachment ====
+^ Name        | ''wiki.deleteAttachment'' |
+^ Parameters  | (String) id |
+^ Description | Deletes a file. Fails if the file is still referenced from any page in the wiki. |
+
+==== plugin.acl.addAcl ====
+^ Name        | ''plugin.acl.addAcl'' |
+^ Parameters  | (String) scope, (String) username, (int) permission |
+^ Description | Add an ACL rule. Use ''@groupname'' instead of ''user'' to add an ACL rule for a group |
+
+==== plugin.acl.delAcl ====
+^ Name        | ''plugin.acl.delAcl'' |
+^ Parameters  | (String) scope, (String) username |
+^ Description | Delete any ACL rule matching the given scope and user. Use ''@groupname'' instead of ''user'' to delete the ACL rules for the group|
+
