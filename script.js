@@ -1,12 +1,16 @@
 function xmlrpc() {         
        var options =  xcom_params();
+       if(!options) {
+          alert('No function selected');
+          return false; 
+        }  
        var func = options[0];
        var params =  'params=' + JSON.stringify(options);
        var jobj = xcom_json_ini('xcom_pwd','xcom_url','xcom_user');
        str =JSON.stringify(jobj); 
        params += '&credentials=' + str;      
   
-  alert(params + "\n" + func);
+ //alert(params + "\n" + func);
  // return; 
          jQuery.ajax({
             url: DOKU_BASE + 'lib/plugins/xcom/scripts/xml.php',
@@ -17,31 +21,22 @@ function xmlrpc() {
             success: function(data)
             {  
                data = decodeURIComponent(data);                  
-               alert(data);               
                xcom_show('xcom_results');
                xcom_print_data(func, data);   
-
-               // xcom_print_data('xcom_htm', data)
-               //  xcom_print_data('xcom_pre', data)
-              //    xcom_show('xcom_editable');                  
-                //  xcom_setValue('xcom_editable',data)                 
-
             }
         });
          return false;
 }
 function xcom_print_data(fn, data) {
    var id = 'xcom_pre';
-        switch(fn) {
-             case 'wiki.getPage': 
-             // (string) raw Wiki text                 
-            case 'wiki.getPageVersion': 
-             // (string) raw Wiki text 
+   
+        switch(fn) 
+         {
+             case 'wiki.getPage':                 // (string) raw Wiki text                 
+            case 'wiki.getPageVersion':      // (string) raw Wiki text 
               id = 'xcom_editable' ;
               break;   
-
-            case 'wiki.getPageHTML': 
-            // (string) rendered HTML 
+            case 'wiki.getPageHTML':      // (string) rendered HTML 
              id = 'xcom_htm';
                 break;
     }
@@ -58,22 +53,28 @@ function xcom_print_data(fn, data) {
 
 function xcom_params() {
     var params = new Array(),i=0;
+    var opts =  xcom_getInputValue('xcom_opts');
+    opts = opts.replace(/^\s+/,"");
+    opts = opts.replace(/\s+$/,"");
+    if(opts) opts = opts.split(/,/);
     
     var fn_sel = document.getElementById('xcom_sel');       
+    if(fn_sel.selectedIndex > 0) {
     params[i]  = fn_sel.options[fn_sel.selectedIndex].value;
+     }
+     else {
+       if(!opts) return false;      
+       return params[i] = opts;
+     }     
     
     var page = document.getElementById('xcom_pageid').value;
     if(page) params[++i] = page;
-     return params;
-   // return 'params=' + JSON.stringify(params);
+    if(opts.length) {
+          for(j=0;j<opts.length;j++) {
+            params[++i] = opts[j]; 
+          }
 }
-
-function _old_xcom_params() {
-    var params = "";
-    var fn_sel = document.getElementById('xcom_sel');   
-    params += 'fn='+encodeURIComponent(fn_sel.options[fn_sel.selectedIndex].value);
-    var page = document.getElementById('xcom_pageid').value;
-    if(page) params += '&page=' + encodeURIComponent(page);
+    fn_sel.selectedIndex = 0;
     return params;
 }
 
