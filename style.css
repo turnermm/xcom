@@ -2,4 +2,14 @@
    border: 1px solid gray;
    padding: 4px;
    margin-top: 8px;
+   overflow:scroll;
+   height: 450px;
 }
+
+div.xcom_editdiv  {
+     margin-top: 8px;
+}
+
+
+
+
