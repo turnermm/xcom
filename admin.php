@@ -51,7 +51,10 @@ class admin_plugin_xcom extends DokuWiki_Admin_Plugin {
       ptln('<button onclick=" xcom_toggle(\'#xcom_functions\')">'. $this->getLang('functions') .'</button>&nbsp;');       
       ptln('<button onclick=" xcom_toggle(\'#xcom_howto\')">'. $this->getLang('howto') .'</button>&nbsp;');       
       ptln('<button onclick="xmlrpc()">' .  $this->getLang('send')  .'</button>');  
-      ptln('<button style="float:right;"  onclick="xcom_toggle(\'#xcom_results\');">' . $this->getLang('results'). '</button>&nbsp;');
+      ptln('<button style="float:right;margin-left:8px;"  title="' . $this->getLang('results_tip').  '"onclick="xcom_toggle(\'#xcom_results\');">' . $this->getLang('results'). '</button>');
+       ptln('<button style="float:right;margin-left:8px;"  onclick="xcom_toggle(\'#xcom_editable\');">' . $this->getLang('editable'). '</button>');
+       ptln('<button style="float:right;margin-left:8px;"  onclick="xcom_toggle(\'#xcom_htm\');">' . $this->getLang('html'). '</button>');
+       ptln('<button style="float:right;margin-left:8px;"  onclick="xcom_toggle(\'#xcom_pre\');">' . $this->getLang('pre'). '</button>');
       ptln('</div>');
       
       ptln('<form action="'.wl($ID).'" method="post" name ="xcom_post">');            
@@ -81,8 +84,8 @@ class admin_plugin_xcom extends DokuWiki_Admin_Plugin {
          Output
       */  
       ptln('<div>');      
-      ptln('<div id = "xcom_results"  style ="display:none;border: 1px solid gray;" >');   //start results
-      ptln('<form><textarea  style ="display:none;margin:auto;"  name="xcom_editable" cols="120" rows="16" id = "xcom_editable" style="margin-bottom:8px;"></textarea></form>');    
+      ptln('<div id = "xcom_results"  style ="display:none;border: 1px solid #ddd;" >');   //start results
+      ptln('<div class="xcom_editdiv"><form><textarea  style ="display:none;margin:auto;"  name="xcom_editable" cols="120" rows="16" id = "xcom_editable" style="margin-bottom:8px;"></textarea></form></div>');    
       ptln('<div id = "xcom_pre"  style ="display:none;white-space:pre;" ></div>');  
       ptln('<div id = "xcom_htm"  style ="display:none;" ></div>');          
       ptln('<br /><button onclick="xcom_hide(\'xcom_results\');">' . $this->getLang('close'). '</button>&nbsp;</div>'); //close/end results
