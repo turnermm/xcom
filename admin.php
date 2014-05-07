@@ -92,9 +92,9 @@ class admin_plugin_xcom extends DokuWiki_Admin_Plugin {
       ptln( '</div>');  
       ptln('<div id = "xcom_status">');   
       ptln('Clear window:&nbsp;&nbsp;');
-      ptln('<a href="javascript:xcom_clear(\'xcom_pre\');void 0;">Code view</a>&nbsp;');
-      ptln('<a href="javascript:xcom_clear(\'xcom_htm\');void 0;">HTML view</a>&nbsp;');
-      ptln('<a href="javascript:xcom_clear(\'xcom_editable\');void 0;">Edit</a>&nbsp;&nbsp;');
+      ptln('<a href="javascript:xcom_clear(\'xcom_pre\');void 0;">[Code view]</a>&nbsp;');
+      ptln('<a href="javascript:xcom_clear(\'xcom_htm\');void 0;">[HTML view]</a>&nbsp;');
+      ptln('<a href="javascript:xcom_clear(\'xcom_editable\');void 0;">[Edit window]</a>&nbsp;&nbsp;');
       ptln( '</div>');        
     
     }

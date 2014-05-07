@@ -145,6 +145,7 @@ function xcom_clear(which) {
   }
   document.getElementById(which).innerHTML= '';   
   xcom_hide(which);
+ } 
 /**
       creates credentials array for Json encoding
 */

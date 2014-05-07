@@ -10,6 +10,17 @@ div.xcom_editdiv  {
      margin-top: 8px;
 }
 
+#xcom_status {
+   border-top: 1px solid gray;
+   padding: 4px;   
+   margin-top: 20px;
+   background-color: #eee
+}
 
+
+#xcom_status a:link {color:#333;}    /* unvisited link */
+#xcom_status a:visited {color:#333;} /* visited link */
+#xcom_status a:hover {color:#999;}   /* mouse over link */
+#xcom_status a:active {color:#000;}  /* selected link */
 
 
