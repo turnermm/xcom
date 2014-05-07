@@ -39,6 +39,27 @@ function xcom_print_data(fn, data) {
             case 'wiki.getPageHTML':      // (string) rendered HTML 
              id = 'xcom_htm';
                 break;
+            case 'dokuwiki.getPagelist':
+                 id = 'xcom_htm';
+                 var obj = jQuery.parseJSON(data);    
+                     if(obj) {   
+                         data = xcom_thead('id','rev', 'mtime' ,'size');
+                         for(var i in obj) {                            
+                              data +="\n<tr>";
+                             // alert(data);                            
+                             for(var j in obj[i]) {                                 
+                                 var r = obj[i][j];
+                                 data += xcom_td(j,r);            
+                             }
+                 
+            
+                        } 
+                    }                   
+                   data += xcom_tclose();
+                   
+                  
+                  
+                 break;           
     }
     
     var d = document.getElementById(id);  
@@ -49,6 +70,29 @@ function xcom_print_data(fn, data) {
         d.innerHTML=  data;
         }
     xcom_show(id);
+}
+
+function xcom_thead() {
+  var row = "<table>\n<tr>";
+  for (i=0; i<arguments.length; i++) {
+     row += '<th>' + arguments[i] + '</th>';
+  }
+   return row + "</tr>\n";
+}
+
+function xcom_td(type,val) {
+    if(type == 'rev' || type == 'mtime') {
+       var d = new Date(val);
+       val = d.toUTCString();
+    }
+    else if(type == 'size') {
+        val += ' bytes';
+    }
+     return '<td>' + val + '</td>'      
+}
+
+function xcom_tclose() {
+  return "</table>\n";
 }
 
 function xcom_params() {
@@ -94,6 +138,13 @@ function xcom_hide(which) {
   document.getElementById(which).style.display = 'none'; 
 }
 
+function xcom_clear(which) {
+  if(which == 'xcom_editable') {
+     xcom_setValue(which,"");     
+     return;
+  }
+  document.getElementById(which).innerHTML= '';   
+  xcom_hide(which);
 /**
       creates credentials array for Json encoding
 */

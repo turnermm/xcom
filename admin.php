@@ -90,7 +90,11 @@ class admin_plugin_xcom extends DokuWiki_Admin_Plugin {
       ptln('<div id = "xcom_htm"  style ="display:none;" ></div>');          
       ptln('<br /><button onclick="xcom_hide(\'xcom_results\');">' . $this->getLang('close'). '</button>&nbsp;</div>'); //close/end results
       ptln( '</div>');  
-      ptln('<div>');    
+      ptln('<div id = "xcom_status">');   
+      ptln('Clear window:&nbsp;&nbsp;');
+      ptln('<a href="javascript:xcom_clear(\'xcom_pre\');void 0;">Code view</a>&nbsp;');
+      ptln('<a href="javascript:xcom_clear(\'xcom_htm\');void 0;">HTML view</a>&nbsp;');
+      ptln('<a href="javascript:xcom_clear(\'xcom_editable\');void 0;">Edit</a>&nbsp;&nbsp;');
       ptln( '</div>');        
     
     }

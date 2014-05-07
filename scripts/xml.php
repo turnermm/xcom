@@ -13,20 +13,28 @@ if($client)
 {
    $time_start = time();   
     while(!call_user_func_array(array($client,"query"),$params)) {       
-        if((time() - $time_start ) > 6) {        
+        if((time() - $time_start ) > 20 ) {        
         break;
         }
        usleep(50);
    } 
   
    $retv = $client->getResponse();
+   $fn = $params[0] ;
    if(!$retv) {
-     $retv = "No page found\n";
+     $retv = "Query timed out\n";
    }
    elseif(is_array($retv)) { 
+    if($fn == 'dokuwiki.getPagelist') {
+       $retv = json_encode($retv);
+       echo $retv;
+       exit;
+    }
+    else  {
      $temp = print_r($retv,true);
       //file_put_contents(DOKU_INC . 'tempxmlrpc.txt',$temp);
       $retv = rawurlencode($temp);
+      }
    }
    else {
       $retv=rawurlencode($retv);
