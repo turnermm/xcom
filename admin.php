@@ -91,10 +91,12 @@ class admin_plugin_xcom extends DokuWiki_Admin_Plugin {
       ptln('<br /><button onclick="xcom_hide(\'xcom_results\');">' . $this->getLang('close'). '</button>&nbsp;</div>'); //close/end results
       ptln( '</div>');  
       ptln('<div id = "xcom_status">');   
-      ptln('Clear window:&nbsp;&nbsp;');
-      ptln('<a href="javascript:xcom_clear(\'xcom_pre\');void 0;">[Code view]</a>&nbsp;');
-      ptln('<a href="javascript:xcom_clear(\'xcom_htm\');void 0;">[HTML view]</a>&nbsp;');
-      ptln('<a href="javascript:xcom_clear(\'xcom_editable\');void 0;">[Edit window]</a>&nbsp;&nbsp;');
+      ptln($this->getLang('clear') . ':&nbsp;');
+      ptln('<a href="javascript:xcom_clear(\'xcom_pre\');void 0;">[' . $this->getLang('pre') . ']</a>&nbsp;');
+      ptln('<a href="javascript:xcom_clear(\'xcom_htm\');void 0;">[' . $this->getLang('html') . ']</a>&nbsp;');
+      ptln('<a href="javascript:xcom_clear(\'xcom_editable\');void 0;">[' . $this->getLang('editable') . ']</a>&nbsp;&nbsp;');
+      ptln('&nbsp;<span class="xcom_qslabel" id="xcom_qslabel">' . $this->getLang('query') . ':</span>');
+      ptln('&nbsp;<span class="xcom_qstatus" id="xcom_qstatus"></span>');
       ptln('<a href="javascript:xmlrpc();void 0;"><span class="xcom_send_link" onmouseover="xcom_rollover(this,1);" onmouseout="xcom_rollover(this,0);">[' .  $this->getLang('send') .']</span></a>&nbsp;&nbsp;');       
       ptln( '</div>');        
     

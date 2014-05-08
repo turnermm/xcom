@@ -1,9 +1,11 @@
 function xmlrpc() {         
+       xcom_clear('xcom_qstatus',false); 
        var options =  xcom_params();
        if(!options) {
           alert('No function selected');
           return false; 
         }  
+       xcom_query_status(options);
        var func = options[0];
        var params =  'params=' + JSON.stringify(options);
        var jobj = xcom_json_ini('xcom_pwd','xcom_url','xcom_user');
@@ -82,7 +84,7 @@ function xcom_thead() {
 
 function xcom_td(type,val) {
     if(type == 'rev' || type == 'mtime') {
-       var d = new Date(val);
+       var d = new Date(val*1000);
        val = d.toUTCString();
     }
     else if(type == 'size') {
@@ -122,6 +124,15 @@ function xcom_params() {
     return params;
 }
 
+function xcom_query_status(options) {
+  
+   if(typeof options != 'object'  && !(options instanceof Array)) return;
+      
+   var q = options.join(',&nbsp;');
+   document.getElementById('xcom_qstatus').innerHTML = q;
+   
+}
+
 function xcom_select(t) {
 //alert(t.selectedIndex + " \n" + t.options[t.selectedIndex].value);
 }
@@ -144,6 +155,7 @@ function xcom_clear(which) {
      return;
   }
   document.getElementById(which).innerHTML= '';   
+  if(arguments.length > 1) return;
   xcom_hide(which);
  } 
 /**
@@ -235,6 +247,7 @@ var xcom_opts=new Array(
 'wiki.aclCheck',
 'wiki.getPage',
 'wiki.getPageVersion',
+'wiki.getPageVersions',
 'wiki.getPageInfo',
 'wiki.getPageHTML',
 'wiki.putPage',

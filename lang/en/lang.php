@@ -28,3 +28,5 @@ $lang['editable'] = 'Edit';
 $lang['pre'] = 'Code view';
 $lang['html'] = 'HTML view';
 $lang['results_tip'] = 'Open/close output window';
+$lang['clear'] ='Clear';
+$lang['query'] ='Query';
