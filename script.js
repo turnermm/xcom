@@ -221,6 +221,12 @@ jQuery( document ).ready(function() {
        }
 });
 
+function xcom_rollover(el,underline) {
+if(underline) 
+  el.style.textDecoration ='underline';
+else el.style.textDecoration = 'none';
+
+}
 var xcom_opts=new Array(
 'dokuwiki.getPagelist',
 'dokuwiki.search',
