@@ -11,6 +11,7 @@ $client = xcom_connect($url,$credentials->user,$credentials->pwd ,0);
 
 if($client)
 {
+   $array_types = array('dokuwiki.getPagelist','wiki.getPageVersions');
    $time_start = time();   
     while(!call_user_func_array(array($client,"query"),$params)) {       
         if((time() - $time_start ) > 20 ) {        
@@ -25,7 +26,8 @@ if($client)
      $retv = "Query timed out\n";
    }
    elseif(is_array($retv)) { 
-    if($fn == 'dokuwiki.getPagelist') {
+    //if($fn == 'dokuwiki.getPagelist' ||  $fn == 'wiki.getPageVersions') {
+      if(in_array($fn,$array_types)) {  
        $retv = json_encode($retv);
        echo $retv;
        exit;

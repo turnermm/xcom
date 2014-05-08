@@ -31,7 +31,13 @@ function xmlrpc() {
 }
 function xcom_print_data(fn, data) {
    var id = 'xcom_pre';
-   
+   xcom_hide('xcom_pre');
+   xcom_hide('xcom_htm');
+   xcom_hide('xcom_editable');
+   var table_calls = {
+     'dokuwiki_getPagelist':  xcom_thead('id','rev', 'mtime' ,'size'),
+     'wiki_getPageVersions': xcom_thead('user','ip','type','sum','modified','version' ),
+   };
         switch(fn) 
          {
              case 'wiki.getPage':                 // (string) raw Wiki text                 
@@ -42,13 +48,14 @@ function xcom_print_data(fn, data) {
              id = 'xcom_htm';
                 break;
             case 'dokuwiki.getPagelist':
+            case 'wiki.getPageVersions':
                  id = 'xcom_htm';
                  var obj = jQuery.parseJSON(data);    
                      if(obj) {   
-                         data = xcom_thead('id','rev', 'mtime' ,'size');
+                        var fncall = fn.replace('.','_');                    
+                        data = table_calls[fncall];                       
                          for(var i in obj) {                            
                               data +="\n<tr>";
-                             // alert(data);                            
                              for(var j in obj[i]) {                                 
                                  var r = obj[i][j];
                                  data += xcom_td(j,r);            
@@ -83,7 +90,13 @@ function xcom_thead() {
 }
 
 function xcom_td(type,val) {
-    if(type == 'rev' || type == 'mtime') {
+
+    if(type == 'modified' && typeof val == 'object') {
+       var min =val['minute'] ?  val['minute'] : val['minut'];
+        var d = new Date( val['year'],val['month'],val['day'],val['hour'],val['minute'], val['second']);
+        val = d.toUTCString();
+    }
+    else if(type == 'rev' || type == 'mtime') {
        var d = new Date(val*1000);
        val = d.toUTCString();
     }
@@ -129,6 +142,9 @@ function xcom_query_status(options) {
    if(typeof options != 'object'  && !(options instanceof Array)) return;
       
    var q = options.join(',&nbsp;');
+   if(q.length > 70) {
+      q = q.substring(0,70) + '.  .  .';
+   }
    document.getElementById('xcom_qstatus').innerHTML = q;
    
 }
@@ -225,7 +241,10 @@ jQuery( document ).ready(function() {
        var sel = document.getElementById('xcom_sel');   
        for(i=0; i<xcom_opts.length; i++) {
            var text = xcom_opts[i].match(/^plugin\./) ? xcom_opts[i].replace(/^plugin\./,"") : (xcom_opts[i].split('.'))[1]; 
-           sel.add(new Option(text,xcom_opts[i]));
+            var newopt = new Option(text,xcom_opts[i]);
+            newopt.title = xcom_opts[i];
+            sel.add(newopt);
+           //sel.add(new Option(text,xcom_opts[i]));
        }
        var ini = { 'xcom_user': 'rpcuser', 'xcom_pwd': 'rpcpwd', 'xcom_url': 'http://192.168.0.77/adora'};  
         for (var key in ini) {  
