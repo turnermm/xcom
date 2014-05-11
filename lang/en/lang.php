@@ -30,3 +30,5 @@ $lang['html'] = 'HTML view';
 $lang['results_tip'] = 'Open/close output window';
 $lang['clear'] ='Clear';
 $lang['query'] ='Query';
+$lang['noconnection'] ='No connection.  Have you set the remote API config options?';
+$lang['timedout'] = 'Query timed out';

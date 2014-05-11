@@ -1,7 +1,8 @@
 <?php
 define('DOKU_INC', realpath(dirname(__FILE__)) . '/../../../../');
 require_once(DOKU_INC.'inc/init.php');
-
+session_write_close();
+$helper =  plugin_load('helper', 'xcom');
 $credentials = json_decode($_REQUEST['credentials']);
 $url = rtrim ($credentials->url,'/') . '/';
 //$page = array('lock'=>array('entities'), 'unlock'=>array());
@@ -11,7 +12,7 @@ $client = xcom_connect($url,$credentials->user,$credentials->pwd ,0);
 
 if($client)
 {
-   $array_types = array('dokuwiki.getPagelist','wiki.getPageVersions');
+   $array_types = array('dokuwiki.getPagelist','wiki.getPageVersions','wiki.getPageInfo','wiki.getAllPages');
    $time_start = time();   
     while(!call_user_func_array(array($client,"query"),$params)) {       
         if((time() - $time_start ) > 20 ) {        
@@ -23,10 +24,9 @@ if($client)
    $retv = $client->getResponse();
    $fn = $params[0] ;
    if(!$retv) {
-     $retv = "Query timed out\n";
+     $retv = $helper->getLang('timedout');
    }
    elseif(is_array($retv)) { 
-    //if($fn == 'dokuwiki.getPagelist' ||  $fn == 'wiki.getPageVersions') {
       if(in_array($fn,$array_types)) {  
        $retv = json_encode($retv);
        echo $retv;
@@ -48,6 +48,7 @@ if($client)
 }
 else {
 
+    echo  $helper->getLang('noconnection') . "\n";
 }
 
 function xcom_connect($url,$user,$pwd, $debug=false) {

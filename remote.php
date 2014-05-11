@@ -29,7 +29,7 @@ class remote_plugin_xcom extends DokuWiki_Remote_Plugin {
           if(@file_exists($path)) {
               $inf_str = file_get_contents($path);
               $inf = @unserialize($inf_str);         
-
+              if(!$inf['current']['relation']['media']) return "no media data in $path";
              return array_keys($inf['current']['relation']['media']);
                          
           }       

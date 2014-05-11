@@ -1,6 +1,6 @@
 function xmlrpc() {         
        xcom_clear('xcom_qstatus',false); 
-       var options =  xcom_params();
+       var options =  xcom_params();       
        if(!options) {
           alert('No function selected');
           return false; 
@@ -13,7 +13,7 @@ function xmlrpc() {
        params += '&credentials=' + str;      
   
  //alert(params + "\n" + func);
- // return; 
+  //return; 
          jQuery.ajax({
             url: DOKU_BASE + 'lib/plugins/xcom/scripts/xml.php',
             async: false,
@@ -22,13 +22,14 @@ function xmlrpc() {
             dataType: 'html',         
             success: function(data)
             {  
-               data = decodeURIComponent(data);                  
+               data = decodeURIComponent(data);                                              
                xcom_show('xcom_results');
-               xcom_print_data(func, data);   
+               xcom_print_data(func, data); 
             }
         });
          return false;
 }
+
 function xcom_print_data(fn, data) {
    var id = 'xcom_pre';
    xcom_hide('xcom_pre');
@@ -37,39 +38,45 @@ function xcom_print_data(fn, data) {
    var table_calls = {
      'dokuwiki_getPagelist':  xcom_thead('id','rev', 'mtime' ,'size'),
      'wiki_getPageVersions': xcom_thead('user','ip','type','sum','modified','version' ),
+     'wiki_getPageInfo': xcom_thead('name','lastModified','author','version' ),
+     'wiki_getAllPages': xcom_thead('id', 'perms', 'size', 'lastModified'),
    };
         switch(fn) 
          {
              case 'wiki.getPage':                 // (string) raw Wiki text                 
             case 'wiki.getPageVersion':      // (string) raw Wiki text 
-              id = 'xcom_editable' ;
-              break;   
+                  id = 'xcom_editable' ;
+                  break;   
             case 'wiki.getPageHTML':      // (string) rendered HTML 
-             id = 'xcom_htm';
-                break;
+                 id = 'xcom_htm';
+                 break;
             case 'dokuwiki.getPagelist':
             case 'wiki.getPageVersions':
+            case 'wiki.getPageInfo':
+            case 'wiki.getAllPages':
                  id = 'xcom_htm';
-                 var obj = jQuery.parseJSON(data);    
+                 try {
+                     var obj = jQuery.parseJSON(data);                     
+                 }
+                 catch(e) {
+                    id = 'xcom_pre';
+                     break;
+                 }
                      if(obj) {   
-                        var fncall = fn.replace('.','_');                    
-                        data = table_calls[fncall];                       
-                         for(var i in obj) {                            
-                              data +="\n<tr>";
-                             for(var j in obj[i]) {                                 
-                                 var r = obj[i][j];
-                                 data += xcom_td(j,r);            
-                             }
-                 
-            
-                        } 
+                        var fncall = fn.replace('.','_');                                 
+                        data = table_calls[fncall]; 
+                         if(fn == 'wiki.getPageInfo' ) {
+                                data +=  xcom_singledim(obj);
+                         } else {
+                               data+=xcom_twodim(obj);
+                        }
                     }                   
                    data += xcom_tclose();
-                   
-                  
-                  
-                 break;           
-    }
+                 break;   
+                 
+               default:     
+                   break;                  
+        }   // end switch
     
     var d = document.getElementById(id);  
     if(id == 'xcom_editable') {
@@ -81,8 +88,30 @@ function xcom_print_data(fn, data) {
     xcom_show(id);
 }
 
+function xcom_twodim(obj) {
+        var data = "";
+        
+        for(var i in obj) {      
+         data +="\n<tr>";                                                        
+         for(var j in obj[i]) {                                 
+             var r = obj[i][j];
+             data += xcom_td(j,r);            
+         } 
+       }
+       
+       return data;
+}
+
+function xcom_singledim(obj) {
+         var data ="\n<tr>";   
+         for(var i in obj) { 
+           data += xcom_td(i,obj[i]);            
+         }
+         return data;
+}
+
 function xcom_thead() {
-  var row = "<table>\n<tr>";
+  var row = "<table class ='xcom_center'>\n<tr>";
   for (i=0; i<arguments.length; i++) {
      row += '<th>' + arguments[i] + '</th>';
   }
@@ -90,9 +119,9 @@ function xcom_thead() {
 }
 
 function xcom_td(type,val) {
-
-    if(type == 'modified' && typeof val == 'object') {
-       var min =val['minute'] ?  val['minute'] : val['minut'];
+//alert(type + " " + val);
+    if(type == 'modified' || type == 'lastModified' && typeof val == 'object') {    
+        var min =val['minute'] ?  val['minute'] : val['minut'];
         var d = new Date( val['year'],val['month'],val['day'],val['hour'],val['minute'], val['second']);
         val = d.toUTCString();
     }
@@ -103,6 +132,7 @@ function xcom_td(type,val) {
     else if(type == 'size') {
         val += ' bytes';
     }
+    if(typeof val == 'object') val = "none";
      return '<td>' + val + '</td>'      
 }
 
@@ -112,31 +142,34 @@ function xcom_tclose() {
 
 function xcom_params() {
     var params = new Array(),i=0;
-    var opts =  xcom_getInputValue('xcom_opts');
+    var opts =  xcom_getInputValue('xcom_opts');  //Params from User-created Query/Options box
     opts = opts.replace(/^\s+/,"");
     opts = opts.replace(/\s+$/,"");
     if(opts) opts = opts.split(/,/);
-    
+
     var fn_sel = document.getElementById('xcom_sel');       
     if(fn_sel.selectedIndex > 0) {
-    params[i]  = fn_sel.options[fn_sel.selectedIndex].value;
+        params[i]  = fn_sel.options[fn_sel.selectedIndex].value;
      }
      else {
        if(!opts) return false;      
        return params[i] = opts;
      }     
-    
+  
     var page = document.getElementById('xcom_pageid').value;
     if(page) params[++i] = page;
     if(opts.length) {
           for(j=0;j<opts.length;j++) {
             params[++i] = opts[j]; 
           }
-}
+    }
     fn_sel.selectedIndex = 0;
-    return params;
+    return params; 
 }
 
+/**
+  Format and output query on status line
+*/
 function xcom_query_status(options) {
   
    if(typeof options != 'object'  && !(options instanceof Array)) return;
@@ -246,7 +279,7 @@ jQuery( document ).ready(function() {
             sel.add(newopt);
            //sel.add(new Option(text,xcom_opts[i]));
        }
-       var ini = { 'xcom_user': 'rpcuser', 'xcom_pwd': 'rpcpwd', 'xcom_url': 'http://192.168.0.77/adora'};  
+       var ini = { 'xcom_user': 'rpcuser', 'xcom_pwd': 'rpcpwd', 'xcom_url': 'http://192.168.0.77/adora'};        
         for (var key in ini) {  
            xcom_setValue(key,ini[key]);        
        }
@@ -277,5 +310,4 @@ var xcom_opts=new Array(
 'wiki.putAttachment',
 'plugin.acl.addAcl',
 'plugin.acl.delAcl'
-
 );
