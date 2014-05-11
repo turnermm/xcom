@@ -28,3 +28,6 @@ a span.xcom_send_link { color: #2b73b7; float:right;  margin-right:24px;}
 table.xcom_center {
     margin:auto;    
   }
+ td.xcom_snippet, td.xcom_none  {
+   border-bottom: 2px solid black; 
+}

@@ -40,6 +40,7 @@ function xcom_print_data(fn, data) {
      'wiki_getPageVersions': xcom_thead('user','ip','type','sum','modified','version' ),
      'wiki_getPageInfo': xcom_thead('name','lastModified','author','version' ),
      'wiki_getAllPages': xcom_thead('id', 'perms', 'size', 'lastModified'),
+     'dokuwiki_search': xcom_thead('id', 'score', 'rev', 'mtime','size')
    };
         switch(fn) 
          {
@@ -54,6 +55,7 @@ function xcom_print_data(fn, data) {
             case 'wiki.getPageVersions':
             case 'wiki.getPageInfo':
             case 'wiki.getAllPages':
+            case 'dokuwiki.search':
                  id = 'xcom_htm';
                  try {
                      var obj = jQuery.parseJSON(data);                     
@@ -68,7 +70,7 @@ function xcom_print_data(fn, data) {
                          if(fn == 'wiki.getPageInfo' ) {
                                 data +=  xcom_singledim(obj);
                          } else {
-                               data+=xcom_twodim(obj);
+                               data+=xcom_twodim(obj,fn);
                         }
                     }                   
                    data += xcom_tclose();
@@ -88,14 +90,14 @@ function xcom_print_data(fn, data) {
     xcom_show(id);
 }
 
-function xcom_twodim(obj) {
+function xcom_twodim(obj,func) {
         var data = "";
         
         for(var i in obj) {      
          data +="\n<tr>";                                                        
          for(var j in obj[i]) {                                 
              var r = obj[i][j];
-             data += xcom_td(j,r);            
+             data += xcom_td(j,r,func);            
          } 
        }
        
@@ -118,8 +120,8 @@ function xcom_thead() {
    return row + "</tr>\n";
 }
 
-function xcom_td(type,val) {
-//alert(type + " " + val);
+function xcom_td(type,val,fn) {
+
     if(type == 'modified' || type == 'lastModified' && typeof val == 'object') {    
         var min =val['minute'] ?  val['minute'] : val['minut'];
         var d = new Date( val['year'],val['month'],val['day'],val['hour'],val['minute'], val['second']);
@@ -132,6 +134,13 @@ function xcom_td(type,val) {
     else if(type == 'size') {
         val += ' bytes';
     }
+     else if(type == 'id'  && fn=='dokuwiki.search') {
+          return '<td class ="xcom_id">'+val +'</td>';
+    }
+    else if(type == 'snippet') {
+        return '<tr><td class="xcom_none">&nbsp;</td><td colspan = "4" class="xcom_snippet">' + val + '</td>';
+    }
+    else if(type == 'title' && fn=='dokuwiki.search') return "";  //skip title, screws up the table design
     if(typeof val == 'object') val = "none";
      return '<td>' + val + '</td>'      
 }
@@ -157,7 +166,13 @@ function xcom_params() {
      }     
   
     var page = document.getElementById('xcom_pageid').value;
-    if(page) params[++i] = page;
+  
+    if(page)  {       
+       if(params[0] == 'dokuwiki.search') {  // add page to search query
+             opts[0] =  opts[0] + " " + page;            
+       }
+       else params[++i] = page;
+    }   
     if(opts.length) {
           for(j=0;j<opts.length;j++) {
             params[++i] = opts[j]; 

@@ -12,7 +12,7 @@ $client = xcom_connect($url,$credentials->user,$credentials->pwd ,0);
 
 if($client)
 {
-   $array_types = array('dokuwiki.getPagelist','wiki.getPageVersions','wiki.getPageInfo','wiki.getAllPages');
+   $array_types = array('dokuwiki.getPagelist','wiki.getPageVersions','wiki.getPageInfo','wiki.getAllPages', 'dokuwiki.search');
    $time_start = time();   
     while(!call_user_func_array(array($client,"query"),$params)) {       
         if((time() - $time_start ) > 20 ) {        
