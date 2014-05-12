@@ -84,6 +84,7 @@ class admin_plugin_xcom extends DokuWiki_Admin_Plugin {
          Output
       */  
       ptln('<div>');      
+      ptln ('<div class="xcom_view_status" id="xcom_view"></div>');
       ptln('<div id = "xcom_results"  style ="display:none;border: 1px solid #ddd;" >');   //start results
       ptln('<div class="xcom_editdiv"><form><textarea  style ="display:none;margin:auto;"  name="xcom_editable" cols="120" rows="16" id = "xcom_editable" style="margin-bottom:8px;"></textarea></form></div>');    
       ptln('<div id = "xcom_pre"  style ="display:none;white-space:pre;" ></div>');  

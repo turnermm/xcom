@@ -1,4 +1,8 @@
 function xmlrpc() {         
+       xcom_hide('xcom_pre');
+       xcom_hide('xcom_htm');
+       xcom_hide('xcom_editable');
+       xcom_hide('xcom_view');
        xcom_clear('xcom_qstatus',false); 
        var options =  xcom_params();       
        if(!options) {
@@ -32,9 +36,7 @@ function xmlrpc() {
 
 function xcom_print_data(fn, data) {
    var id = 'xcom_pre';
-   xcom_hide('xcom_pre');
-   xcom_hide('xcom_htm');
-   xcom_hide('xcom_editable');
+
    var table_calls = {
      'dokuwiki_getPagelist':  xcom_thead('id','rev', 'mtime' ,'size'),
      'wiki_getPageVersions': xcom_thead('user','ip','type','sum','modified','version' ),
@@ -88,6 +90,7 @@ function xcom_print_data(fn, data) {
         d.innerHTML=  data;
         }
     xcom_show(id);
+    xcom_display_view_title(id); 
 }
 
 function xcom_twodim(obj,func) {
@@ -248,7 +251,12 @@ function xcom_setValue(item,val) {
    d.value = val; 
 }
 
-
+function xcom_display_view_title(id) {
+  var titles = {'xcom_htm': 'HTML View', 'xcom_pre': 'Code View', 'xcom_editable': 'Editor' };
+  xcom_show("xcom_view");
+  var div = document.getElementById("xcom_view");
+  div.innerHTML = titles[id]; 
+} 
 /**
    JSON.stringify combines elements from both of below:
       http://blogs.sitepointstatic.com/examples/tech/json-serialization/json-serialization.js

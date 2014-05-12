@@ -17,6 +17,11 @@ div.xcom_editdiv  {
    background-color: #eee
 }
 
+div.xcom_view_status {
+   background-color: #eee;
+   text-align:center;
+   margin-top: 8px;
+}
 
 #xcom_status a:link {color:#333;}    /* unvisited link */
 #xcom_status a:visited {color:#333;} /* visited link */
