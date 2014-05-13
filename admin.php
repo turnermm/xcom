@@ -51,10 +51,12 @@ class admin_plugin_xcom extends DokuWiki_Admin_Plugin {
       ptln('<button onclick=" xcom_toggle(\'#xcom_functions\')">'. $this->getLang('functions') .'</button>&nbsp;');       
       ptln('<button onclick=" xcom_toggle(\'#xcom_howto\')">'. $this->getLang('howto') .'</button>&nbsp;');       
       ptln('<button class="xcom_send_but" onclick="xmlrpc()">' .  $this->getLang('send')  .'</button>');  
-      ptln('<button style="float:right;margin-left:8px;"  title="' . $this->getLang('results_tip').  '"onclick="xcom_toggle(\'#xcom_results\');">' . $this->getLang('results'). '</button>');
+      
+      ptln('<button style="float:right;margin-left:8px;"  title="' . $this->getLang('results_tip').  '"onclick="xcom_show(\'xcom_results\');">' . $this->getLang('results'). '</button>');
        ptln('<button style="float:right;margin-left:8px;"  onclick="xcom_toggle(\'#xcom_editable\');">' . $this->getLang('editable'). '</button>');
        ptln('<button style="float:right;margin-left:8px;"  onclick="xcom_toggle(\'#xcom_htm\');">' . $this->getLang('html'). '</button>');
        ptln('<button style="float:right;margin-left:8px;"  onclick="xcom_toggle(\'#xcom_pre\');">' . $this->getLang('pre'). '</button>');
+      ptln('<button style="float:right;margin-left:8px;"  title="' . $this->getLang('results_tip').  '"onclick="xcom_hide_all_views();">' . $this->getLang('hideallviews'). '</button>');      
       ptln('</div>');
       
       ptln('<form action="'.wl($ID).'" method="post" name ="xcom_post">');            
@@ -84,13 +86,17 @@ class admin_plugin_xcom extends DokuWiki_Admin_Plugin {
          Output
       */  
       ptln('<div>');      
-      ptln ('<div class="xcom_view_status" id="xcom_view"></div>');
+     // ptln ('<div class="xcom_view_status" id="xcom_view"></div>');
       ptln('<div id = "xcom_results"  style ="display:none;border: 1px solid #ddd;" >');   //start results
-      ptln('<div class="xcom_editdiv"><form><textarea  style ="display:none;margin:auto;"  name="xcom_editable" cols="120" rows="16" id = "xcom_editable" style="margin-bottom:8px;"></textarea></form></div>');    
-      ptln('<div id = "xcom_pre"  style ="display:none;white-space:pre;" ></div>');  
-      ptln('<div id = "xcom_htm"  style ="display:none;" ></div>');          
+      ptln('<div id = "xcom_editable_title" style ="display:none;">' . $this->getLang('editable') . '</div><div class="xcom_editdiv"><form><textarea  style ="display:none;margin:auto;"  name="xcom_editable" cols="120" rows="16" id = "xcom_editable" style="margin-bottom:8px;"></textarea></form></div>');    
+      ptln('<div id = "xcom_pre_title" style ="display:none;">' . $this->getLang('pre') . '</div><div id = "xcom_pre"  style ="display:none;white-space:pre;" ></div>');  
+      ptln('<div id = "xcom_htm_title" style ="display:none;">' . $this->getLang('html') . '</div><div id = "xcom_htm"  style ="display:none;" ></div>');          
       ptln('<br /><button onclick="xcom_hide(\'xcom_results\');">' . $this->getLang('close'). '</button>&nbsp;</div>'); //close/end results
       ptln( '</div>');  
+      
+      /**
+        Status Bar
+      */
       ptln('<div id = "xcom_status">');   
       ptln($this->getLang('clear') . ':&nbsp;');
       ptln('<a href="javascript:xcom_clear(\'xcom_pre\');void 0;">[' . $this->getLang('pre') . ']</a>&nbsp;');

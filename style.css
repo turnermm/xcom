@@ -17,7 +17,7 @@ div.xcom_editdiv  {
    background-color: #eee
 }
 
-div.xcom_view_status {
+div.xcom_view_status, #xcom_htm_title, #xcom_pre_title, #xcom_editable_title  {
    background-color: #eee;
    text-align:center;
    margin-top: 8px;

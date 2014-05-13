@@ -1,8 +1,11 @@
 function xmlrpc() {         
-       xcom_hide('xcom_pre');
-       xcom_hide('xcom_htm');
-       xcom_hide('xcom_editable');
+       xcom_hide_all_views();
        xcom_hide('xcom_view');
+       xcom_hide('xcom_pre_title');
+       xcom_hide('xcom_htm_title');
+       xcom_hide('xcom_editable_title');
+       
+
        xcom_clear('xcom_qstatus',false); 
        var options =  xcom_params();       
        if(!options) {
@@ -77,7 +80,10 @@ function xcom_print_data(fn, data) {
                     }                   
                    data += xcom_tclose();
                  break;   
-                 
+             case 'wiki.putPage':  
+             case 'dokuwiki.appendPage':  
+                  id == 'xcom_editable';
+                  break;
                default:     
                    break;                  
         }   // end switch
@@ -90,7 +96,6 @@ function xcom_print_data(fn, data) {
         d.innerHTML=  data;
         }
     xcom_show(id);
-    xcom_display_view_title(id); 
 }
 
 function xcom_twodim(obj,func) {
@@ -176,6 +181,11 @@ function xcom_params() {
        }
        else params[++i] = page;
     }   
+    if(params[0]=='wiki.putPage' || params[0]=='dokuwiki.appendPage') {
+            params[++i] =  encodeURIComponent(xcom_getInputValue('xcom_editable') );
+            params[++i] = {'sum':"", 'minor':""};
+     }     
+    
     if(opts.length) {
           for(j=0;j<opts.length;j++) {
             params[++i] = opts[j]; 
@@ -206,6 +216,8 @@ function xcom_select(t) {
 
 function xcom_toggle(which) {
   jQuery(which).toggle();
+  var title = which + '_title';
+  jQuery(title).toggle();  
 }
 
 function xcom_show(which) {
@@ -214,6 +226,16 @@ function xcom_show(which) {
 
 function xcom_hide(which) {
   document.getElementById(which).style.display = 'none'; 
+}
+function xcom_hide_all_views() {
+    xcom_hide('xcom_editable');
+    xcom_hide('xcom_pre');
+    xcom_hide('xcom_htm');
+    xcom_hide('xcom_editable_title');
+    xcom_hide('xcom_pre_title');
+    xcom_hide('xcom_htm_title');
+    xcom_hide('xcom_results');
+    
 }
 
 function xcom_clear(which) {
@@ -251,12 +273,7 @@ function xcom_setValue(item,val) {
    d.value = val; 
 }
 
-function xcom_display_view_title(id) {
-  var titles = {'xcom_htm': 'HTML View', 'xcom_pre': 'Code View', 'xcom_editable': 'Editor' };
-  xcom_show("xcom_view");
-  var div = document.getElementById("xcom_view");
-  div.innerHTML = titles[id]; 
-} 
+
 /**
    JSON.stringify combines elements from both of below:
       http://blogs.sitepointstatic.com/examples/tech/json-serialization/json-serialization.js
@@ -295,6 +312,7 @@ JSON.stringify = JSON.stringify || function (obj) {
 
 jQuery( document ).ready(function() {     
        var sel = document.getElementById('xcom_sel');   
+       if(sel) {
        for(i=0; i<xcom_opts.length; i++) {
            var text = xcom_opts[i].match(/^plugin\./) ? xcom_opts[i].replace(/^plugin\./,"") : (xcom_opts[i].split('.'))[1]; 
             var newopt = new Option(text,xcom_opts[i]);
@@ -305,6 +323,7 @@ jQuery( document ).ready(function() {
        var ini = { 'xcom_user': 'rpcuser', 'xcom_pwd': 'rpcpwd', 'xcom_url': 'http://192.168.0.77/adora'};        
         for (var key in ini) {  
            xcom_setValue(key,ini[key]);        
+           }
        }
 });
 
