@@ -220,6 +220,10 @@ function xcom_select(t) {
 
 function xcom_toggle(which) {
   jQuery(which).toggle();
+  var state = jQuery(which).css('display');  
+  if(state != 'none')  {
+      xcom_show('xcom_results');
+  }
   var title = which + '_title';
   jQuery(title).toggle();  
 }
