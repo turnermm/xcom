@@ -182,7 +182,7 @@ function xcom_params() {
        else params[++i] = page;
     }   
     if(params[0]=='wiki.putPage' || params[0]=='dokuwiki.appendPage') {
-            params[++i] =  encodeURIComponent(xcom_getInputValue('xcom_editable') );
+            params[++i] = xcom_getInputValue('xcom_editable'); // encodeURIComponent(xcom_getInputValue('xcom_editable') );            
             params[++i] = {'sum':"", 'minor':""};
      }     
     
@@ -221,11 +221,13 @@ function xcom_toggle(which) {
 }
 
 function xcom_show(which) {
-   document.getElementById(which).style.display = 'block'; 
+   var d = document.getElementById(which);
+   if(d) d.style.display = 'block'; 
 }
 
 function xcom_hide(which) {
-  document.getElementById(which).style.display = 'none'; 
+  var d = document.getElementById(which);
+  if(d) d.style.display = 'none'; 
 }
 function xcom_hide_all_views() {
     xcom_hide('xcom_editable');

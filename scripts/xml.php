@@ -5,24 +5,45 @@ session_write_close();
 $helper =  plugin_load('helper', 'xcom');
 $credentials = json_decode($_REQUEST['credentials']);
 $url = rtrim ($credentials->url,'/') . '/';
-//$page = array('lock'=>array('entities'), 'unlock'=>array());
+
+
 
 $params = json_decode($_REQUEST['params']);
 $client = xcom_connect($url,$credentials->user,$credentials->pwd ,0);
 
+$secs = 30;
+$fn = $params[0] ;
+    
 if($client)
 {
+
+   if($fn =='wiki.putPage' || $fn=='dokuwiki.appendPage') {
+        if(!xcom_lock($params[1], true, $client)) {
+           echo "Lock failed\n";
+           exit;
+        }
+    }    
+
    $array_types = array('dokuwiki.getPagelist','wiki.getPageVersions','wiki.getPageInfo','wiki.getAllPages', 'dokuwiki.search');
    $time_start = time();   
-    while(!call_user_func_array(array($client,"query"),$params)) {       
-        if((time() - $time_start ) > 20 ) {        
+   $resp = "";
+   
+    while(!($resp = call_user_func_array(array($client,"query"),$params))){       
+        if((time() - $time_start ) > $secs ) {        
         break;
         }
        usleep(50);
    } 
   
+ 
    $retv = $client->getResponse();
-   $fn = $params[0] ;
+       if($fn =='wiki.putPage' || $fn=='dokuwiki.appendPage') {
+         $retv = "retv: $retv resp: $resp";
+       }
+   if($fn =='wiki.putPage' || $fn=='dokuwiki.appendPage') {
+        xcom_lock($params[1], false, $client);
+   }   
+   
    if(!$retv) {
      $retv = $helper->getLang('timedout');
    }
@@ -61,3 +82,28 @@ function xcom_connect($url,$user,$pwd, $debug=false) {
 
 }
 
+function xcom_lock($page, $lock, $client) { 
+
+ $locks = array('lock'=>array(), 'unlock'=>array()) ;
+ if($lock) {
+   $locks['lock'][] = $page;
+   echo "locking\n";
+ }
+ else {
+ echo "unlocking\n";
+       $locks['unlock'][] = $page;
+ }
+   while(!$client->query('dokuwiki.setLocks',$locks));  
+   
+  $data = $client->getResponse();  
+  
+  if(in_array($page,$data['locked'])) {   
+     return true;  
+   } 
+  if(in_array($page,$data['unlocked'])) { 
+     return true;  
+   } 
+
+   return false;
+
+}
