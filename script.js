@@ -196,7 +196,7 @@ function xcom_params() {
 }
 
 function xcom_escape(data) {
-   data = data.replace(/&/g,"%26amp;");
+   data = data.replace(/&/g,"%26");
    return  data;
 }
 /**
