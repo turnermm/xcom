@@ -182,7 +182,7 @@ function xcom_params() {
        else params[++i] = page;
     }   
     if(params[0]=='wiki.putPage' || params[0]=='dokuwiki.appendPage') {
-            params[++i] = xcom_getInputValue('xcom_editable'); // encodeURIComponent(xcom_getInputValue('xcom_editable') );            
+            params[++i] = xcom_escape(xcom_getInputValue('xcom_editable'));             
             params[++i] = {'sum':"", 'minor':""};
      }     
     
@@ -195,6 +195,10 @@ function xcom_params() {
     return params; 
 }
 
+function xcom_escape(data) {
+   data = data.replace(/&/g,"%26amp;");
+   return  data;
+}
 /**
   Format and output query on status line
 */

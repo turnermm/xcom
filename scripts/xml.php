@@ -11,7 +11,7 @@ $url = rtrim ($credentials->url,'/') . '/';
 $params = json_decode($_REQUEST['params']);
 $client = xcom_connect($url,$credentials->user,$credentials->pwd ,0);
 
-$secs = 30;
+$secs = 20;
 $fn = $params[0] ;
     
 if($client)
