@@ -87,7 +87,7 @@ function xcom_lock($page, $lock, $client) {
  $locks = array('lock'=>array(), 'unlock'=>array()) ;
  if($lock) {
    $locks['lock'][] = $page;
-   echo "locking\n";
+   echo "locking $page\n";
  }
  else {
  echo "unlocking\n";

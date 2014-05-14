@@ -6,7 +6,7 @@ require_once('inc/init.php');
  //$client->debug = 1; 
 
 if($ok) {  
-   	while(!$client->query('wiki.getAttachment','current:jenny.png'));
+    while(!$client->query('wiki.getAttachment','current:jenny.png'));
     $data = $client->getResponse();
     save_img('jenny.png',$data); 
      exit;
