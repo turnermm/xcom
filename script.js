@@ -105,6 +105,8 @@ function xcom_print_data(fn, data) {
         d.innerHTML=  data;
         }
     xcom_show(id);
+    var title = id + '_title';
+    xcom_show(title);
 }
 
 function xcom_multidim(obj,func) {
