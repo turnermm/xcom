@@ -354,6 +354,33 @@ jQuery( document ).ready(function() {
            xcom_setValue(key,ini[key]);        
            }
        }
+   var img_path = DOKU_BASE + 'lib/plugins/xcom/images/';
+   var eyes  = {
+        'black':  img_path + 'eye_blk.png',
+        'blue':  img_path + 'eye_blue.png',
+   };
+       
+   jQuery("img[name='xcom_eye']").click(function () {
+      if(jQuery(this).attr("src").match(/blue/)) {
+           jQuery(this).attr("src",eyes.black);
+           jQuery("#xcom_pwd").attr("type","password");
+           jQuery(this).attr("title",JSINFO['pwdview']);           
+       }
+       else {
+          jQuery(this).attr("src",eyes.blue);
+          jQuery("#xcom_pwd").attr("type","text");
+           jQuery(this).attr("title",JSINFO['pwdhide']);                     
+       }
+});
+
+jQuery( "#xcom_eye" ).on( "mouseover", function() {
+jQuery( this ).css( "cursor", "pointer" );
+});
+
+jQuery( "#xcom_eye" ).on( "mouseout", function() {
+jQuery( this ).css( "cursor", "default" );
+});
+       
 });
 
 function xcom_rollover(el,underline) {

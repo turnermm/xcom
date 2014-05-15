@@ -14,7 +14,6 @@
 class admin_plugin_xcom extends DokuWiki_Admin_Plugin {
 
 
-  
     /**
      * handle user request
      */
@@ -68,7 +67,8 @@ class admin_plugin_xcom extends DokuWiki_Admin_Plugin {
        */
       ptln( $this->getLang('url').': <input type="text"  size = "40"  name="xcom_url" id = "xcom_url">&nbsp;');
       ptln( $this->getLang('user').': <input type="text"  name="xcom_user"  id = "xcom_user">&nbsp;');
-      ptln( $this->getLang('pwd').': <input type="text"  name="xcom_pwd"  id = "xcom_pwd"><br />');         
+      ptln( $this->getLang('pwd').': <input type="password"  name="xcom_pwd"  id = "xcom_pwd">');
+      ptln('&nbsp;<img src="' . DOKU_REL .  'lib/plugins/xcom/images/eye_blk.png"  title="'. $this->getLang('pwdview') . '" name="xcom_eye" id ="xcom_eye" />');          
       ptln('</form>');  
      
     /**  

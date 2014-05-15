@@ -23,7 +23,7 @@ $lang['pageid'] = 'Page/Namespace';
 $lang['options'] = 'Options/User-created query';
 $lang['other_query'] = 'User-created query';
 $lang['howto'] = 'Instructions';
-$lang['results'] = 'Show view windows';
+$lang['results'] = 'Show views';
 $lang['editable'] = 'Edit';
 $lang['pre'] = 'Code view';
 $lang['html'] = 'HTML view';
@@ -33,3 +33,6 @@ $lang['query'] ='Query';
 $lang['noconnection'] ='No connection.  Have you set the remote API config options?';
 $lang['timedout'] = 'Query timed out';
 $lang['hideallviews'] = 'Hide views';
+$lang['pwdview'] = 'View password';
+$lang['pwdhide'] = 'Hide password';
+
