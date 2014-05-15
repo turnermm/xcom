@@ -30,9 +30,9 @@ class remote_plugin_xcom extends DokuWiki_Remote_Plugin {
               $inf_str = file_get_contents($path);
               $inf = @unserialize($inf_str);         
               if($inf['current']['relation']['media']) {
-             return array_keys($inf['current']['relation']['media']);
+                  return array_keys($inf['current']['relation']['media']);                         
               }
-                         
+              
               $filename = wikiFN($id);
               if(@file_exists($filename)) {
                  $str = file_get_contents($filename );
@@ -42,7 +42,7 @@ class remote_plugin_xcom extends DokuWiki_Remote_Plugin {
                     $result = explode('|', $file);
                     $result = explode('?',$result[0]);
                     $result = trim($result[0]);
-                    if(strpos($result,'http://')=== false){
+                    if(strpos($result,'http://')=== false && strpos($result,'>') === false ){
                         $media[$result] = 1;
                     }
                 }

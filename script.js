@@ -45,7 +45,8 @@ function xcom_print_data(fn, data) {
      'wiki_getPageVersions': xcom_thead('user','ip','type','sum','modified','version' ),
      'wiki_getPageInfo': xcom_thead('name','lastModified','author','version' ),
      'wiki_getAllPages': xcom_thead('id', 'perms', 'size', 'lastModified'),
-     'dokuwiki_search': xcom_thead('id', 'score', 'rev', 'mtime','size')
+     'dokuwiki_search': xcom_thead('id', 'score', 'rev', 'mtime','size'),
+     'plugin_xcom_getMedia': xcom_thead('Media files'),
    };
         switch(fn) 
          {
@@ -61,25 +62,33 @@ function xcom_print_data(fn, data) {
             case 'wiki.getPageInfo':
             case 'wiki.getAllPages':
             case 'dokuwiki.search':
+            case 'plugin.xcom.getMedia':
                  id = 'xcom_htm';
                  try {
-                     var obj = jQuery.parseJSON(data);                     
-                 }
-                 catch(e) {
-                    id = 'xcom_pre';
+                     var obj = jQuery.parseJSON(data);                                           
+                 } catch(e) {
+                    id = 'xcom_pre';   // not a table, use code view, probably error msg                                 
                      break;
                  }
-                     if(obj) {   
-                        var fncall = fn.replace('.','_');                                 
+                    /** 
+                       handle tables
+                    */
+                     if(obj) 
+                    {   
+                        var fncall = fn.replace(/\./g,'_');                      
                         data = table_calls[fncall]; 
-                         if(fn == 'wiki.getPageInfo' ) {
-                                data +=  xcom_singledim(obj);
-                         } else {
-                               data+=xcom_twodim(obj,fn);
-                        }
+                         if(fn == 'wiki.getPageInfo') {
+                                data +=  xcom_twodim(obj);
+                           }     
+                          else if (fn == 'plugin.xcom.getMedia') {
+                               data +=  xcom_onedim(obj);
+                           }                          
+                          else {
+                               data+=xcom_multidim(obj,fn);
+                          }
                     }                   
-                   data += xcom_tclose();
-                 break;   
+                    data += xcom_tclose();  //end tables
+                break;   
              case 'wiki.putPage':  
              case 'dokuwiki.appendPage':  
                   id == 'xcom_editable';
@@ -98,7 +107,7 @@ function xcom_print_data(fn, data) {
     xcom_show(id);
 }
 
-function xcom_twodim(obj,func) {
+function xcom_multidim(obj,func) {
         var data = "";
         
         for(var i in obj) {      
@@ -112,12 +121,20 @@ function xcom_twodim(obj,func) {
        return data;
 }
 
-function xcom_singledim(obj) {
+function xcom_twodim(obj) {
          var data ="\n<tr>";   
          for(var i in obj) { 
            data += xcom_td(i,obj[i]);            
          }
          return data;
+}
+
+function xcom_onedim(obj) {
+        var data ="\n<tr>";   
+         for(var i in obj) { 
+           data += xcom_td(i,obj[i]) + "\n<tr>";   
+         }
+         return data;        
 }
 
 function xcom_thead() {
@@ -361,5 +378,6 @@ var xcom_opts=new Array(
 'wiki.getAttachmentInfo',
 'wiki.putAttachment',
 'plugin.acl.addAcl',
-'plugin.acl.delAcl'
+'plugin.acl.delAcl',
+'plugin.xcom.getMedia'
 );

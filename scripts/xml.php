@@ -24,7 +24,7 @@ if($client)
         }
     }    
 
-   $array_types = array('dokuwiki.getPagelist','wiki.getPageVersions','wiki.getPageInfo','wiki.getAllPages', 'dokuwiki.search');
+   $array_types = array('dokuwiki.getPagelist','wiki.getPageVersions','wiki.getPageInfo','wiki.getAllPages', 'dokuwiki.search','plugin.xcom.getMedia');
    $time_start = time();   
    $resp = "";
    
