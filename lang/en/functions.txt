@@ -111,3 +111,7 @@ $attrs['minor'] = (boolean) minor
 ^ Parameters  | (String) scope, (String) username |
 ^ Description | Delete any ACL rule matching the given scope and user. Use ''@groupname'' instead of ''user'' to delete the ACL rules for the group|
 
+==== plugin.xcom.getMedia ====
+^ Name        | ''plugin.xcom.getMedia'' |
+^ Parameters  | (String) id |
+^ Description |List the media files in a page (id) |
