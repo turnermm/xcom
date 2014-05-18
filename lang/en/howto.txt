@@ -1,16 +1,24 @@
+==== Purpose ====
+With this app is users can conveniently communicate with Dokuwiki's xmlrpc library and interface.  This can be on any dokuwiki, including the one which you are currently logged into. 
+ 
 ==== Instructions ====
 
-  - Enter the URL to the remote site. If your remote site is at ''<nowiki>http://www.example.com</nowiki>''  and the name of the wiki is ''my_wiki'', then you would enter ''<nowiki>http://www.example.com/my_wiki</nowiki>''.
+  - Enter the URL to the remote site. If your remote site is at ''<nowiki>http://www.example.com</nowiki>''  and the name of the wiki is ''my_wiki'', then you would enter ''<nowiki>http://www.example.com/my_wiki</nowiki>''. \\ As explained above the 'remote site' simply refers to the site which holds the xmlrpc interface with which you are communicating and could therefore be the site that you are currently logged into.
   - Enter the remote user name and password for the remote site. In your configuration settings you must enable the "Remote API system" and identify the remote user(s) or group(s).
   - Select your query type from the drop-down ''Select query''  menu.
   - If your query requires a page id or namespace id, enter that in the ''Page/Namespace''  text box.
   - Some queries may require one or more additional options and others do not require page or namespace. Clicking the ''Query types''  button will bring up a listing of query types and their options. Enter these options, the order listed, separated by commas, in the ''Options/User-created query''  text box. ** Do not **  re-enter page or namespace in this additional list of options.
   - There are more query types found on Dokuwiki's [[https://dokuwiki.org/devel:xmlrpc|xmlrpc page]] than are listed in the ''Select query''  menu. If you want to use one of those, then enter the complete listing, including the function name. The function name must come first and then, in order listed, the options. They must all be separated by commas, including the function name. For instance: ''wiki.function,parameter_1, parameter_2''
+  - The buttons at the top of the screen are self-explanatory.
+      * At the left: ''Query Types''  (explained in 5 above), ''Instructions''  (this page), ''Send Query'', which submits the query
+      * At the right: the buttons which control which, if any, of the views appear on the screen.
 
 ==== GUI ====
 
-There are three display views: HTML, Edit, and Code. These are all contained within the ''Output window''. When the result of a query is displayed, the ''Output window''  opens and the contents will appear in one of these three views, depending upon the nature of the output. More than one view can be open at any one time, so that, for instance, you can be looking at the markup for a page while also viewing it as HTML. You can close and re-open these views using the buttons at the top right of the screen. And you can close the ''Output window''  entirely.
+There are three display views: HTML, Edit, and Code. These are all contained within an "Output" window. When the result of a query is displayed, this window opens and the contents of your query will appear in one of these three views, depending upon the nature of the output. More than one view can be open at any one time, so that, for instance, you can be looking at the markup for a page while also viewing it as HTML. You can close and re-open these views using the buttons at the top right of the screen. And you can close the Output window entirely.
 
-  - Edit view enables you to make changes to the markup and save it back to the remote wiki. It also enables you to add material to a page by appending.
-  - HTML is used to display wiki pages and to display query results that can be conveniently formatted as HTML.
-  - The Code view is preformatted text. It's used for simple plain text responses and complex arrays which may in later versions of xcom be re-formatted as tables.
+   - ''Edit'' view enables you to make changes to the markup and save it back to the remote wiki which, as nted above, could be the wiki you are currently logged into. It also enables you to add material to a page by appending.
+  - ''HTML view'' is used to display wiki pages and to display query results that can be conveniently formatted as HTML.
+  - The ''Code view'' is preformatted text. It's used for simple plain text responses and complex arrays which may in later versions of xcom be re-formatted as tables.
+
+In the status bar at the bottom of the screen there are command links which enable you to clear the contents from each of the three view windows.  The status bar also contains a ''Query'' field where the current query is printed.  At the far right is a link which enables you to submit the query.

@@ -6,10 +6,16 @@
    height: 450px;
 }
 
-div.xcom_editdiv  {
+div.xcom_editdiv, div.l_ocal_side  {
      margin-top: 8px;
 }
-
+div.local_side  {
+   /*display:none; */
+   float: right;
+}
+div.xcom_sites {
+  padding-top: 8px; 
+}
 #xcom_status {
    border-top: 1px solid gray;
    padding: 4px;   

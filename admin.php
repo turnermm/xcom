@@ -11,8 +11,19 @@
  * All DokuWiki plugins to extend the admin function
  * need to inherit from this class
  */
-class admin_plugin_xcom extends DokuWiki_Admin_Plugin {
+if(!defined('DOKU_INC')) die();
 
+class admin_plugin_xcom extends DokuWiki_Admin_Plugin {
+     private $local_user;
+     function __construct() {
+         global $INFO;
+         $this->local_user = $INFO['client'];
+
+     }
+    
+     function forAdminOnly(){
+        return false;
+    }
 
     /**
      * handle user request
@@ -65,9 +76,10 @@ class admin_plugin_xcom extends DokuWiki_Admin_Plugin {
     /**
             credentials
        */
+       // Remote Credentials
       ptln( $this->getLang('url').': <input type="text"  size = "40"  name="xcom_url" id = "xcom_url">&nbsp;');
-      ptln( $this->getLang('user').': <input type="text"  name="xcom_user"  id = "xcom_user">&nbsp;');
-      ptln( $this->getLang('pwd').': <input type="password"  name="xcom_pwd"  id = "xcom_pwd">');
+      ptln( $this->getLang('user').': <input type="text" size = "12" name="xcom_user"  id = "xcom_user">&nbsp;');
+      ptln( $this->getLang('pwd').': <input type="password" size = "9" name="xcom_pwd"  id = "xcom_pwd">');
       ptln('&nbsp;<img src="' . DOKU_REL .  'lib/plugins/xcom/images/eye_blk.png"  title="'. $this->getLang('pwdview') . '" name="xcom_eye" id ="xcom_eye" />');          
       ptln('</form>');  
      
@@ -76,9 +88,21 @@ class admin_plugin_xcom extends DokuWiki_Admin_Plugin {
      */          
       ptln ('<div style = "padding-top: 8px;">');
       ptln('<form>');
-      ptln('<select id = "xcom_sel" onchange="xcom_select(this);"><option value="none">' .  $this->getLang('select')  .'</option></select>&nbsp;' );      
-      ptln( $this->getLang('pageid').': <input type="text"  name="xcom_pageid" value="start" id = "xcom_pageid">&nbsp;');   
-      ptln( $this->getLang('options').': <input type="text"  name="xcom_opts" size="40" id = "xcom_opts">');         
+      
+      ptln('<select id = "xcom_sel"><option value="none">' .  $this->getLang('select')  .'</option></select>&nbsp;' );      
+      ptln( $this->getLang('pageid').': <input type="text"  name="xcom_pageid" value="" id = "xcom_pageid">&nbsp;');   
+      ptln('<span title="'. $this->getLang('options_title') .'">' . $this->getLang('options').':</span> <input type="text"  name="xcom_opts" size="40" id = "xcom_opts" title="'. $this->getLang('options_title').'">');         
+   
+            // Local User and Password 
+      ptln('<div class="xcom_sites">');     
+      ptln('<select id = "xcom_selsites" onchange="xcom_select(this);"><option value="none">' .  $this->getLang('sel_sites')  .'</option></select>&nbsp;' );           
+      ptln ('<div class="local_side">');            
+      ptln( $this->getLang('locuser').': <input type="text" size = "12" value="' . $this->local_user .  '" name="xcom_locuser"  id = "xcom_locuser">&nbsp;');
+      ptln($this->getLang('localpwd'). ': <input type="password" size = "9" name="xcom_localpwd"  id = "xcom_localpwd">');     
+      ptln('&nbsp;<img src="' . DOKU_REL .  'lib/plugins/xcom/images/eye_blk.png"  title="'. $this->getLang('pwdview') . '" name="xcom_loceye" id ="xcom_loceye" />');                
+      ptln('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>') ;     
+      ptln('</div>');     
+      
       ptln('</form>');      
       ptln( '</div>');
   

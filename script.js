@@ -1,3 +1,6 @@
+
+var xcomSites;
+
 function xmlrpc() {         
        xcom_hide_all_views();
        xcom_hide('xcom_view');
@@ -233,8 +236,11 @@ function xcom_query_status(options) {
    
 }
 
-function xcom_select(t) {
-//alert(t.selectedIndex + " \n" + t.options[t.selectedIndex].value);
+function xcom_select(sel) {
+    var which =sel.options[sel.selectedIndex].value;
+    xcom_setValue('xcom_url',xcomSites[which]['url']);
+    xcom_setValue('xcom_pwd',xcomSites[which]['pwd']);
+    xcom_setValue('xcom_user',xcomSites[which]['user']);
 }
 
 function xcom_toggle(which) {
@@ -347,11 +353,15 @@ jQuery( document ).ready(function() {
             var newopt = new Option(text,xcom_opts[i]);
             newopt.title = xcom_opts[i];
             sel.add(newopt);
-           //sel.add(new Option(text,xcom_opts[i]));
        }
-       var ini = { 'xcom_user': 'rpcuser', 'xcom_pwd': 'rpcpwd', 'xcom_url': 'http://192.168.0.77/adora'};        
-        for (var key in ini) {  
-           xcom_setValue(key,ini[key]);        
+
+         var selsites = document.getElementById('xcom_selsites');   
+         if(selsites) {
+             xcomSites = JSINFO['xcom_sites'];
+             for (var i in xcomSites) {
+                var newopt = new Option(i,i);
+                selsites.add(newopt);
+             }
            }
        }
    var img_path = DOKU_BASE + 'lib/plugins/xcom/images/';
@@ -360,15 +370,17 @@ jQuery( document ).ready(function() {
         'blue':  img_path + 'eye_blue.png',
    };
        
-   jQuery("img[name='xcom_eye']").click(function () {
-      if(jQuery(this).attr("src").match(/blue/)) {
+   jQuery("img").click(function () {   
+      if(jQuery(this).attr("src").match(/eye_blue/)) {
+           var which = jQuery(this).attr("id").match(/loc/) ?  "#xcom_localpwd" : "#xcom_pwd";
            jQuery(this).attr("src",eyes.black);
-           jQuery("#xcom_pwd").attr("type","password");
+           jQuery(which).attr("type","password");
            jQuery(this).attr("title",JSINFO['pwdview']);           
        }
-       else {
+       else if(jQuery(this).attr("src").match(/eye_blk/)) {      
+          var which = jQuery(this).attr("id").match(/loc/) ?  "#xcom_localpwd" : "#xcom_pwd";
           jQuery(this).attr("src",eyes.blue);
-          jQuery("#xcom_pwd").attr("type","text");
+          jQuery(which).attr("type","text");
            jQuery(this).attr("title",JSINFO['pwdhide']);                     
        }
 });
@@ -378,6 +390,14 @@ jQuery( this ).css( "cursor", "pointer" );
 });
 
 jQuery( "#xcom_eye" ).on( "mouseout", function() {
+jQuery( this ).css( "cursor", "default" );
+});
+       
+jQuery( "#xcom_loceye").on( "mouseover", function() {
+jQuery( this ).css( "cursor", "pointer" );
+});
+
+jQuery( "#xcom_loceye" ).on( "mouseout", function() {
 jQuery( this ).css( "cursor", "default" );
 });
        
