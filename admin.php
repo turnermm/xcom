@@ -84,27 +84,29 @@ class admin_plugin_xcom extends DokuWiki_Admin_Plugin {
       ptln('</form>');  
      
     /**  
-          Selection buttons
+          Selection inputs and locals
      */          
       ptln ('<div style = "padding-top: 8px;">');
-      ptln('<form>');
+      ptln('<form  action = "javascript:void 0;">');
       
       ptln('<select id = "xcom_sel"><option value="none">' .  $this->getLang('select')  .'</option></select>&nbsp;' );      
       ptln( $this->getLang('pageid').': <input type="text"  name="xcom_pageid" value="" id = "xcom_pageid">&nbsp;');   
       ptln('<span title="'. $this->getLang('options_title') .'">' . $this->getLang('options').':</span> <input type="text"  name="xcom_opts" size="40" id = "xcom_opts" title="'. $this->getLang('options_title').'">');         
    
-            // Local User and Password 
       ptln('<div class="xcom_sites">');     
       ptln('<select id = "xcom_selsites" onchange="xcom_select(this);"><option value="none">' .  $this->getLang('sel_sites')  .'</option></select>&nbsp;' );           
-      ptln ('<div class="local_side">');            
+
+      // Local User and Password 
+      ptln ('<div class="local_side">&nbsp;&nbsp;&nbsp;'); 
+      ptln( '<button   onclick="xcom_localSave(this.form);" title="' . $this->getLang('locsave_title') . '">'. $this->getLang('locsave') .  '</button>&nbsp;');
       ptln( $this->getLang('locuser').': <input type="text" size = "12" value="' . $this->local_user .  '" name="xcom_locuser"  id = "xcom_locuser">&nbsp;');
       ptln($this->getLang('localpwd'). ': <input type="password" size = "9" name="xcom_localpwd"  id = "xcom_localpwd">');     
       ptln('&nbsp;<img src="' . DOKU_REL .  'lib/plugins/xcom/images/eye_blk.png"  title="'. $this->getLang('pwdview') . '" name="xcom_loceye" id ="xcom_loceye" />');                
-      ptln('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>') ;     
-      ptln('</div>');     
+      ptln('&nbsp;&nbsp;&nbsp;</div>') ;     // end local_side
       
+      ptln('</div>');     //end xcom_sites
       ptln('</form>');      
-      ptln( '</div>');
+      ptln( '</div>');  // end Selection inputs and locals
   
       /**
          Output

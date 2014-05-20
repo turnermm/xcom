@@ -37,4 +37,7 @@ $lang['pwdview'] = 'View password';
 $lang['pwdhide'] = 'Hide password';
 $lang['localpwd'] = 'Local password';
 $lang['locuser'] = 'Local user';
+$lang['locsave'] = 'Local Save';
+$lang['locsave_title'] = 'Save remote selection to local server';
 $lang['sel_sites'] = 'Remote sites';
+	

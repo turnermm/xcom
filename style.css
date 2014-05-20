@@ -11,6 +11,8 @@ div.xcom_editdiv, div.l_ocal_side  {
 }
 div.local_side  {
    /*display:none; */
+   background-color: #eee;
+   height: 2em;
    float: right;
 }
 div.xcom_sites {

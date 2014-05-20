@@ -41,7 +41,7 @@ class action_plugin_xcom extends DokuWiki_Action_Plugin {
         $JSINFO['xcom_sites'] = array();
         $ini = parse_ini_file($ini_file,1);
         foreach ($ini as $name=>$site) {
-            $JSINFO['xcom_sites'][$name] = array();   
+            $JSINFO['xcom_sites'][$name] = array('url'=>'','user'=>'','pwd'=>'');   
             foreach($site as $item=>$val) {
                 $JSINFO['xcom_sites'][$name][$item] = $val;       
             }

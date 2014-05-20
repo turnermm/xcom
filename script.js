@@ -1,5 +1,11 @@
 
 var xcomSites;
+function xcom_localSave(f) {
+   var user =f.xcom_locuser.value;
+   var pwd = f.xcom_localpwd.value;
+  alert(pwd);
+ 
+}
 
 function xmlrpc() {         
        xcom_hide_all_views();
@@ -51,7 +57,7 @@ function xcom_print_data(fn, data) {
      'dokuwiki_search': xcom_thead('id', 'score', 'rev', 'mtime','size'),
      'plugin_xcom_getMedia': xcom_thead('Media files'),
    };
-        switch(fn) 
+	        switch(fn) 
          {
              case 'wiki.getPage':                 // (string) raw Wiki text                 
             case 'wiki.getPageVersion':      // (string) raw Wiki text 

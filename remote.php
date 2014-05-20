@@ -36,6 +36,7 @@ class remote_plugin_xcom extends DokuWiki_Remote_Plugin {
               $filename = wikiFN($id);
               if(@file_exists($filename)) {
                  $str = file_get_contents($filename );
+                 if(strpos($str,'{{') === false) return "0";
                  preg_match_all('/{{(.*?)}}/ms',$str,$matches);
                  $media = array();
                  foreach($matches[1] as $file) {
@@ -54,6 +55,6 @@ class remote_plugin_xcom extends DokuWiki_Remote_Plugin {
               
               return "no media data in $path";             
           }       
-          return array("no data for $path");
+          return "no data for $path";
     }
 }
