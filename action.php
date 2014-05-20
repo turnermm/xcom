@@ -34,10 +34,17 @@ class action_plugin_xcom extends DokuWiki_Action_Plugin {
 
     public function handle_dokuwiki_started(Doku_Event &$event, $param) {
         global $JSINFO, $INFO;
-         $JSINFO['pwdhide'] = $this->getLang('pwdhide');
-         $JSINFO['pwdview'] = $this->getLang('pwdview');
-              
-        $ini_file = DOKU_PLUGIN . 'xcom/scripts/xcom.ini';      
+        $JSINFO['pwdhide'] = $this->getLang('pwdhide');
+        $JSINFO['pwdview'] = $this->getLang('pwdview');
+        $inidir = trim($this->getConf('inidir'));
+         if(!$inidir) {
+               $inidir = DOKU_PLUGIN . 'xcom/scripts/';
+         }             
+         else {
+             $inidir = rtrim($inidir,'/') . '/';
+         }      
+        $ini_file = $inidir . 'xcom.ini';
+       
         $JSINFO['xcom_sites'] = array();
         $ini = parse_ini_file($ini_file,1);
         foreach ($ini as $name=>$site) {
