@@ -3,7 +3,7 @@ var xcomSites;
 function xcom_localSave(f) {
    var user =f.xcom_locuser.value;
    var pwd = f.xcom_localpwd.value;
-  alert(pwd);
+  
  
 }
 
