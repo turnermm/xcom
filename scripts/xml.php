@@ -76,7 +76,8 @@ function xcom_connect($url,$user,$pwd, $debug=false) {
     $url = rtrim($url,'/') . '/lib/exe/xmlrpc.php';
     $client = new IXR_Client($url);
     $client->debug = $debug; // enable for debugging
-    $ok = $client->query('dokuwiki.login',$user,$pwd);
+    $client->query('dokuwiki.login',$user,$pwd);
+    $ok = $client->getResponse();
     if($ok) return $client;
     return false;
 

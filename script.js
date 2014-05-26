@@ -1,10 +1,38 @@
 
 var xcomSites;
-function xcom_localSave(f) {
-   var user =f.xcom_locuser.value;
-   var pwd = f.xcom_localpwd.value;
+function xcom_localSave() {
   
+   //xcom_clear('xcom_qstatus');
  
+  var params = "";
+  var id =xcom_getInputValue('xcom_pageid');
+  var params = 'id='+id;
+
+   var jobj = xcom_json_ini('xcom_localpwd','xcom_locuser');
+   jobj['url'] = JSINFO['url'];
+   var str =JSON.stringify(jobj); 
+   params +='&local=' + str;
+
+    var jobj = xcom_json_ini('xcom_pwd','xcom_url','xcom_user');
+    str =JSON.stringify(jobj); 
+    params +='&remote=' + str;
+   
+   var status =new Array("Save remote: ("+ id +  ") to Local wiki");
+   xcom_query_status(status);
+  
+         jQuery.ajax({
+            url: DOKU_BASE + 'lib/plugins/xcom/scripts/xcom_save.php',
+            async: false,
+            data: params,         
+            type: 'POST',
+            dataType: 'html',         
+            success: function(data)
+            {  
+               data = decodeURIComponent(data);                      
+               xcom_show('xcom_results');
+               xcom_print_data('dokuwiki.copy', data); 
+            }
+        });
 }
 
 function xmlrpc() {         
@@ -244,6 +272,7 @@ function xcom_query_status(options) {
 
 function xcom_select(sel) {
     var which =sel.options[sel.selectedIndex].value;
+    if(!which) return;
     xcom_setValue('xcom_url',xcomSites[which]['url']);
     xcom_setValue('xcom_pwd',xcomSites[which]['pwd']);
     xcom_setValue('xcom_user',xcomSites[which]['user']);
@@ -296,6 +325,8 @@ function xcom_json_ini() {
      for (i=0; i<arguments.length; i++) {
         var val = xcom_getInputValue(arguments[i]);
         var key = (arguments[i].split(/_/))[1];
+        key = key.replace(/local/,"");
+        key = key.replace(/loc/,"");
         jobj[key] = val;
      }
      return jobj;
