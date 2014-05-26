@@ -69,10 +69,11 @@ class xcom_save  {
     function processMediaArray() {        
         if(!$this->mediaArray)  $this->getMedia();
         if(!is_array($this->mediaArray)) {
-            echo $this->mediaArray . "\n";
+            echo "No media found for ". $this->page . "\n";
+            $this->logoff();
             exit;
         }
-        echo "Identifying remote media\n";
+        echo "Requesting remote media\n";
         foreach($this->mediaArray as $mfile) {
             $this->getMediaFile($mfile);
         }
@@ -94,8 +95,36 @@ class xcom_save  {
    
 
     function getPage() {
+        $auth = $this->xcom_get_data( 'wiki.aclCheck',$this->localClient,false,array($this->page));    
+        if($auth < 4) {
+            echo "Create permission needed for $this->page\n";
+        }
+        $info = $this->xcom_get_data( 'wiki.getPageInfo',$this->remoteClient,false,array($this->page));    
+           
+        if(!is_array($info)) {
+            echo  $this->page ." was not found on the remote server.\n";;
+            $this->logoff();
+             exit;
+        }
+          
+        $this->data_buffer = "";
+        $this->xcom_get_data( 'wiki.getPage',$this->remoteClient,true, array($this->page));              
+         if(is_array($this->data_buffer)) {
+              echo print_r($this->data_buffer,true);
+              exit; 
+         }
+
+         usleep(100);
+        $this->savePage();
     }
     function savePage() {
+        $resp = $this->xcom_get_data( 'wiki.putPage',$this->localClient,false, array($this->page,$this->data_buffer,array('sum'=>'imported')));
+        if(!$resp) {
+            echo "Unable to import $this->page\n";       
+            $this->logoff();
+            exit;
+        }
+        echo "Imported $this->page\n";
     }
     
     function getMedia() {
@@ -134,7 +163,7 @@ class xcom_save  {
         
     function saveMediaFile($id) {    
        $auth = $this->xcom_get_data( 'wiki.aclCheck',$this->localClient,false,array($id));    
-        if($auth < 16) {
+        if($auth < 8) {
             echo "Upload permission needed for $id\n";
             return;
         }
@@ -163,14 +192,14 @@ class xcom_save  {
             $client = new IXR_Client($url);
             $client->debug = $debug; // enable for debugging
              
-            $client->query('dokuwiki.login',$user,$pwd);
+            $resp = $client->query('dokuwiki.login',$user,$pwd);            
             $ok = $client->getResponse();
             
             if($ok) return $client;
             return false;
     }
     function logoff() { 
-     
+        echo "Logging off\n";
         $resp =$this->xcom_get_data( 'dokuwiki.getVersion',$this->localClient,false,false);
         echo "\nLocal Dokuwiki version= $resp\n";     
         preg_match('/(\d+)-\d+-\d+/',$resp,$matches);        
@@ -197,6 +226,7 @@ $xcom=new xcom_save(json_encode($local),json_encode($remote),'start');
 exit;
 */
 $xcom=new xcom_save($_REQUEST['local'],$_REQUEST['remote'],$_REQUEST['id']);
+$xcom->getPage();
 $xcom->getMedia() ;
 $xcom->processMediaArray();
 $xcom-> logoff();

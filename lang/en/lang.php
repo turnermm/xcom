@@ -40,4 +40,7 @@ $lang['locuser'] = 'Local user';
 $lang['locsave'] = 'Local Save';
 $lang['locsave_title'] = 'Save remote selection to local server';
 $lang['sel_sites'] = 'Remote sites';
+$lang['nolocal'] = 'Unable to log into local server';
+$lang['noremote'] = 'Unable to log into remote server';
+$lang['chkauth'] ='Please check your authorization credentials or try again later';
 	
