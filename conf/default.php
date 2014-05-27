@@ -1,2 +1,3 @@
 <?php
-$lang['inidir'] ="";
+$conf['inidir'] ="";
+$conf['textbox_size'] = '40';

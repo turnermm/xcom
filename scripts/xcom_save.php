@@ -21,7 +21,11 @@ class xcom_save  {
         $err = "";
         $this->helper =  plugin_load('helper', 'xcom');
         $this->page = $page;
-
+       
+        if(!$this->page) {
+            $this->msg('nopage');            
+            exit;
+        }
         $secs =  5;     
         while(!($this->localClient = $this->ini_clients($local_auth,true))) {
             if((time() - $time_start ) > $secs ) {        
@@ -29,8 +33,8 @@ class xcom_save  {
             }
             usleep(50);
         }                
-        if(!$this->localClient) {
-            $err .= "Unable to log into local server.\n";
+        if(!$this->localClient) {         
+             $err .= $this->msg('nolocal',1);
         }
         $time_start = time();
         while(!($this->remoteClient = $this->ini_clients($remote_auth))) {
@@ -39,18 +43,23 @@ class xcom_save  {
             }
             usleep(50);
         }
-        if(!$this->remoteClient) {
-            $err .= "Unable to log into remote server.\n";
+        if(!$this->remoteClient) {           
+            $err .= $this->msg('noremote',1);
         }
-        if($err) {
-           $err .="Please check your authorization credentials or try again later.\n"; 
+        if($err) {                
+           $err .= $this->msg('chkauth',1);
            echo "$err\n";
            exit;
         }        
-        
-        echo "success: logged in.\n";        
+      
+      $this->msg('success');
     }
-   
+ 
+    function msg($which, $ret=false, $nl="\n") {
+       if($ret) return $this->helper->getLang($which) . $nl;
+       echo $this->helper->getLang($which) . $nl;
+    }
+    
     function ini_clients($credentials,$local=false) {
         if(is_string($credentials)) {
             $credentials = json_decode($credentials);
@@ -69,11 +78,10 @@ class xcom_save  {
     function processMediaArray() {        
         if(!$this->mediaArray)  $this->getMedia();
         if(!is_array($this->mediaArray)) {
-            echo "No media found for ". $this->page . "\n";
-            $this->logoff();
-            exit;
-        }
-        echo "Requesting remote media\n";
+           $this->msg('nomedia',0, " $this->page.\n");
+           return;
+        }       
+        $this->msg('reqmedia');
         foreach($this->mediaArray as $mfile) {
             $this->getMediaFile($mfile);
         }
@@ -85,8 +93,8 @@ class xcom_save  {
           if(is_array($this->data_buffer)) {
               echo print_r($this->data_buffer,true);
             }          
-           else {
-                 echo "$mfile file size: " . strlen($this->data_buffer) ."\n";        
+           else {              
+                echo "$mfile " . $this->msg('fsize',true,"") . " " . strlen($this->data_buffer) ."\n";        
                 $this->saveMediaFile($mfile);
           }
         }
@@ -94,15 +102,18 @@ class xcom_save  {
     }
    
 
-    function getPage() {
+    function getPage() {        
         $auth = $this->xcom_get_data( 'wiki.aclCheck',$this->localClient,false,array($this->page));    
+        
         if($auth < 4) {
-            echo "Create permission needed for $this->page\n";
+            $this->msg('noperm',false," $this->page\n");        
+            $this->logoff();
+            exit;
         }
         $info = $this->xcom_get_data( 'wiki.getPageInfo',$this->remoteClient,false,array($this->page));    
            
-        if(!is_array($info)) {
-            echo  $this->page ." was not found on the remote server.\n";;
+        if(!is_array($info)) {         
+            $this->msg('notonremote',false," $this->page\n");
             $this->logoff();
              exit;
         }
@@ -112,19 +123,20 @@ class xcom_save  {
          if(is_array($this->data_buffer)) {
               echo print_r($this->data_buffer,true);
               exit; 
-         }
-
+         }       
          usleep(100);
         $this->savePage();
     }
     function savePage() {
         $resp = $this->xcom_get_data( 'wiki.putPage',$this->localClient,false, array($this->page,$this->data_buffer,array('sum'=>'imported')));
-        if(!$resp) {
-            echo "Unable to import $this->page\n";       
+ 
+       if(!$resp) {
+            $this->msg('noimport',false," $this->page\n");        
             $this->logoff();
             exit;
         }
-        echo "Imported $this->page\n";
+        $this->msg('imported',false," $this->page\n");        
+        
     }
     
     function getMedia() {
@@ -163,8 +175,9 @@ class xcom_save  {
         
     function saveMediaFile($id) {    
        $auth = $this->xcom_get_data( 'wiki.aclCheck',$this->localClient,false,array($id));    
-        if($auth < 8) {
-            echo "Upload permission needed for $id\n";
+       
+        if($auth < 8) {    
+            $this->msg('uploadperm',false," $id\n");  
             return;
         }
         
@@ -180,43 +193,45 @@ class xcom_save  {
        $file = array('name'=>$file_name);
        $ow = false;
        $move='rename';
-       echo "Saving: $id to local wiki\n";
+      
        $res = media_save($file, $id, $ow, $auth, $move) ;
-       if($res) {
+       if(is_array($res)) {
          print_r($res);
        }
+       else  $this->msg('msave',false," $id\n");
  }
     
     function xcom_connect($url,$user,$pwd, $debug=false) {
             $url = rtrim($url,'/') . '/lib/exe/xmlrpc.php';
             $client = new IXR_Client($url);
             $client->debug = $debug; // enable for debugging
-             
+            
             $resp = $client->query('dokuwiki.login',$user,$pwd);            
             $ok = $client->getResponse();
-            
+             
             if($ok) return $client;
             return false;
     }
     function logoff() { 
-        echo "Logging off\n";
-        $resp =$this->xcom_get_data( 'dokuwiki.getVersion',$this->localClient,false,false);
-        echo "\nLocal Dokuwiki version= $resp\n";     
+
+        $this->msg('logoff');
+        $resp =$this->xcom_get_data( 'dokuwiki.getVersion',$this->localClient,false,false);   
+        $this->msg('localdw', false," $resp\n");
         preg_match('/(\d+)-\d+-\d+/',$resp,$matches);        
-        if($matches[1] >= 2014) {
-             echo "Logging off: $resp\n";
+        if($matches[1] >= 2014) {             
+             $this->msg('logoff',false, " $resp\n");
              $this->xcom_get_data( 'dokuwiki.logoff',$this->localClient,false,false);
         }
-        else echo "Logoff function not available\n";
+        else  $this->msg('nologoff');     
         
        $resp =$this->xcom_get_data( 'dokuwiki.getVersion',$this->remoteClient,false,false);
-        echo "Remote Dokuwiki version=$resp\n";     
+       $this->msg('remotedw', false," $resp\n");        
         preg_match('/(\d+)-\d+-\d+/',$resp,$matches);        
-        if($matches[1] >= 2014) {
-             echo "Logging off: $resp\n";
+        if($matches[1] >= 2014) {             
+             $this->msg('logoff',false, " $resp\n");
              $this->xcom_get_data( 'dokuwiki.logoff',$this->remoteClient,false,false);
         }
-        else echo "Logoff function not available\n";
+        else $this->msg('nologoff');
     }
 }
 /*
@@ -229,6 +244,6 @@ $xcom=new xcom_save($_REQUEST['local'],$_REQUEST['remote'],$_REQUEST['id']);
 $xcom->getPage();
 $xcom->getMedia() ;
 $xcom->processMediaArray();
-$xcom-> logoff();
+$xcom->logoff();
 echo "\n";
 flush();

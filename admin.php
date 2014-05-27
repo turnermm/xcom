@@ -77,7 +77,8 @@ class admin_plugin_xcom extends DokuWiki_Admin_Plugin {
             credentials
        */
        // Remote Credentials
-      ptln( $this->getLang('url').': <input type="text"  size = "40"  name="xcom_url" id = "xcom_url">&nbsp;');
+      $textboxsize = $this->getConf('textbox_size');
+      ptln( $this->getLang('url').': <input type="text"  size = "' . $textboxsize .'"  name="xcom_url" id = "xcom_url">&nbsp;');
       ptln( $this->getLang('user').': <input type="text" size = "12" name="xcom_user"  id = "xcom_user">&nbsp;');
       ptln( $this->getLang('pwd').': <input type="password" size = "9" name="xcom_pwd"  id = "xcom_pwd">');
       ptln('&nbsp;<img src="' . DOKU_REL .  'lib/plugins/xcom/images/eye_blk.png"  title="'. $this->getLang('pwdview') . '" name="xcom_eye" id ="xcom_eye" />');          
@@ -91,7 +92,7 @@ class admin_plugin_xcom extends DokuWiki_Admin_Plugin {
       
       ptln('<select id = "xcom_sel"><option value="none">' .  $this->getLang('select')  .'</option></select>&nbsp;' );      
       ptln( $this->getLang('pageid').': <input type="text"  name="xcom_pageid" value="" id = "xcom_pageid">&nbsp;');   
-      ptln('<span title="'. $this->getLang('options_title') .'">' . $this->getLang('options').':</span> <input type="text"  name="xcom_opts" size="40" id = "xcom_opts" title="'. $this->getLang('options_title').'">');         
+      ptln('<span title="'. $this->getLang('options_title') .'">' . $this->getLang('options').':</span> <input type="text"  name="xcom_opts" size="' . $textboxsize .'" id = "xcom_opts" title="'. $this->getLang('options_title').'">');         
    
       ptln('<div class="xcom_sites">');     
       ptln('<select id = "xcom_selsites" onchange="xcom_select(this);"><option value="none">' .  $this->getLang('sel_sites')  .'</option></select>&nbsp;' );           
