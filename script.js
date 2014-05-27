@@ -2,8 +2,6 @@
 var xcomSites;
 function xcom_localSave() {
   
-   //xcom_clear('xcom_qstatus');
- 
   var params = "";
   var id =xcom_getInputValue('xcom_pageid');
   var params = 'id='+id;
@@ -462,7 +460,6 @@ var xcom_opts=new Array(
 'wiki.getAllPages',
 'wiki.getAttachments',
 'wiki.getAttachmentInfo',
-'wiki.putAttachment',
 'plugin.acl.addAcl',
 'plugin.acl.delAcl',
 'plugin.xcom.getMedia'

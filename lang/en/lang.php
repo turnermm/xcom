@@ -19,7 +19,8 @@ $lang['user'] = 'User name';
 $lang['pwd'] = 'Password';
 $lang['invalid'] = 'invalid input detected!';
 $lang['send'] = 'Send query';
-$lang['pageid'] = 'Page/Namespace';
+$lang['pageid'] = 'ID';
+$lang['pageid_title'] = 'Page, media, or namespace';
 $lang['options'] = 'Options';
 $lang['options_title'] = 'Options/User-created query';
 $lang['howto'] = 'Instructions';
@@ -58,4 +59,5 @@ $lang['localdw'] = 'Local Dokuwiki version =';
 $lang['remotedw'] = 'Remote Dokuwiki version =';
 $lang['msave'] = 'Saved to local wiki:';
 $lang['fsize'] = 'file size:';
+$lang['ismedia'] = 'is a media file:';
 	

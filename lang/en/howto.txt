@@ -1,24 +1,59 @@
-==== Purpose ====
-With this app is users can conveniently communicate with Dokuwiki's xmlrpc library and interface.  This can be on any dokuwiki, including the one which you are currently logged into. 
+===== Purpose =====
  
-==== Instructions ====
+With this app users can conveniently communicate with Dokuwiki's xmlrpc library. It can be on any Dokuwiki, including the one which you are currently logged into.  The user can then communicate and exchange data between the local wiki and a remote wiki.
+
+===== Basics =====
+
+At its simplest you enter the URL of the remote wiki into the ''Remote URL'' text box, you select a query form the ''Select query'' drop-down menu, and you click ''Send query''. So, for instance, if you select ''getAllPages'', the result will be a list of all the pages on the remote wiki. Often, however, queries require an id. For these, you enter the id in the ''ID'' textbox. If you enter a paged id, then select listLinks, a list of all the links for that page, and their types, will be returned.
+
+===== Dashboard Layout =====
+
+  * Top Row:  Buttons for controlling what appears on the screen and the ''Send Query''  button for submitting the query.
+  * Second and third rows:  inputs for constructing the query
+  * Third row:
+      - A drop-down menu for selecting pre-defined remote sites and their credentials
+      - A button for saving remote data to the local wiki and the credentials of the local wiki
+  * A status bar with action links to clear the various views and to display the current query
+  * Above the status bar is the output window where the results of the query are displayed.  They open automatically when the query is completed.
+
+==== Instructions for creating the query ====
 
   - Enter the URL to the remote site. If your remote site is at ''<nowiki>http://www.example.com</nowiki>''  and the name of the wiki is ''my_wiki'', then you would enter ''<nowiki>http://www.example.com/my_wiki</nowiki>''. \\ As explained above the 'remote site' simply refers to the site which holds the xmlrpc interface with which you are communicating and could therefore be the site that you are currently logged into.
   - Enter the remote user name and password for the remote site. In your configuration settings you must enable the "Remote API system" and identify the remote user(s) or group(s).
   - Select your query type from the drop-down ''Select query''  menu.
-  - If your query requires a page id or namespace id, enter that in the ''Page/Namespace''  text box.
-  - Some queries may require one or more additional options and others do not require page or namespace. Clicking the ''Query types''  button will bring up a listing of query types and their options. Enter these options, the order listed, separated by commas, in the ''Options/User-created query''  text box. ** Do not **  re-enter page or namespace in this additional list of options.
-  - There are more query types found on Dokuwiki's [[https://dokuwiki.org/devel:xmlrpc|xmlrpc page]] than are listed in the ''Select query''  menu. If you want to use one of those, then enter the complete listing, including the function name. The function name must come first and then, in order listed, the options. They must all be separated by commas, including the function name. For instance: ''wiki.function,parameter_1, parameter_2''
-  - The buttons at the top of the screen are self-explanatory.
-      * At the left: ''Query Types''  (explained in 5 above), ''Instructions''  (this page), ''Send Query'', which submits the query
-      * At the right: the buttons which control which, if any, of the views appear on the screen.
+  - If your query requires an id, enter that in the ''ID''  text box.  The id must be the complete id that identifies the page on the remote server, in other words, including the namespace.
+  - Some queries may require additional options. Clicking the ''Query types''  button will bring up a listing of query types and their options. Enter these options, in the order listed, separated by commas, in the ''Options''  text box. ** Do not **  re-enter the ''id''  in this additional list of options.
+  - There are more query types found on Dokuwiki's [[https://dokuwiki.org/devel:xmlrpc|xmlrpc page]] than are listed in the ''Select query''  menu. If you want to use one of those, then enter the complete listing, including the function name into the ''Options''  box. The function name must come first and then, in order listed, the options. They must all be separated by commas, including the function name. For instance: \\ ''wiki.function,parameter_1, parameter_2''
 
-==== GUI ====
+==== Views ====
 
-There are three display views: HTML, Edit, and Code. These are all contained within an "Output" window. When the result of a query is displayed, this window opens and the contents of your query will appear in one of these three views, depending upon the nature of the output. More than one view can be open at any one time, so that, for instance, you can be looking at the markup for a page while also viewing it as HTML. You can close and re-open these views using the buttons at the top right of the screen. And you can close the Output window entirely.
+There are three display views: HTML, Edit, and Code. These are all contained within an "Output" window. When the result of a query is displayed, this window opens and the contents of your query will appear in one of these three views, depending upon the output. More than one view can be open at any one time, so that, for instance, you can be looking at the markup for a page while also viewing it as HTML. You can close and re-open these views using the buttons at the top right of the screen. And you can close the Output window entirely.
 
    - ''Edit'' view enables you to make changes to the markup and save it back to the remote wiki which, as nted above, could be the wiki you are currently logged into. It also enables you to add material to a page by appending.
   - ''HTML view'' is used to display wiki pages and to display query results that can be conveniently formatted as HTML.
   - The ''Code view'' is preformatted text. It's used for simple plain text responses and complex arrays which may in later versions of xcom be re-formatted as tables.
 
-In the status bar at the bottom of the screen there are command links which enable you to clear the contents from each of the three view windows.  The status bar also contains a ''Query'' field where the current query is printed.  At the far right is a link which enables you to submit the query.
+==== Status Bar ====
+
+In the status bar at the bottom of the screen there are command links which enable you to ''Clear'' the contents from each of the three view windows. The status bar also contains a ''Query'' field where the current query is displayed. At the far right is a link which enables you to submit the query.
+==== Local Save ====
+
+The ''Local save'' button makes it possible to move pages and media from the remote wiki to the local wiki. Enter the id of a remote page or media file into the ''ID'' field and click the ''Local save'' button. If you select a page id, the page and all of its referenced media will be copied to the local server. All will be copied to the correct namespaces, including the page itself. If, instead of a page id,you enter a media id, the media file will also be copied to the correct namespace.
+
+To use the feature you must fill in the local user's xmlrpc user name and password in the text boxes.  The local url will be automtically retrieved from the system.
+
+==== Remote Sites Menu ====
+
+There is an initialization file named ''xcom.ini'' which is found in the scripts directory. Use of this file is not required but it can be convenient. The file structure is based on the php,ini format:
+<code>
+      [title]
+        url=http://www.example.com/mywiki/
+        user=rpcuser
+        pwd=rpcpwd
+</code>
+
+For each remote wiki that you work with, enter another data block. Only the title is required. The titles of these remote sites will appear in the drop-down menu, and when you select a menu item, the fields with entries will be entered into the remote wiki's text boxes.
+
+=== Security ===
+
+The fact that the fields are optional means that you don't have to enter passwords (or even user names). But as another security feature, you can move xcom.ini out of the web server's access. For this, there is a configuration option (''inidir'') for setting an alternate directory for this file, and this can be anywhere on your server.  But the file and its directory must be readable.

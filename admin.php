@@ -91,8 +91,8 @@ class admin_plugin_xcom extends DokuWiki_Admin_Plugin {
       ptln('<form  action = "javascript:void 0;">');
       
       ptln('<select id = "xcom_sel"><option value="none">' .  $this->getLang('select')  .'</option></select>&nbsp;' );      
-      ptln( $this->getLang('pageid').': <input type="text"  name="xcom_pageid" value="" id = "xcom_pageid">&nbsp;');   
-      ptln('<span title="'. $this->getLang('options_title') .'">' . $this->getLang('options').':</span> <input type="text"  name="xcom_opts" size="' . $textboxsize .'" id = "xcom_opts" title="'. $this->getLang('options_title').'">');         
+      ptln('<span title="'. $this->getLang('pageid_title') .'">' .  $this->getLang('pageid').': <input type="text"  name="xcom_pageid" value="" id = "xcom_pageid">&nbsp;</span>');   
+      ptln('<span title="'. $this->getLang('options_title') .'">' . $this->getLang('options').': <input type="text"  name="xcom_opts" size="' . $textboxsize .'" id = "xcom_opts"></span>');         
    
       ptln('<div class="xcom_sites">');     
       ptln('<select id = "xcom_selsites" onchange="xcom_select(this);"><option value="none">' .  $this->getLang('sel_sites')  .'</option></select>&nbsp;' );           

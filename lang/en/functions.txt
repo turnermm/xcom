@@ -79,7 +79,7 @@ $attrs['minor'] = (boolean) minor
 ==== wiki.getAttachments ====
 ^ Name        | ''wiki.getAttachments'' |
 ^ Parameters  | (String) namespace, (array) options |
-^ Description | Returns a list of media files in a given namespace. The options are passed directly to [[xref>search_media()]]|
+^ Description | Returns a list of media files in a given namespace. The options are passed directly to [[http://xref.dokuwiki.org/reference/dokuwiki/nav.html?_functions/search_media.html|search_media()]]|
 
 ==== wiki.getAttachment ====
 ^ Name        | ''wiki.getAttachment'' |

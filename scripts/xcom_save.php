@@ -20,6 +20,7 @@ class xcom_save  {
     function __construct($local_auth,$remote_auth,$page) {
         $err = "";
         $this->helper =  plugin_load('helper', 'xcom');
+        
         $this->page = $page;
        
         if(!$this->page) {
@@ -53,6 +54,14 @@ class xcom_save  {
         }        
       
       $this->msg('success');
+  
+       /*possible to query and save a single media id instead of a page id */  
+       if($this->is_media_id($page)) {
+           $this->getMediaFile($page);
+           $this->logoff();
+           exit;
+       }
+
     }
  
     function msg($which, $ret=false, $nl="\n") {
@@ -74,7 +83,16 @@ class xcom_save  {
        }
            return false;
     }
+    function is_media_id($id) {     
+       if(preg_match('/\.(\w{3,4})$/',$id,$matches)) {
+          echo "$id ". $this->msg('ismedia',1," " . $matches[1] . "\n");
     
+          
+          return true;          
+       }   
+       return false;
+       
+    }
     function processMediaArray() {        
         if(!$this->mediaArray)  $this->getMedia();
         if(!is_array($this->mediaArray)) {
@@ -86,6 +104,7 @@ class xcom_save  {
             $this->getMediaFile($mfile);
         }
     }    
+    
     function getMediaFile($mfile) {
         $this->data_buffer = "";
         $this->xcom_get_data( 'wiki.getAttachment',$this->remoteClient,true, array($mfile));      
