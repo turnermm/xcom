@@ -1,9 +1,10 @@
 
 var xcomSites;
-function xcom_localSave() {
+function xcom_localSave(a_id) {
   
   var params = "";
-  var id =xcom_getInputValue('xcom_pageid');
+  
+  var id =a_id ? a_id : xcom_getInputValue('xcom_pageid');
   var params = 'id='+id;
 
    var jobj = xcom_json_ini('xcom_localpwd','xcom_locuser');
@@ -82,6 +83,7 @@ function xcom_print_data(fn, data) {
      'wiki_getAllPages': xcom_thead('id', 'perms', 'size', 'lastModified'),
      'dokuwiki_search': xcom_thead('id', 'score', 'rev', 'mtime','size'),
      'plugin_xcom_getMedia': xcom_thead('Media files'),
+     'wiki_getAttachments': xcom_thead('id','size','lastModified'),
    };
 	        switch(fn) 
          {
@@ -98,6 +100,7 @@ function xcom_print_data(fn, data) {
             case 'wiki.getAllPages':
             case 'dokuwiki.search':
             case 'plugin.xcom.getMedia':
+            case 'wiki.getAttachments':
                  id = 'xcom_htm';
                  try {
                      var obj = jQuery.parseJSON(data);                                           
@@ -151,7 +154,8 @@ function xcom_multidim(obj,func) {
          data +="\n<tr>";                                                        
          for(var j in obj[i]) {                                 
              var r = obj[i][j];
-             data += xcom_td(j,r,func);            
+             row = xcom_td(j,r,func);            
+             if(row) data += row;
          } 
        }
        
@@ -184,6 +188,10 @@ function xcom_thead() {
 
 function xcom_td(type,val,fn) {
 
+     if(fn == 'wiki.getAttachments') {        
+        if(type!='id' && type!='size' && type!='lastModified')return;
+     }
+    
     if(type == 'modified' || type == 'lastModified' && typeof val == 'object') {    
         var min =val['minute'] ?  val['minute'] : val['minut'];
         var d = new Date( val['year'],val['month'],val['day'],val['hour'],val['minute'], val['second']);
@@ -198,6 +206,17 @@ function xcom_td(type,val,fn) {
     }
      else if(type == 'id'  && fn=='dokuwiki.search') {
           return '<td class ="xcom_id">'+val +'</td>';
+    }
+    else if(type == 'id') {                   
+       var display = val;
+       if(val.length > 40) {
+          var a = val.substring(0,40) + ". . . .<br />";  
+          var b = val.substring(40)
+          if(b.length > 7) { 
+             display = a + '&nbsp;&nbsp;&nbsp;&nbsp;' + b;
+          }   
+        }  
+         return '<td><a href="javascript:xcom_localSave(\'' + val + '\');void 0;">' +display +'</a></td>';         
     }
     else if(type == 'snippet') {
         return '<tr><td class="xcom_none">&nbsp;</td><td colspan = "4" class="xcom_snippet">' + val + '</td>';

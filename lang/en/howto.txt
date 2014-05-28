@@ -42,6 +42,16 @@ The ''Local save'' button makes it possible to move pages and media from the rem
 
 To use the feature you must fill in the local user's xmlrpc user name and password in the text boxes.  The local url will be automtically retrieved from the system.
 
+There is an alternate way of importing pages and media from the remote to the local wiki. There are several query types which return lists of pages and media with the ids in the first column. These are:
+
+  * dokuwiki.getPagelist
+  * wiki.getAllPages
+  * wiki_getAttachments (media files)
+
+**''dokuwiki.getPagelist''  **  will take a namespace in the ''ID''  field and return all the pages in that namespace. **''wiki.getAllPages''  **  will return all the pages on the remote wiki. If you omit the namespace in the ID field,** ''dokuwiki.getPagelist''  **  is almost the same as'' **wiki.getAllPages**''. Finally, **''wiki_getAttachments''  **  returns media files and behaves exactly as **''dokuwiki.getPagelist''  **.
+
+The results of these queries are formatted as tables in which the first column is an action link.  If you click that link, the item will be imported into the local wiki from the remote wiki.  If this is a page, all of its media will also be imported.
+
 ==== Remote Sites Menu ====
 
 There is an initialization file named ''xcom.ini'' which is found in the scripts directory. Use of this file is not required but it can be convenient. The file structure is based on the php,ini format:
