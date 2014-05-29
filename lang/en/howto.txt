@@ -53,6 +53,8 @@ There is an alternate way of importing pages and media from the remote to the lo
 
 The results of these queries are formatted as tables in which the first column is an action link.  If you click that link, the item will be imported into the local wiki from the remote wiki.  If this is a page, all of its media will also be imported.
 
+Action links can also work with queries selected from the drop-down query menu. For more information about this, see the xcom plugin: [[doku>plugin:xcom#action_links|page]]
+
 ==== Remote Sites Menu ====
 
 There is an initialization file named ''xcom.ini'' which is found in the scripts directory. Use of this file is not required but it can be convenient. The file structure is based on the php,ini format:
