@@ -11,7 +11,7 @@ $url = rtrim ($credentials->url,'/') . '/';
 $params = json_decode($_REQUEST['params']);
 $client = xcom_connect($url,$credentials->user,$credentials->pwd ,0);
 
-$secs = 20;
+$secs = 15;
 $fn = $params[0] ;
     
 if($client)
@@ -84,6 +84,7 @@ function xcom_connect($url,$user,$pwd, $debug=false) {
 }
 
 function xcom_lock($page, $lock, $client) { 
+ global $secs;
 
  $locks = array('lock'=>array(), 'unlock'=>array()) ;
  if($lock) {
@@ -94,7 +95,13 @@ function xcom_lock($page, $lock, $client) {
  echo "unlocking\n";
        $locks['unlock'][] = $page;
  }
-   while(!$client->query('dokuwiki.setLocks',$locks));  
+   $time_start = time();   
+   while(!$client->query('dokuwiki.setLocks',$locks)) {
+      if((time() - $time_start ) > $secs ) {        
+        break;
+       }
+      usleep(50);
+   }   
    
   $data = $client->getResponse();  
   
