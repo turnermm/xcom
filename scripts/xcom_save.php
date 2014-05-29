@@ -253,12 +253,7 @@ class xcom_save  {
         else $this->msg('nologoff');
     }
 }
-/*
-$local=array('url'=>'http://192.168.0.77/binky','user'=>'tower','pwd'=>'mike35tu'); 
-$remote=array('url'=>'http://192.168.0.77/adora','user'=>'tower','pwd'=>'mike35tu'); 
-$xcom=new xcom_save(json_encode($local),json_encode($remote),'start');
-exit;
-*/
+
 $xcom=new xcom_save($_REQUEST['local'],$_REQUEST['remote'],$_REQUEST['id']);
 $xcom->getPage();
 $xcom->getMedia() ;
