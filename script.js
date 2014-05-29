@@ -87,7 +87,7 @@ function xcom_print_data(fn, data) {
    };
 	        switch(fn) 
          {
-             case 'wiki.getPage':                 // (string) raw Wiki text                 
+            case 'wiki.getPage':                 // (string) raw Wiki text                 
             case 'wiki.getPageVersion':      // (string) raw Wiki text 
                   id = 'xcom_editable' ;
                   break;   
@@ -243,6 +243,9 @@ function xcom_params() {
      }
      else {
        if(!opts) return false;      
+       for(n=0; n<opts.length; n++) {
+         opts[n] = xcom_timeStamp(opts[n]);
+       }
        return params[i] = opts;
      }     
   
@@ -261,11 +264,26 @@ function xcom_params() {
     
     if(opts.length) {
           for(j=0;j<opts.length;j++) {
+            opts[j] = xcom_timeStamp(opts[j]);
             params[++i] = opts[j]; 
           }
     }
     fn_sel.selectedIndex = 0;
     return params; 
+}
+
+function xcom_timeStamp(opt) {        
+    try{
+        if(opt.match(/\d\d\d\d-\d\d-\d\d/)) {
+           var d = new Date(opt);
+           var unixtime = parseInt(d.getTime() / 1000);
+           if(unixtime) {
+               return unixtime;
+           }
+        }
+    }catch(e) { 
+    }
+    return opt;
 }
 
 function xcom_escape(data) {
@@ -402,10 +420,12 @@ JSON.stringify = JSON.stringify || function (obj) {
 jQuery( document ).ready(function() {     
        var sel = document.getElementById('xcom_sel');   
        if(sel) {
+       var titles = JSINFO['xcom_qtitles'];
        for(i=0; i<xcom_opts.length; i++) {
            var text = xcom_opts[i].match(/^plugin\./) ? xcom_opts[i].replace(/^plugin\./,"") : (xcom_opts[i].split('.'))[1]; 
             var newopt = new Option(text,xcom_opts[i]);
-            newopt.title = xcom_opts[i];
+            if(titles[xcom_opts[i]]) newopt.title = titles[xcom_opts[i]];
+            else newopt.title = xcom_opts[i];
             sel.add(newopt);
        }
 

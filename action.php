@@ -55,6 +55,27 @@ class action_plugin_xcom extends DokuWiki_Action_Plugin {
             }
     }
 
+        $JSINFO['xcom_qtitles'] = array(
+            'dokuwiki.getPagelist'=>"get pages in given namespace",
+            'dokuwiki.search'=>'fulltext search',
+            'dokuwiki.getTitle'=>'Wiki title',
+            'dokuwiki.appendPage'=>'Append text to wiki page',
+            'wiki.aclCheck'=>false,
+            'wiki.getPage'=>'get raw wiki text',
+            'wiki.getPageVersion'=>'get wiki text for specific revision ',
+            'wiki.getPageVersions'=>'available versions of a wiki page',
+            'wiki.getPageInfo'=>false,
+            'wiki.getPageHTML'=>'get XHTML body of wiki page',
+            'wiki.putPage'=>'Save page',
+            'wiki.listLinks'=>'all links in page',
+            'wiki.getAllPages'=>'all wiki pages in remote wiki',
+            'wiki.getAttachments'=>'list media files in namespace',
+            'wiki.getAttachmentInfo'=>'info about a media file',
+            'plugin.acl.addAcl'=>false,
+            'plugin.acl.delAcl'=>false,
+            'plugin.xcom.getMedia'=>'list of all media in wiki page'
+        );
+        
     }        
 }
 

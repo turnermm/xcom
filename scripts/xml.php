@@ -48,7 +48,7 @@ if($client)
      $retv = $helper->getLang('timedout');
    }
    elseif(is_array($retv)) { 
-      if(in_array($fn,$array_types)) {  
+      if(in_array($fn,$array_types) && !$retv['faultCode'] && !$retv['faultString']) {  
        $retv = json_encode($retv);
        echo $retv;
        exit;
