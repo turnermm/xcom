@@ -24,6 +24,7 @@ At its simplest you enter the URL of the remote wiki into the ''Remote URL'' tex
   - If your query requires an id, enter that in the ''ID''  text box.  The id must be the complete id that identifies the page on the remote server, in other words, including the namespace.
   - Some queries may require additional options. Clicking the ''Query types''  button will bring up a listing of query types and their options. Enter these options, in the order listed, separated by commas, in the ''Options''  text box. ** Do not **  re-enter the ''id''  in this additional list of options.
   - There are more query types found on Dokuwiki's [[https://dokuwiki.org/devel:xmlrpc|xmlrpc page]] than are listed in the ''Select query''  menu. If you want to use one of those, then enter the complete listing, including the function name into the ''Options''  box. The function name must come first and then, in order listed, the options. They must all be separated by commas, including the function name. For instance: \\ ''wiki.function,parameter_1, parameter_2''
+  - ''Timestamps'':  Some queries require a timestamp as a parameter.   Xcom will create the timestamp for you.  Enter the date in the ''Options''  box in this format:  yyyy-mm-dd, for instance 2014-05-29.
 
 ==== Views ====
 
