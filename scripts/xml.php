@@ -24,7 +24,7 @@ if($client)
         }
     }    
 
-   $array_types = array('dokuwiki.getPagelist','wiki.getPageVersions','wiki.getPageInfo','wiki.getAllPages', 'wiki.getAttachments','wiki.listLinks','dokuwiki.search','plugin.xcom.getMedia');
+   $array_types = array('dokuwiki.getPagelist','wiki.getPageVersions','wiki.getPageInfo','wiki.getAllPages',  'wiki.getAttachmentInfo','wiki.getAttachments','wiki.listLinks','dokuwiki.search','plugin.xcom.getMedia');
    $time_start = time();   
    $resp = "";
    
@@ -49,6 +49,9 @@ if($client)
    }
    elseif(is_array($retv)) { 
       if(in_array($fn,$array_types) && !$retv['faultCode'] && !$retv['faultString']) {  
+	   if($fn == 'wiki.getAttachmentInfo' && isset($params[1])) {
+	      $retv = array_merge(array('id' => $params[1]), $retv); 
+	  }
        $retv = json_encode($retv);
        echo $retv;
        exit;

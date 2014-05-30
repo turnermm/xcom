@@ -91,6 +91,7 @@ function xcom_print_data(fn, data) {
      'plugin_xcom_getMedia': ['Media files'],
      'wiki_getAttachments': ['id','size','lastModified'],
      'wiki_listLinks': ['type', 'page','href'], 
+	 'wiki_getAttachmentInfo': ['id','lastModified','size'],
    };
    xcomHeaders = table_calls;
    
@@ -111,7 +112,7 @@ function xcom_print_data(fn, data) {
             case 'plugin.xcom.getMedia':
             case 'wiki.getAttachments':
             case  'wiki.listLinks':
-      
+			case  'wiki.getAttachmentInfo':    
                  id = 'xcom_htm';
                  try {
                      var obj = jQuery.parseJSON(data);                                           
@@ -126,7 +127,7 @@ function xcom_print_data(fn, data) {
                     {   
                         var fncall = fn.replace(/\./g,'_');                      
                         data = xcom_thead(table_calls[fncall]); 
-                         if(fn == 'wiki.getPageInfo') {
+                         if(fn == 'wiki.getPageInfo' || fn ==  'wiki.getAttachmentInfo') {
                                 data +=  xcom_hash(obj);  //straight single hash
                            }     
                           else if (fn == 'plugin.xcom.getMedia') {
