@@ -91,7 +91,7 @@ function xcom_print_data(fn, data) {
      'plugin_xcom_getMedia': ['Media files'],
      'wiki_getAttachments': ['id','size','lastModified'],
      'wiki_listLinks': ['type', 'page','href'], 
-	 'wiki_getAttachmentInfo': ['id','lastModified','size'],
+     'wiki_getAttachmentInfo': ['id','lastModified','size'],
    };
    xcomHeaders = table_calls;
    
@@ -112,7 +112,7 @@ function xcom_print_data(fn, data) {
             case 'plugin.xcom.getMedia':
             case 'wiki.getAttachments':
             case  'wiki.listLinks':
-			case  'wiki.getAttachmentInfo':    
+            case  'wiki.getAttachmentInfo':    
                  id = 'xcom_htm';
                  try {
                      var obj = jQuery.parseJSON(data);                                           
@@ -199,7 +199,7 @@ function xcom_thead(args) {
 }
 
 function xcom_td(type,val,fn) {
-
+     
      if(fn) 
      {        
          var is_header = false;
@@ -210,9 +210,9 @@ function xcom_td(type,val,fn) {
                  is_header=true;
                  break;
              }
-        }
+        }    
         if(!is_header) return;
-     }
+    }
     
     if(type == 'modified' || type == 'lastModified' && typeof val == 'object') {    
         var min =val['minute'] ?  val['minute'] : val['minut'];
@@ -237,10 +237,10 @@ function xcom_td(type,val,fn) {
           if(b.length > 7) { 
              display = a + '&nbsp;&nbsp;&nbsp;&nbsp;' + b;
           }   
-        }  
+        } 
          if(type == 'id') {        
-         return '<td><a href="javascript:xcom_localSave(\'' + val + '\');void 0;">' +display +'</a></td>';         
-    }
+            return '<td><a href="javascript:xcom_localSave(\'' + val + '\');void 0;">' +display +'</a></td>';         
+         }
          val =display;
     }
     else if(type == 'snippet') {
@@ -323,6 +323,7 @@ function xcom_query_status(options) {
    if(typeof options != 'object'  && !(options instanceof Array)) return;
       
    var q = options.join(',&nbsp;');
+ 
    if(q.length > 70) {
       q = q.substring(0,70) + '.  .  .';
    }
