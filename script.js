@@ -90,6 +90,7 @@ function xcom_print_data(fn, data) {
      'dokuwiki_search': ['id', 'score', 'rev', 'mtime','size'],
      'plugin_xcom_getMedia': ['Media files'],
      'wiki_getAttachments': ['id','size','lastModified'],
+     'wiki_listLinks': ['type', 'page','href'], 
    };
    xcomHeaders = table_calls;
    
@@ -109,6 +110,8 @@ function xcom_print_data(fn, data) {
             case 'dokuwiki.search':
             case 'plugin.xcom.getMedia':
             case 'wiki.getAttachments':
+            case  'wiki.listLinks':
+      
                  id = 'xcom_htm';
                  try {
                      var obj = jQuery.parseJSON(data);                                           
@@ -124,13 +127,13 @@ function xcom_print_data(fn, data) {
                         var fncall = fn.replace(/\./g,'_');                      
                         data = xcom_thead(table_calls[fncall]); 
                          if(fn == 'wiki.getPageInfo') {
-                                data +=  xcom_twodim(obj);
+                                data +=  xcom_hash(obj);  //straight single hash
                            }     
                           else if (fn == 'plugin.xcom.getMedia') {
                                data +=  xcom_onedim(obj);
                            }                          
                           else {
-                               data+=xcom_multidim(obj,fn);
+                               data+=xcom_multidim(obj,fn);  // array of arrays
                           }
                     }                   
                     data += xcom_tclose();  //end tables
@@ -170,7 +173,7 @@ function xcom_multidim(obj,func) {
        return data;
 }
 
-function xcom_twodim(obj) {
+function xcom_hash(obj) {
          var data ="\n<tr>";   
          for(var i in obj) { 
            data += xcom_td(i,obj[i]);            
@@ -225,7 +228,7 @@ function xcom_td(type,val,fn) {
      else if(type == 'id'  && fn=='dokuwiki.search') {
           return '<td class ="xcom_id">'+val +'</td>';
     }
-    else if(type == 'id') {                   
+    else if(type == 'id' || type == 'href' || (type =='page' && fn == 'wiki.listLinks')) {                   
        var display = val;
        if(val.length > 40) {
           var a = val.substring(0,40) + ". . . .<br />";  
@@ -234,7 +237,10 @@ function xcom_td(type,val,fn) {
              display = a + '&nbsp;&nbsp;&nbsp;&nbsp;' + b;
           }   
         }  
+         if(type == 'id') {        
          return '<td><a href="javascript:xcom_localSave(\'' + val + '\');void 0;">' +display +'</a></td>';         
+    }
+         val =display;
     }
     else if(type == 'snippet') {
         return '<tr><td class="xcom_none">&nbsp;</td><td colspan = "4" class="xcom_snippet">' + val + '</td>';
