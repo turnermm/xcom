@@ -11,6 +11,11 @@ class remote_plugin_xcom extends DokuWiki_Remote_Plugin {
                'return' => 'array',
                'doc' => 'returns list of media in page id named in args1, args 2 is optional namespace'
             ),            
+            'listNamespaces' => array(
+                'args' => array('string','array'),
+                'return' => 'array',
+                'doc' => 'returns list of wiki namespaces'
+            ),             
         );
     }
 
@@ -18,6 +23,69 @@ class remote_plugin_xcom extends DokuWiki_Remote_Plugin {
         if($a[0]) return strftime('%Y. %B %d. %A', $this->getApi()->toDate(time()));
         return $this->getApi()->toDate(time());
     }
+    
+     public function listNamespaces($namespace="",$mask="") {  
+      global $conf;       
+      //return $conf['mediadir'];
+      if(!$namespace) {
+        $namespace = $conf['mediadir']; 
+      }
+       else $namespace = $conf['mediadir'] . '/'. $namespace;
+       
+      $namespace = rtrim($namespace, '/');
+      $folder_list = array();  
+      $folder_list =$this->find_all_files($namespace,$mask);
+      return $folder_list;
+
+    
+    }    
+    
+  /**
+    /*    Based on  find_all_files() by kodlee at kodleeshare dot net 
+    /*         at  http://ca3.php.net/scandir: 
+   */
+  function find_all_files($dir,$mask="")
+  {
+    
+    $root = scandir($dir);
+    $regex='';
+    $mask = trim($mask);
+    if($mask) {
+        $mask= json_decode($mask);
+        for($i=0; $i<count($mask) ;$i++) {
+            $mask[$i] = preg_quote($mask[$i]);
+        }
+        if(count($mask) > 1) {    
+           $regex =  implode('|',$mask);      
+        }
+         else if(is_array($mask)) {
+            $regex = $mask[0];
+         }
+         else $regex = $mask;    
+        $regex = "\/($regex)";
+   }
+    
+   foreach($root as $value)
+    {
+        if($value === '.' || $value === '..') {continue;}
+         if($mask)  if(preg_match('#'. $regex .'#',"$dir/$value")) {continue;} 
+  
+        if(is_dir("$dir/$value")) {                
+                $result[]="$dir/$value";
+                foreach($this->find_all_files("$dir/$value") as $value)
+                {      if(!$mask) {
+                             $result[]="$value";                           
+                         }    
+                         else  if(! preg_match('#'. $regex .'#',"$dir/$value")) {
+                            $result[]=$value;
+                        }
+                }
+            }
+    }
+    
+    return $result;
+  } 
+
     
     public function getMedia($id,$namespace="") {  
           if($namespace) {
@@ -55,6 +123,6 @@ class remote_plugin_xcom extends DokuWiki_Remote_Plugin {
               
               return "no media data in $path";             
           }       
-          return "no data for $path";
+          return "no data for $id";
     }
 }

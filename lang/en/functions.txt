@@ -115,3 +115,11 @@ $attrs['minor'] = (boolean) minor
 ^ Name        | ''plugin.xcom.getMedia'' |
 ^ Parameters  | (String) id |
 ^ Description |List the media files in a page (id) |
+
+==== plugin.xcom.listNamespaces ====
+
+^Name |''plugin.xcom.listNamespaces''   |
+^Parameters |(String) namespace id, (Array) exclusions |
+^Description |Returns a list of sub-namespaces under the specified ''namespace id''. If the namespace id \\ is left blank, the listing will start at the root directory. \\ To exclude sub-namespaces enter the exclusions array in the ''Options'': \\ <code>(id1;id2;id3) </code> Note that the array is a series of ids, separated by semi-colons and enclosed in parentheses |
+
+

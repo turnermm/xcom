@@ -60,9 +60,7 @@ function xmlrpc() {
        var jobj = xcom_json_ini('xcom_pwd','xcom_url','xcom_user');
        str =JSON.stringify(jobj); 
        params += '&credentials=' + str;      
-  
- //alert(params + "\n" + func);
-  //return; 
+  //alert(params); // return;
          jQuery.ajax({
             url: DOKU_BASE + 'lib/plugins/xcom/scripts/xml.php',
             async: false,
@@ -92,6 +90,7 @@ function xcom_print_data(fn, data) {
      'wiki_getAttachments': ['id','size','lastModified'],
      'wiki_listLinks': ['type', 'page','href'], 
      'wiki_getAttachmentInfo': ['id','lastModified','size'],
+      'plugin_xcom_listNamespaces': ['Namespace Directories'],
    };
    xcomHeaders = table_calls;
    
@@ -113,6 +112,7 @@ function xcom_print_data(fn, data) {
             case 'wiki.getAttachments':
             case  'wiki.listLinks':
             case  'wiki.getAttachmentInfo':    
+            case  'plugin.xcom.listNamespaces':         
                  id = 'xcom_htm';
                  try {
                      var obj = jQuery.parseJSON(data);                                           
@@ -130,7 +130,7 @@ function xcom_print_data(fn, data) {
                          if(fn == 'wiki.getPageInfo' || fn ==  'wiki.getAttachmentInfo') {
                                 data +=  xcom_hash(obj);  //straight single hash
                            }     
-                          else if (fn == 'plugin.xcom.getMedia') {
+                          else if (fn == 'plugin.xcom.getMedia' || fn =='plugin.xcom.listNamespaces') {
                                data +=  xcom_onedim(obj);
                            }                          
                           else {
@@ -257,20 +257,36 @@ function xcom_tclose() {
 
 function xcom_params() {
     var params = new Array(),i=0;
-    var opts =  xcom_getInputValue('xcom_opts');  //Params from User-created Query/Options box
-    opts = opts.replace(/^\s+/,"");
-    opts = opts.replace(/\s+$/,"");
-    if(opts) opts = opts.split(/,/);
+    var optstring =  xcom_getInputValue('xcom_opts');  //Params from User-created Query/Options box
+    
+    var ar;
+    var opts = "";
+    
+    optstring = optstring.replace(/\s+/g,"");   
+    if(optstring) opts = optstring.split(/,/);   
+    
+    for(var p=0; i<opts.length; p++) {          
+          var isarray = xcom_getArray(opts[p]);    
+          if(isarray) {
+             opts[p] = isarray;
+             break;
+          }
+    }
 
     var fn_sel = document.getElementById('xcom_sel');       
+  
+     for(var n=0; n<opts.length; n++) {     
+        opts[n] = xcom_timeStamp(opts[n]);
+    }
+    
     if(fn_sel.selectedIndex > 0) {
         params[i]  = fn_sel.options[fn_sel.selectedIndex].value;
      }
-     else {
+     else 
+     {
        if(!opts) return false;      
-       for(n=0; n<opts.length; n++) {
-         opts[n] = xcom_timeStamp(opts[n]);
-       }
+ 
+       if(ar) opts[opts.length] = ar;     
        return params[i] = opts;
      }     
   
@@ -282,6 +298,11 @@ function xcom_params() {
        }
        else params[++i] = page;
     }   
+     else {
+         if(params[0]=='plugin.xcom.listNamespaces') {
+            params[++i] = '0';
+         }
+    }     
     if(params[0]=='wiki.putPage' || params[0]=='dokuwiki.appendPage') {
             params[++i] = xcom_escape(xcom_getInputValue('xcom_editable'));             
             params[++i] = {'sum':"", 'minor':""};
@@ -293,8 +314,24 @@ function xcom_params() {
             params[++i] = opts[j]; 
           }
     }
+
+    if(ar) params.push(ar); 
     fn_sel.selectedIndex = 0;
     return params; 
+}
+
+function xcom_getArray(opt) {
+
+try{
+    if(matches = opt.match(/\((.*?)\)/)) {          
+         ar = matches[1].split(/;/);  
+          return ar;
+       }
+    }
+    catch(e) {
+          alert(e.toString() + "\n" + opt);
+    }
+       return false;
 }
 
 function xcom_timeStamp(opt) {        
@@ -525,7 +562,9 @@ var xcom_opts=new Array(
 'wiki.getAllPages',
 'wiki.getAttachments',
 'wiki.getAttachmentInfo',
+'wiki.getRecentMediaChanges',
 'plugin.acl.addAcl',
 'plugin.acl.delAcl',
-'plugin.xcom.getMedia'
+'plugin.xcom.getMedia',
+'plugin.xcom.listNamespaces'
 );

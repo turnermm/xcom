@@ -24,10 +24,20 @@ if($client)
         }
     }    
 
-   $array_types = array('dokuwiki.getPagelist','wiki.getPageVersions','wiki.getPageInfo','wiki.getAllPages',  'wiki.getAttachmentInfo','wiki.getAttachments','wiki.listLinks','dokuwiki.search','plugin.xcom.getMedia');
+   $array_types = array('dokuwiki.getPagelist','wiki.getPageVersions','wiki.getPageInfo','wiki.getAllPages',  'wiki.getAttachmentInfo','wiki.getAttachments','wiki.listLinks','dokuwiki.search','plugin.xcom.getMedia', 'plugin.xcom.listNamespaces');
    $time_start = time();   
    $resp = "";
    
+   if($fn == 'plugin.xcom.listNamespaces') {
+       for($p=0; $p<count($params);$p++) {      
+            if(is_array($params[$p])) {
+               $params[$p] = json_encode($params[$p]);       
+            }
+       }
+   }
+   
+ 
+    
     while(!($resp = call_user_func_array(array($client,"query"),$params))){       
         if((time() - $time_start ) > $secs ) {        
         break;
