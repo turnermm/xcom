@@ -33,7 +33,7 @@ class remote_plugin_xcom extends DokuWiki_Remote_Plugin {
     
     
     
-         public function listNamespaces($namespace="",$mask="") {  
+     public function listNamespaces($namespace="",$mask="") {  
       global $conf;       
      
       if(!$namespace) {
@@ -80,10 +80,8 @@ class remote_plugin_xcom extends DokuWiki_Remote_Plugin {
     /*         at  http://ca3.php.net/scandir: 
    */
   function find_all_files($dir,$regex="")
-  {
-     global $conf; 
+  {     
     $root = scandir($dir);
-  
     
    foreach($root as $value)
     {
