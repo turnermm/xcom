@@ -81,7 +81,7 @@ function xcom_print_data(fn, data) {
    var id = 'xcom_pre';
 
    var table_calls = {
-     'dokuwiki_getPagelist':  ['id','rev', 'mtime' ,'size'],
+     'dokuwiki_getPagelist':  ['id','rev', 'mtime' ,'size','hash'],
      'wiki_getPageVersions': ['user','ip','type','sum','modified','version' ],
      'wiki_getPageInfo': ['name','lastModified','author','version'],
      'wiki_getAllPages': ['id', 'perms', 'size', 'lastModified'],
@@ -268,7 +268,10 @@ function xcom_params() {
     for(var p=0; i<opts.length; p++) {          
           var isarray = xcom_getArray(opts[p]);    
           if(isarray) {
-             opts[p] = isarray;
+              if(isarray[0] == 'hash')   {       
+                opts[p] ={'hash':'1'};
+               }                
+                else opts[p] =isarray;
              break;
           }
     }
@@ -314,9 +317,7 @@ function xcom_params() {
             params[++i] = opts[j]; 
           }
     }
-
-    if(ar) params.push(ar); 
-    fn_sel.selectedIndex = 0;
+     //fn_sel.selectedIndex = 0;
     return params; 
 }
 

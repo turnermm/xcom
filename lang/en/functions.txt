@@ -2,7 +2,7 @@
 ==== dokuwiki.getPagelist ====
 ^ Name        | ''dokuwiki.getPagelist'' |
 ^ Parameters  | (string) namespace, (array) options |
-^ Description | Lists all pages within a given namespace. The options are passed directly to [[xref>search_allpages()]]. |
+^Description |Lists all pages within a given namespace. The options are passed directly to [[go>search?q=search_allpages()&btnI=lucky|search_allpages()]]. The options array contains only one entry, the word ''hash'' enclosed in parentheses.  This will cause the ''getPagelist'' function to return a column containing a hash of the raw wiki contents of each page found.  |
 
 ==== dokuwiki.search ====
 
