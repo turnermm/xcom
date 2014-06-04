@@ -1,7 +1,8 @@
 
 ==== dokuwiki.getPagelist ====
-^ Name        | ''dokuwiki.getPagelist'' |
-^ Parameters  | (string) namespace, (array) options |
+
+^Name |''dokuwiki.getPagelist''   |
+^Parameters |(string) namespace, (array) options |
 ^Description |Lists all pages within a given namespace. The options are passed directly to [[go>search?q=search_allpages()&btnI=lucky|search_allpages()]]. The options array contains only one entry, the word ''hash'' enclosed in parentheses.  This will cause the ''getPagelist'' function to return a column containing a hash of the raw wiki contents of each page found.  |
 
 ==== dokuwiki.search ====
@@ -77,8 +78,8 @@ $attrs['minor'] = (boolean) minor
 ^ Description | Returns a list of recent changed media since given timestamp. |
 
 ==== wiki.getAttachments ====
-^ Name        | ''wiki.getAttachments'' |
-^ Parameters  | (String) namespace, (array) options |
+^Name |''wiki.getAttachments''   |
+^Parameters |(String) namespace, (array) options |
 ^Description |Returns a list of media files in a given namespace. The options array holds a regular expression in this format: ''(#pattern#)''. The hashes are regular expression pattern delimiters; everything between them will be matched against the media file names in ''namespace'' and only the matching files will be returned.  |
 
 ==== wiki.getAttachment ====

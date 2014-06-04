@@ -21,7 +21,7 @@ At its simplest you enter the URL of the remote wiki into the ''Remote URL'' tex
   - Enter the URL to the remote site. If your remote site is at ''<nowiki>http://www.example.com</nowiki>''  and the name of the wiki is ''my_wiki'', then you would enter ''<nowiki>http://www.example.com/my_wiki</nowiki>''. \\ As explained above the 'remote site' simply refers to the site which holds the xmlrpc interface with which you are communicating and could therefore be the site that you are currently logged into.
   - Enter the remote user name and password for the remote site. In your configuration settings you must enable the "Remote API system" and identify the remote user(s) or group(s).
   - Select your query type from the drop-down ''Select query''  menu.
-  - If your query requires an id, enter that in the ''ID''  text box.  The id must be the complete id that identifies the page on the remote server, in other words, including the namespace.
+  - If your query requires an id, enter that in the ''ID''  text box. The id must be the complete id that identifies the page on the remote server, in other words, including the namespace.
   - Some queries may require additional options. Clicking the ''Query types''  button will bring up a listing of query types and their options. Enter these options, in the order listed, separated by commas, in the ''Options''  text box. ** Do not **  re-enter the ''id''  in this additional list of options.
   - There are more query types found on Dokuwiki's [[https://dokuwiki.org/devel:xmlrpc|xmlrpc page]] than are listed in the ''Select query''  menu. If you want to use one of those, then enter the complete listing, including the function name into the ''Options''  box. The function name must come first and then, in order listed, the options. They must all be separated by commas, including the function name. For instance: \\ ''wiki.function,parameter_1, parameter_2''
   - ''Timestamps'':  Some queries require a timestamp as a parameter.   Xcom will create the timestamp for you.  Enter the date in the ''Options''  box in this format:  yyyy-mm-dd, for instance 2014-05-29.
@@ -30,9 +30,9 @@ At its simplest you enter the URL of the remote wiki into the ''Remote URL'' tex
 
 There are three display views: HTML, Edit, and Code. These are all contained within an "Output" window. When the result of a query is displayed, this window opens and the contents of your query will appear in one of these three views, depending upon the output. More than one view can be open at any one time, so that, for instance, you can be looking at the markup for a page while also viewing it as HTML. You can close and re-open these views using the buttons at the top right of the screen. And you can close the Output window entirely.
 
-   - ''Edit'' view enables you to make changes to the markup and save it back to the remote wiki which, as nted above, could be the wiki you are currently logged into. It also enables you to add material to a page by appending.
-  - ''HTML view'' is used to display wiki pages and to display query results that can be conveniently formatted as HTML.
-  - The ''Code view'' is preformatted text. It's used for simple plain text responses and complex arrays which may in later versions of xcom be re-formatted as tables.
+  - ''Edit''  view enables you to make changes to the markup and save it back to the remote wiki which, as nted above, could be the wiki you are currently logged into. It also enables you to add material to a page by appending.
+  - ''HTML view''  is used to display wiki pages and to display query results that can be conveniently formatted as HTML.
+  - The ''Code view''  is preformatted text. It's used for simple plain text responses and complex arrays which may in later versions of xcom be re-formatted as tables.
 
 ==== Status Bar ====
 
@@ -41,7 +41,7 @@ In the status bar at the bottom of the screen there are command links which enab
 
 The ''Local save'' button makes it possible to move pages and media from the remote wiki to the local wiki. Enter the id of a remote page or media file into the ''ID'' field and click the ''Local save'' button. If you select a page id, the page and all of its referenced media will be copied to the local server. All will be copied to the correct namespaces, including the page itself. If, instead of a page id,you enter a media id, the media file will also be copied to the correct namespace.
 
-To use the feature you must fill in the local user's xmlrpc user name and password in the text boxes.  The local url will be automtically retrieved from the system.
+To use the feature you must fill in the local user's xmlrpc user name and password in the text boxes. The local url will be automtically retrieved from the system.
 
 There is an alternate way of importing pages and media from the remote to the local wiki. There are several query types which return lists of pages and media with the ids in the first column. These are:
 
@@ -51,7 +51,7 @@ There is an alternate way of importing pages and media from the remote to the lo
 
 **''dokuwiki.getPagelist''  **  will take a namespace in the ''ID''  field and return all the pages in that namespace. **''wiki.getAllPages''  **  will return all the pages on the remote wiki. If you omit the namespace in the ID field,** ''dokuwiki.getPagelist''  **  is almost the same as'' **wiki.getAllPages**''. Finally, **''wiki_getAttachments''  **  returns media files and behaves exactly as **''dokuwiki.getPagelist''  **.
 
-The results of these queries are formatted as tables in which the first column is an action link.  If you click that link, the item will be imported into the local wiki from the remote wiki.  If this is a page, all of its media will also be imported.
+The results of these queries are formatted as tables in which the first column is an action link. If you click that link, the item will be imported into the local wiki from the remote wiki. If this is a page, all of its media will also be imported.
 
 Action links can also work with queries selected from the drop-down query menu. For more information about this, see the xcom plugin: [[doku>plugin:xcom#action_links|page]]
 

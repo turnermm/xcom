@@ -67,7 +67,7 @@ function xmlrpc() {
           }
           
        }
-       
+       var array_types = {'dokuwiki.getPagelist':1,'wiki.getPageVersions':1,'wiki.getPageInfo':1,'wiki.getAllPages':1, 'wiki.getAttachmentInfo':1,'wiki.getAttachments':1,'wiki.listLinks':1,'dokuwiki.search':1,'plugin.xcom.getMedia':1, 'plugin.xcom.listNamespaces':1};       
        var jobj = xcom_json_ini('xcom_pwd','xcom_url','xcom_user');
        str =JSON.stringify(jobj); 
        params += '&credentials=' + str;      
@@ -80,7 +80,9 @@ function xmlrpc() {
             dataType: 'html',         
             success: function(data)
             {  
+            if(!array_types.hasOwnProperty(func)) {
                data = decodeURIComponent(data);                                              
+            }
                xcom_show('xcom_results');
                xcom_print_data(func, data,other); 
             }
@@ -96,7 +98,7 @@ function xcom_print_data(fn, data,other) {
      'wiki_getPageVersions': ['user','ip','type','sum','modified','version' ],
      'wiki_getPageInfo': ['name','lastModified','author','version'],
      'wiki_getAllPages': ['id', 'perms', 'size', 'lastModified'],
-     'dokuwiki_search': ['id', 'score', 'rev', 'mtime','size'],
+     'dokuwiki_search': ['id', 'score', 'rev', 'mtime','size','snippet'],
      'plugin_xcom_getMedia': ['Media files'],
      'wiki_getAttachments': ['id','size','lastModified'],
      'wiki_listLinks': ['type', 'page','href'], 
@@ -272,11 +274,14 @@ function xcom_params() {
    
      
     var opts = ""; 
-    optstring = optstring.replace(/\s+/g,"");   
+    optstring = optstring.replace(/\s+$/,"");   
+    optstring = optstring.replace(/^\s+/,"");   
+    optstring = optstring.replace(/;\s+/,";");   
     if(optstring) opts = optstring.split(/,/);          
    
      
     for(var p=0; i<opts.length; p++) { 
+        if(!opts[p] || !opts[p].match(/^\s*\(/)) break;    
         var isarray = xcom_getArray(opts[p]);    
          if(isarray) {
              if(isarray[0] == 'hash')   {       
