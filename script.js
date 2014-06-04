@@ -35,7 +35,7 @@ function xcom_localSave(a_id) {
             {  
                data = decodeURIComponent(data);                      
                xcom_show('xcom_results');
-               xcom_print_data('dokuwiki.copy', data); 
+               xcom_print_data('dokuwiki.copy', data, false); 
             }
         });
 }
@@ -56,11 +56,22 @@ function xmlrpc() {
         }  
        xcom_query_status(options);
        var func = options[0];
+       var other=false;
        var params =  'params=' + JSON.stringify(options);
+       if(typeof options[2] == 'object' && options[2] !== null ) {
+          try {
+              if(options[2].hasOwnProperty('hash')) {
+                 other = 'hash';
+              }
+          } catch(e) {
+          }
+          
+       }
+       
        var jobj = xcom_json_ini('xcom_pwd','xcom_url','xcom_user');
        str =JSON.stringify(jobj); 
        params += '&credentials=' + str;      
-  //alert(params); // return;
+ //alert(params); // return;
          jQuery.ajax({
             url: DOKU_BASE + 'lib/plugins/xcom/scripts/xml.php',
             async: false,
@@ -71,17 +82,17 @@ function xmlrpc() {
             {  
                data = decodeURIComponent(data);                                              
                xcom_show('xcom_results');
-               xcom_print_data(func, data); 
+               xcom_print_data(func, data,other); 
             }
         });
          return false;
 }
 
-function xcom_print_data(fn, data) {
+function xcom_print_data(fn, data,other) {
    var id = 'xcom_pre';
 
-   var table_calls = {
-     'dokuwiki_getPagelist':  ['id','rev', 'mtime' ,'size','hash'],
+   var table_calls = {     
+     'dokuwiki_getPagelist': (other=='hash') ? ['id','rev', 'mtime' ,'size','hash'] : ['id','rev', 'mtime' ,'size'] ,      
      'wiki_getPageVersions': ['user','ip','type','sum','modified','version' ],
      'wiki_getPageInfo': ['name','lastModified','author','version'],
      'wiki_getAllPages': ['id', 'perms', 'size', 'lastModified'],
@@ -90,7 +101,7 @@ function xcom_print_data(fn, data) {
      'wiki_getAttachments': ['id','size','lastModified'],
      'wiki_listLinks': ['type', 'page','href'], 
      'wiki_getAttachmentInfo': ['id','lastModified','size'],
-      'plugin_xcom_listNamespaces': ['Namespace Directories'],
+     'plugin_xcom_listNamespaces': ['Namespace Directories'],
    };
    xcomHeaders = table_calls;
    
@@ -258,49 +269,55 @@ function xcom_tclose() {
 function xcom_params() {
     var params = new Array(),i=0;
     var optstring =  xcom_getInputValue('xcom_opts');  //Params from User-created Query/Options box
-    
-    var ar;
-    var opts = "";
-    
+   
+     
+    var opts = ""; 
     optstring = optstring.replace(/\s+/g,"");   
-    if(optstring) opts = optstring.split(/,/);   
-    
-    for(var p=0; i<opts.length; p++) {          
-          var isarray = xcom_getArray(opts[p]);    
-          if(isarray) {
-              if(isarray[0] == 'hash')   {       
+    if(optstring) opts = optstring.split(/,/);          
+   
+     
+    for(var p=0; i<opts.length; p++) { 
+        var isarray = xcom_getArray(opts[p]);    
+         if(isarray) {
+             if(isarray[0] == 'hash')   {       
                 opts[p] ={'hash':'1'};
-               }                
-                else opts[p] =isarray;
-             break;
+                break;
+             }    
+             else if(isarray[0].match(/#/))   { 
+                opts[p] ={'pattern' : isarray[0]};
+                break;
+             }    
+             else {
+                 opts[p] =isarray;
+                 break;
+             }
           }
     }
-
-    var fn_sel = document.getElementById('xcom_sel');       
+    
+     var fn_sel = document.getElementById('xcom_sel');       
   
      for(var n=0; n<opts.length; n++) {     
         opts[n] = xcom_timeStamp(opts[n]);
     }
     
-    if(fn_sel.selectedIndex > 0) {
+    if(fn_sel.selectedIndex > 0) {  
         params[i]  = fn_sel.options[fn_sel.selectedIndex].value;
-     }
+        }
      else 
      {
-       if(!opts) return false;      
- 
-       if(ar) opts[opts.length] = ar;     
+        if(!opts) return false;       
+       
        return params[i] = opts;
-     }     
-  
+    }     
+     
     var page = document.getElementById('xcom_pageid').value;
-  
+     
     if(page)  {       
        if(params[0] == 'dokuwiki.search') {  // add page to search query
              opts[0] =  opts[0] + " " + page;            
        }
        else params[++i] = page;
-    }   
+    }
      else {
          if(params[0]=='plugin.xcom.listNamespaces') {
             params[++i] = '0';
@@ -309,30 +326,29 @@ function xcom_params() {
     if(params[0]=='wiki.putPage' || params[0]=='dokuwiki.appendPage') {
             params[++i] = xcom_escape(xcom_getInputValue('xcom_editable'));             
             params[++i] = {'sum':"", 'minor':""};
-     }     
-    
+     }   
+
     if(opts.length) {
           for(j=0;j<opts.length;j++) {
             opts[j] = xcom_timeStamp(opts[j]);
             params[++i] = opts[j]; 
           }
     }
-     //fn_sel.selectedIndex = 0;
+    
     return params; 
 }
 
 function xcom_getArray(opt) {
 
-try{
+   if(!opt) return false;
+   try{
     if(matches = opt.match(/\((.*?)\)/)) {          
          ar = matches[1].split(/;/);  
           return ar;
        }
     }
-    catch(e) {
-          alert(e.toString() + "\n" + opt);
-    }
-       return false;
+    catch(e) { }
+    return false;
 }
 
 function xcom_timeStamp(opt) {        

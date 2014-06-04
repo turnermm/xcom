@@ -52,6 +52,7 @@ class admin_plugin_xcom extends DokuWiki_Admin_Plugin {
  */    
       ptln('<div id="xcom_functions" style="display:none;border:1px black solid;padding:12px 12px 12px 8px;height:400px;overflow:auto;">' );
       ptln('<b>' . $this->getLang('xmlrpc_fns') . ': </b><a href="https:/dokuwiki.org/xmlrpc">https://dokuwiki.org/devel:xmlrpc</a>');
+      ptln(' ' .$this->getLang('xmlrpc_fns_qualifier')); 
       ptln('<button  style = "float:right;" onclick="xcom_toggle(\'#xcom_functions\')">' . $this->getLang('close'). '</button>&nbsp;' . $this->locale_xhtml('functions'));
       ptln('<button  style = "float:right" onclick="xcom_toggle(\'#xcom_functions\')">' . $this->getLang('close'). '</button>&nbsp;<br /><br /></div>');
  /**

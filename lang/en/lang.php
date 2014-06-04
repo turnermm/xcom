@@ -10,6 +10,7 @@
 // if set here, the plugin doesn't need to override the getMenuText() method
 $lang['menu'] = 'xcom XMLRPC Dashboard'; 
 $lang['xmlrpc_fns'] ='For a complete listing with full details see';
+$lang['xmlrpc_fns_qualifier']='But the xcom listing may differ from that at dokuwiki.org in particulars that apply to the xcom application.';
 $lang['close'] = 'close';
 $lang['functions'] =  'Query types';
 $lang['select'] = 'Select query';
