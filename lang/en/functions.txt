@@ -47,7 +47,7 @@
 ==== wiki.putPage ====
 ^ Name        | ''wiki.putPage'' |
 ^ Parameters  | (string) [[doku>:pagename]] , (string) raw Wiki text, (array) attrs\\ Where ''attrs'' is either ''minor'' or it is''sum'', which specifies change summary.  The format is the same is in [[#dokuwikiappendpage|dokuwiki.appendPage]] |
-^ Description | Saves a Wiki Page. |
+^ Description | Saves a Wiki Page to the remote wiki. |
 
 ==== wiki.listLinks ====
 ^ Name        | ''wiki.listLinks'' |
@@ -87,11 +87,6 @@
 ^ Name        | ''wiki.getAttachmentInfo'' |
 ^ Parameters  | (String) id |
 ^ Description | Returns information about a media file |
-
-==== wiki.putAttachment ====
-^ Name        | ''wiki.putAttachment'' |
-^ Parameters  | (String) id, (base64) data, (array) params |
-^ Description | Uploads a file as a given media id. Available parameters are: \\ \\ <code>$params['ow'] = true if file is to overwrite an already existing media object of the given id</code> (This parameter is not yet implemented, and until it is, overwrite is always true.)|
 
 ==== wiki.deleteAttachment ====
 ^ Name        | ''wiki.deleteAttachment'' |
