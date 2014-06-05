@@ -2,12 +2,7 @@
 var xcomSites;
 var xcomHeaders;
 function xcom_localSave(a_id) {
-  var fn_sel = document.getElementById('xcom_sel');       
-   if(fn_sel.selectedIndex > 0 && a_id) {
-      xcom_setValue('xcom_pageid',a_id);
-      xmlrpc();
-      return;
-  }
+
   var params = "";
   
   var id =a_id ? a_id : xcom_getInputValue('xcom_pageid');

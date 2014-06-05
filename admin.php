@@ -100,7 +100,7 @@ class admin_plugin_xcom extends DokuWiki_Admin_Plugin {
 
       // Local User and Password 
       ptln ('<div class="local_side">&nbsp;&nbsp;&nbsp;'); 
-      ptln( '<button   onclick="xcom_localSave(this.form);" title="' . $this->getLang('locsave_title') . '">'. $this->getLang('locsave') .  '</button>&nbsp;');
+      ptln( '<button   onclick="xcom_localSave(this.form.xcom_pageid.value);" title="' . $this->getLang('locsave_title') . '">'. $this->getLang('locsave') .  '</button>&nbsp;');
       ptln( $this->getLang('locuser').': <input type="text" size = "12" value="' . $this->local_user .  '" name="xcom_locuser"  id = "xcom_locuser">&nbsp;');
       ptln($this->getLang('localpwd'). ': <input type="password" size = "9" name="xcom_localpwd"  id = "xcom_localpwd">');     
       ptln('&nbsp;<img src="' . DOKU_REL .  'lib/plugins/xcom/images/eye_blk.png"  title="'. $this->getLang('pwdview') . '" name="xcom_loceye" id ="xcom_loceye" />');                
