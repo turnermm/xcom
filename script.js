@@ -58,6 +58,7 @@ function xmlrpc() {
        var func = options[0];
        var other=false;
        var params =  'params=' + JSON.stringify(options);
+       params = params.replace(/\s*__comma__\s*/g,',');
        if(typeof options[2] == 'object' && options[2] !== null ) {
           try {
               if(options[2].hasOwnProperty('hash')) {
@@ -274,9 +275,19 @@ function xcom_params() {
    
      
     var opts = ""; 
+    var matches;
     optstring = optstring.replace(/\s+$/,"");   
     optstring = optstring.replace(/^\s+/,"");   
     optstring = optstring.replace(/;\s+/,";");   
+   
+    optstring = optstring.replace(/\((.*?)\)/g,function(a) {       
+        return a.replace(/,/g,' __comma__ ');
+    });
+  
+    optstring = optstring.replace(/\#(.*?)\#/g,function(a) {       
+        return a.replace(/,/g,'__comma__');
+    });
+    
     if(optstring) opts = optstring.split(/,/);          
    
      
@@ -292,6 +303,14 @@ function xcom_params() {
                 opts[p] ={'pattern' : isarray[0]};
                 break;
              }    
+             else if(isarray[0].match(/sum/))   {  
+                opts[p] ={'sum' : isarray[1]};
+                break;
+             } 
+             else if(matches = isarray[0].match(/minor/))   {                 
+                opts[p] ={'minor': isarray[1]};
+                break;
+             }                              
              else {
                  opts[p] =isarray;
                  break;
@@ -330,9 +349,9 @@ function xcom_params() {
     }     
     if(params[0]=='wiki.putPage' || params[0]=='dokuwiki.appendPage') {
             params[++i] = xcom_escape(xcom_getInputValue('xcom_editable'));             
-            params[++i] = {'sum':"", 'minor':""};
      }   
 
+     //assign options to parameter array
     if(opts.length) {
           for(j=0;j<opts.length;j++) {
             opts[j] = xcom_timeStamp(opts[j]);
@@ -346,6 +365,7 @@ function xcom_params() {
 function xcom_getArray(opt) {
 
    if(!opt) return false;
+   var matches;
    try{
     if(matches = opt.match(/\((.*?)\)/)) {          
          ar = matches[1].split(/;/);  
