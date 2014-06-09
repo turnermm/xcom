@@ -11,7 +11,8 @@ function xcom_localSave(a_id) {
    }
    
    if(a_id) {
-      if(!window.confirm('Click OK to save "' + a_id + '" to the local wiki.')) return;
+      xcom_setValue('xcom_pageid',a_id);
+      if(!window.confirm(JSINFO['savelocalfile']  + ' ' + a_id)) return;
    }  
 
   var params = "";
