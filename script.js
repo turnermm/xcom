@@ -141,6 +141,7 @@ function xcom_print_data(fn, data,other) {
                      var obj = jQuery.parseJSON(data);                                           
                  } catch(e) {
                     id = 'xcom_pre';   // not a table, use code view, probably error msg                                 
+                    data = decodeURIComponent(data);                    
                      break;
                  }
                     /** 
