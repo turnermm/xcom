@@ -3,6 +3,17 @@ var xcomSites;
 var xcomHeaders;
 function xcom_localSave(a_id) {
 
+   var fn_sel = document.getElementById('xcom_sel');
+   if(fn_sel.selectedIndex > 0) {
+       xcom_setValue('xcom_pageid',a_id);
+        xmlrpc();
+        return;
+   }
+   
+   if(a_id) {
+      if(!window.confirm('Click OK to save "' + a_id + '" to the local wiki.')) return;
+   }  
+
   var params = "";
   
   var id =a_id ? a_id : xcom_getInputValue('xcom_pageid');
@@ -83,6 +94,9 @@ function xmlrpc() {
                xcom_print_data(func, data,other); 
             }
         });
+      
+         var fn_sel = document.getElementById('xcom_sel');
+         fn_sel.selectedIndex = 0;
          return false;
 }
 
