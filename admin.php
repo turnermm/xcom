@@ -63,11 +63,11 @@ class admin_plugin_xcom extends DokuWiki_Admin_Plugin {
       ptln('<button onclick=" xcom_toggle(\'#xcom_howto\')">'. $this->getLang('howto') .'</button>&nbsp;');       
       ptln('<button class="xcom_send_but" onclick="xmlrpc()">' .  $this->getLang('send')  .'</button>');  
       
-      ptln('<button style="float:right;margin-left:8px;"  title="' . $this->getLang('results_tip').  '"onclick="xcom_show(\'xcom_results\');">' . $this->getLang('results'). '</button>');
+      ptln('<button style="float:right;margin-left:8px;"  title="' . $this->getLang('results_tip').  '" onclick="xcom_show(\'xcom_results\');">' . $this->getLang('results'). '</button>');
        ptln('<button style="float:right;margin-left:8px;"  onclick="xcom_toggle(\'#xcom_editable\');">' . $this->getLang('editable'). '</button>');
        ptln('<button style="float:right;margin-left:8px;"  onclick="xcom_toggle(\'#xcom_htm\');">' . $this->getLang('html'). '</button>');
        ptln('<button style="float:right;margin-left:8px;"  onclick="xcom_toggle(\'#xcom_pre\');">' . $this->getLang('pre'). '</button>');
-      ptln('<button style="float:right;margin-left:8px;"  title="' . $this->getLang('results_tip').  '"onclick="xcom_hide_all_views();">' . $this->getLang('hideallviews'). '</button>');      
+      ptln('<button style="float:right;margin-left:8px;"  title="' . $this->getLang('results_tip').  '" onclick="xcom_hide_all_views();">' . $this->getLang('hideallviews'). '</button>');      
       ptln('</div>');
       
       ptln('<form action="'.wl($ID).'" method="post" name ="xcom_post">');            
