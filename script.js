@@ -258,7 +258,7 @@ function xcom_td(type,val,fn) {
        var display = val;
        if(val.length > 40) {
           var a = val.substring(0,40) + ". . . .<br />";  
-          var b = val.substring(40)
+          var b = val.substring(40);
           if(b.length > 7) { 
              display = a + '&nbsp;&nbsp;&nbsp;&nbsp;' + b;
           }   
