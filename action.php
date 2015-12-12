@@ -74,7 +74,8 @@ class action_plugin_xcom extends DokuWiki_Action_Plugin {
             'wiki.getAttachmentInfo'=>'info about a media file',
             'plugin.acl.addAcl'=>false,
             'plugin.acl.delAcl'=>false,
-            'plugin.xcom.getMedia'=>'list of all media in wiki page'
+            'plugin.xcom.getMedia'=>'list of all media in wiki page',
+            'plugin.xcom.listNamespaces'=>'list all namespaces, or sub-namespaces of ID'
         );
         
     }        
