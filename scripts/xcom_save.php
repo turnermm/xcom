@@ -253,8 +253,9 @@ class xcom_save  {
         else $this->msg('nologoff');
     }
 }
+global $INPUT;
 
-$xcom=new xcom_save($_REQUEST['local'],$_REQUEST['remote'],$_REQUEST['id']);
+$xcom=new xcom_save($INPUT->post->str('local'),$INPUT->post->str('remote'),$INPUT->post->str('id'));
 $xcom->getPage();
 $xcom->getMedia() ;
 $xcom->processMediaArray();

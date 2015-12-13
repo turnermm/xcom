@@ -55,7 +55,7 @@ class action_plugin_xcom extends DokuWiki_Action_Plugin {
                 $JSINFO['xcom_sites'][$name][$item] = $val;       
             }
     }
-
+       /* tooltips  for  function select menu */
         $JSINFO['xcom_qtitles'] = array(
             'dokuwiki.getPagelist'=>"get pages in given namespace",
             'dokuwiki.search'=>'fulltext search',
