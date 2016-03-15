@@ -76,8 +76,8 @@ class remote_plugin_xcom extends DokuWiki_Remote_Plugin {
     }    
     
   /**
-    /*    Based on  find_all_files() by kodlee at kodleeshare dot net 
-    /*         at  http://ca3.php.net/scandir: 
+    *    Based on  find_all_files() by kodlee at kodleeshare dot net 
+    *         at  http://ca3.php.net/scandir: 
    */
   function find_all_files($dir,$regex="")
   {     
