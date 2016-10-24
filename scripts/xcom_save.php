@@ -27,7 +27,7 @@ class xcom_save  {
             $this->msg('nopage');            
             exit;
         }
-        $secs =  5;     
+        $secs =  10;     
         while(!($this->localClient = $this->ini_clients($local_auth,true))) {
             if((time() - $time_start ) > $secs ) {        
             break;
