@@ -53,7 +53,7 @@ if($client)
             }
        }
  
-    
+   
     while(!($resp = call_user_func_array(array($client,"query"),$params))){       
         if((time() - $time_start ) > $secs ) {        
         break;
@@ -83,6 +83,7 @@ if($client)
        exit;
     }
     else  {     
+      $temp = print_r($retv,true);
       $retv = rawurlencode($temp);
       }
    }
