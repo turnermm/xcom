@@ -88,7 +88,7 @@ if($client)
       }
    }
    else {
-      $retv=rawurlencode($retv);
+      
    }
    echo $retv;
   
