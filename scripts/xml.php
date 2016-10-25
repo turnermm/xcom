@@ -36,6 +36,22 @@ if($client)
        }
    }
    
+    if($fn == 'dokuwiki.getPagelist') {
+       for($p=0; $p<count($params);$p++) {      
+            if(is_array($params[$p])) {                   
+                    $elems = $params[$p];
+                    foreach($elems as $el) {
+                        if(strpos($el,':') !== false) {
+                            list($key,$val) = explode (':' , $el);
+                            $key = trim($key); $val = trim($val);
+                            $ar[$key] = ($val+=1);                             
+                            $params[$p] = $ar;            
+                            break;                            
+                        }                                         
+                    }                        
+                }
+            }
+       }
  
     
     while(!($resp = call_user_func_array(array($client,"query"),$params))){       
@@ -66,9 +82,7 @@ if($client)
        echo $retv;
        exit;
     }
-    else  {
-     $temp = print_r($retv,true);
-      //file_put_contents(DOKU_INC . 'tempxmlrpc.txt',$temp);
+    else  {     
       $retv = rawurlencode($temp);
       }
    }
