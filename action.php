@@ -37,7 +37,12 @@ class action_plugin_xcom extends DokuWiki_Action_Plugin {
         $JSINFO['pwdhide'] = $this->getLang('pwdhide');
         $JSINFO['pwdview'] = $this->getLang('pwdview');
         $JSINFO['savelocalfile'] = $this->getLang('savelocalfile');       
-        $JSINFO['url'] = DOKU_URL;
+        $local_url = $this->getConf('local_url') ;
+        if(!empty($local_url))  {
+            $JSINFO['url'] = $local_url;
+        }
+        else   $JSINFO['url'] = DOKU_URL;     
+    
         $inidir = trim($this->getConf('inidir'));
          if(!$inidir) {
                $inidir = DOKU_PLUGIN . 'xcom/scripts/';

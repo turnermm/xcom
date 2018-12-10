@@ -28,6 +28,7 @@ function xcom_localSave(a_id) {
     var jobj = xcom_json_ini('xcom_pwd','xcom_url','xcom_user');
     str =JSON.stringify(jobj); 
     params +='&remote=' + str;
+   //if(!confirm("params: " + params)) return;
    
    var status =new Array("Save remote: ("+ id +  ") to Local wiki");
    xcom_query_status(status);
@@ -80,7 +81,8 @@ function xmlrpc() {
        var jobj = xcom_json_ini('xcom_pwd','xcom_url','xcom_user');
        str =JSON.stringify(jobj); 
        params += '&credentials=' + str;      
- //alert(params); // return;
+   //    if(!confirm(params)) return;
+
          jQuery.ajax({
             url: DOKU_BASE + 'lib/plugins/xcom/scripts/xml.php',
             async: false,
