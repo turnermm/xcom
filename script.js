@@ -537,6 +537,8 @@ JSON.stringify = JSON.stringify || function (obj) {
 
 
 jQuery( document ).ready(function() {     
+       /* drop-down function menu with tool tips */
+	   /* xcom_opts is array of xmlrpc functions below */ 
        var sel = document.getElementById('xcom_sel');   
        if(sel) {
        var titles = JSINFO['xcom_qtitles'];
@@ -556,7 +558,8 @@ jQuery( document ).ready(function() {
                 selsites.add(newopt);
              }
            }
-       }
+       }  // drop-down menu end
+	   
    var img_path = DOKU_BASE + 'lib/plugins/xcom/images/';
    var eyes  = {
         'black':  img_path + 'eye_blk.png',
