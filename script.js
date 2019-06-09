@@ -99,8 +99,8 @@ function xmlrpc() {
             }
         });
       
-         var fn_sel = document.getElementById('xcom_sel');
-         fn_sel.selectedIndex = 0;
+       // var fn_sel = document.getElementById('xcom_sel');
+        // fn_sel.selectedIndex = 0;
          return false;
 }
 
