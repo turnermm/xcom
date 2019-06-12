@@ -35,7 +35,6 @@ function xcom_localSave(a_id) {
   
          jQuery.ajax({
             url: DOKU_BASE + 'lib/plugins/xcom/scripts/xcom_save.php',
-            async: false,
             data: params,         
             type: 'POST',
             dataType: 'html',         
@@ -85,7 +84,6 @@ function xmlrpc() {
 
          jQuery.ajax({
             url: DOKU_BASE + 'lib/plugins/xcom/scripts/xml.php',
-            async: false,
             data: params,         
             type: 'POST',
             dataType: 'html',         
@@ -334,7 +332,7 @@ function xcom_params() {
     
      var fn_sel = document.getElementById('xcom_sel');       
   
-     for(var n=0; n<opts.length; n++) {     
+     for(var n=0; n<opts.length; n++) {  
         opts[n] = xcom_timeStamp(opts[n]);
     }
     
@@ -390,6 +388,7 @@ function xcom_getArray(opt) {
     return false;
 }
 
+ /* returns formatted timestamp if date, otherwise returns the option */
 function xcom_timeStamp(opt) {        
     try{
         if(opt.match(/\d\d\d\d-\d\d-\d\d/)) {
