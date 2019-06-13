@@ -167,7 +167,7 @@ function xcom_print_data(fn, data,other) {
                 break;   
              case 'wiki.putPage':  
              case 'dokuwiki.appendPage':  
-                  id == 'xcom_editable';
+                  id = 'xcom_editable';
                   break;
                default:     
                    break;                  

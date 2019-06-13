@@ -50,7 +50,7 @@ There is an alternate way of importing pages and media from the remote to the lo
   * wiki.getAllPages
   * wiki_getAttachments (media files)
 
-**''dokuwiki.getPagelist''  **  will take a namespace in the ''ID''  field and return all the pages in that namespace. **''wiki.getAllPages''  **  will return all the pages on the remote wiki. If you omit the namespace in the ID field,** ''dokuwiki.getPagelist''  **  is almost the same as'' **wiki.getAllPages**''. Finally, **''wiki_getAttachments''  **  returns media files and behaves exactly as **''dokuwiki.getPagelist''  **.
+**''dokuwiki.getPagelist''**  will take a namespace in the ''ID''  field and return all the pages in that namespace. **''wiki.getAllPages''**  will return all the pages on the remote wiki.  Finally, **''wiki_getAttachments''**  returns media files and behaves exactly as **''dokuwiki.getPagelist''**. The latter takes a namespace  in the ID field and requires a regular expression in the Options field.  The regular expression must be placed between hashes and passed in as an array.  For instance, if you want to get all PNG images in a namespace, you would enter the following expression in the options field: ''(#\.png#)''.
 
 The results of these queries are formatted as tables in which the first column is an action link. If you click that link, the item will be imported into the local wiki from the remote wiki. If this is a page, all of its media will also be imported.
 
@@ -66,7 +66,7 @@ There is an initialization file named ''xcom.ini'' which is found in the scripts
         pwd=rpcpwd
 </code>
 
-For each remote wiki that you work with, enter another data block. Only the title is required. The titles of these remote sites will appear in the drop-down menu, and when you select a menu item, the fields with entries will be entered into the remote wiki's text boxes.
+For each remote wiki that you work with, enter another data block. Only the title is required. The titles of these remote sites will appear in the drop-down menu, and when you select a menu item, the fields with entries will be entered into the remote wiki's text boxes.  **Note:** the title entry must be set flush against the left-hand margin.
 
 === Security ===
 
