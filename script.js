@@ -1,6 +1,8 @@
 
 var xcomSites;
 var xcomHeaders;
+var xcom_remote_url;  
+
 function xcom_localSave(a_id) {
 
    var fn_sel = document.getElementById('xcom_sel');
@@ -53,8 +55,10 @@ function xmlrpc() {
        xcom_hide('xcom_pre_title');
        xcom_hide('xcom_htm_title');
        xcom_hide('xcom_editable_title');
-       
-
+       xcom_remote_url = xcom_getInputValue('xcom_url'); 	   
+       xcom_remote_url = xcom_remote_url.replace(/[\/\\]$/,"");
+	   xcom_remote_url += '/doku.php?';
+       //alert(xcom_remote_url);	   
        xcom_clear('xcom_qstatus',false); 
        var options =  xcom_params();       
 
@@ -253,7 +257,7 @@ function xcom_td(type,val,fn) {
         val += ' bytes';
     }
      else if(type == 'id'  && fn=='dokuwiki.search') {
-          return '<td class ="xcom_id">'+val +'</td>';
+          return '<td class ="xcom_id">'+ xcom_search_url(val) +'</td>';
     }
     else if(type == 'id' || type == 'href' || (type =='page' && fn == 'wiki.listLinks')) {                   
        var display = val;
@@ -281,6 +285,9 @@ function xcom_tclose() {
   return "</table>\n";
 }
 
+function xcom_search_url(pageid) {
+	return '<a href = "' + xcom_remote_url + 'id=' +pageid +'">' + pageid + '</a>';
+}	
 function xcom_params() {
     var params = new Array(),i=0;
     var optstring =  xcom_getInputValue('xcom_opts');  //Params from User-created Query/Options box
