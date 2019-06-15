@@ -44,13 +44,14 @@ The ''Local save'' button makes it possible to move pages and media from the rem
 
 To use the feature you must fill in the local user's xmlrpc user name and password in the text boxes. The local url will be automtically retrieved from the system.
 
-There is an alternate way of importing pages and media from the remote to the local wiki. There are several query types which return lists of pages and media with the ids in the first column. These are:
+There is an alternate way of importing pages and media from the remote to the local wiki. There are several query types which return lists of pages and/or media with the ids in the first column. These are:
 
   * dokuwiki.getPagelist
   * wiki.getAllPages
-  * wiki_getAttachments (media files)
+  * wiki.getAttachments (media files)
+  * dokuwiki.search
 
-**''dokuwiki.getPagelist''**  will take a namespace in the ''ID''  field and return all the pages in that namespace. **''wiki.getAllPages''**  will return all the pages on the remote wiki.  Finally, **''wiki_getAttachments''**  returns media files and behaves exactly as **''dokuwiki.getPagelist''**. The latter takes a namespace  in the ID field and requires a regular expression in the Options field.  The regular expression must be placed between hashes and passed in as an array.  For instance, if you want to get all PNG images in a namespace, you would enter the following expression in the options field: ''(#\.png#)''.
+**''dokuwiki.getPagelist''**  will take a namespace in the ''ID''  field and return all the pages in that namespace. **''wiki.getAllPages''**  will return all the pages on the remote wiki.  Finally, **''wiki_getAttachments''**  returns media files and behaves exactly as **''dokuwiki.getPagelist''**. The latter takes a namespace  in the ID field and requires a regular expression in the Options field.  The regular expression must be placed between hashes and passed in as an array.  For instance, if you want to get all PNG images in a namespace, you would enter the following expression in the options field: ''(#\.png#)''. **''dokuwiki.search''** takes a query string as described in [[doku>search]] and returns a page of snippets from pages with the matching texts; clicking on the page id's for these snippets opens the full page with all matching texts highlighted.
 
 The results of these queries are formatted as tables in which the first column is an action link. If you click that link, the item will be imported into the local wiki from the remote wiki. If this is a page, all of its media will also be imported.
 

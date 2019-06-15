@@ -9,7 +9,7 @@
 
 ^ Name        | ''dokuwiki.search'' |
 ^ Parameters  | (string) a query string as described on [[doku>search]] |
-^ Description | Performs a fulltext search based on a regular expression enclosed in hash delimiters: ''#regex#'' |
+^ Description | Performs a fulltext search based on the query string |
 
 ==== dokuwiki.appendPage ====
 ^ Name        | ''dokuwiki.appendPage '' |
