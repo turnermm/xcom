@@ -1,6 +1,8 @@
 
 var xcomSites;
 var xcomHeaders;
+var xcom_remote_url;  
+var xcom_srch_str;
 function xcom_localSave(a_id) {
 
    var fn_sel = document.getElementById('xcom_sel');
@@ -53,8 +55,10 @@ function xmlrpc() {
        xcom_hide('xcom_pre_title');
        xcom_hide('xcom_htm_title');
        xcom_hide('xcom_editable_title');
-       
-
+       xcom_remote_url = xcom_getInputValue('xcom_url'); 	   
+       xcom_remote_url = xcom_remote_url.replace(/[\/\\]$/,"");
+	   xcom_remote_url += '/doku.php?';
+       //alert(xcom_remote_url);	   
        xcom_clear('xcom_qstatus',false); 
        var options =  xcom_params();       
 
@@ -253,7 +257,7 @@ function xcom_td(type,val,fn) {
         val += ' bytes';
     }
      else if(type == 'id'  && fn=='dokuwiki.search') {
-          return '<td class ="xcom_id">'+val +'</td>';
+          return '<td class ="xcom_id">'+ xcom_search_url(val) +'</td>';
     }
     else if(type == 'id' || type == 'href' || (type =='page' && fn == 'wiki.listLinks')) {                   
        var display = val;
@@ -279,6 +283,39 @@ function xcom_td(type,val,fn) {
 
 function xcom_tclose() {
   return "</table>\n";
+}
+
+function xcom_search_url(pageid) {
+	 if ( typeof xcom_srch_str == 'undefined' ) {        
+        xcom_srch_str =xcom_getInputValue('xcom_opts');
+}	
+	 var qs = '&'+ xcom_srch_opts(xcom_srch_opts); 	 
+	 return '<a href = "' + xcom_remote_url + 'id=' +pageid + qs +'" target = \"_blank\">' + pageid + '</a>';
+}	
+
+function xcom_srch_opts(srch_str) {
+	var srch_str =xcom_getInputValue('xcom_opts');
+    srch_str = srch_str.replace(/^\s+/,"");
+    srch_str = srch_str.replace(/\s+$/,"");
+    srch_str = srch_str.replace(/\s+\"/,'\"');
+    srch_str = srch_str.replace(/\"\s+/,'\"'); 
+  
+    var tmp = srch_str.split('\"');
+    if(tmp.length == 1) {
+      tmp = srch_str.split(/\s+/g);
+    }	
+    var result = "";
+    for(i=0; i<tmp.length; i++) {
+      if(tmp[i]) {
+       result += "s[]=" + tmp[i]; 
+       if(tmp[i+1]) {
+         result += '&';
+       }
+      }
+    }
+  result = result.replace(/=\s+/g, '='); 
+  result = result.replace(/\s*&\s*/g, '&'); 
+  return result;
 }
 
 function xcom_params() {
