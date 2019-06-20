@@ -58,16 +58,15 @@ function xmlrpc() {
        xcom_remote_url = xcom_getInputValue('xcom_url'); 	   
        xcom_remote_url = xcom_remote_url.replace(/[\/\\]$/,"");
 	   xcom_remote_url += '/doku.php?';
-       //alert(xcom_remote_url);	   
+       	   
        xcom_clear('xcom_qstatus',false); 
-       var options =  xcom_params();       
-
+       var options =  xcom_params(); 
        xcom_query_status(options);
-       var func = options[0];
-       if(!func || !options) {
-          alert('No function selected');
+
+       if(!options) {		
           return false; 
         }  
+       var func = options[0];      
        var other=false;
        var params =  'params=' + JSON.stringify(options);
        params = params.replace(/\s*__comma__\s*/g,',');
@@ -78,13 +77,12 @@ function xmlrpc() {
               }
           } catch(e) {
           }
-          
        }
        var array_types = {'dokuwiki.getPagelist':1,'wiki.getPageVersions':1,'wiki.getPageInfo':1,'wiki.getAllPages':1, 'wiki.getAttachmentInfo':1,'wiki.getAttachments':1,'wiki.listLinks':1,'dokuwiki.search':1,'plugin.xcom.getMedia':1, 'plugin.xcom.listNamespaces':1};       
        var jobj = xcom_json_ini('xcom_pwd','xcom_url','xcom_user');
        str =JSON.stringify(jobj); 
        params += '&credentials=' + str;      
-   //    if(!confirm(params)) return;
+       if(!confirm(params)) return;
 
          jQuery.ajax({
             url: DOKU_BASE + 'lib/plugins/xcom/scripts/xml.php',
@@ -288,12 +286,12 @@ function xcom_tclose() {
 function xcom_search_url(pageid) {
 	 if ( typeof xcom_srch_str == 'undefined' ) {        
         xcom_srch_str =xcom_getInputValue('xcom_opts');
-}	
-	 var qs = '&'+ xcom_srch_opts(xcom_srch_opts); 	 
+      }	
+	 var qs = '&'+ xcom_srch_opts(); 	 
 	 return '<a href = "' + xcom_remote_url + 'id=' +pageid + qs +'" target = \"_blank\">' + pageid + '</a>';
 }	
 
-function xcom_srch_opts(srch_str) {
+function xcom_srch_opts() {  // for search function
 	var srch_str =xcom_getInputValue('xcom_opts');
     srch_str = srch_str.replace(/^\s+/,"");
     srch_str = srch_str.replace(/\s+$/,"");
@@ -316,6 +314,64 @@ function xcom_srch_opts(srch_str) {
   result = result.replace(/=\s+/g, '='); 
   result = result.replace(/\s*&\s*/g, '&'); 
   return result;
+}
+function xcom_check_opts(fn,page,opts) {
+      alert('fn=' +fn + " page=" + page  + " opts=" +opts);
+	
+    var regex;
+
+    switch(fn) {
+         case 'wiki.getAllPages':
+            if((!page || page.trim().length === 0) && !opts) {              
+                return true;
+            }          
+             xcom_msg("Wrong parameter count: wiki.getAllPages does not take parameters")
+             return false;           
+        case 'wiki.aclCheck': 
+        case 'wiki.getPage':  
+        case 'plugin.xcom.getMedia': 
+        case 'wiki.getAttachmentInfo':
+        case 'wiki.deleteAttachment': 
+        case 'wiki.listLinks':
+        case 'wiki.getBackLinks':
+        case 'wiki.getPageInfo':
+        case 'wiki.getPageHTML': 
+            if(opts) {
+                xcom_msg("Wrong parameter count: " + fn + " does not take parameters")
+                return false;
+            }
+            regex = RegExp('^[\\w_:\.]+$');
+			console.log(regex.test(page));
+            if(!regex.test(page)) {
+                xcom_msg("Bad page ID");
+                return false;
+            }
+            return true;
+           
+      /*  case 'wiki.getRecentChanges':(int) timestamp
+        case 'wiki.getRecentMediaChanges':(int) timestamp
+            break	
+        case 'dokuwiki.getPagelist': (hash),(depth:n)
+            break;
+        case 'dokuwiki.search': string query
+            break;
+        case 'dokuwiki.appendPage': string [[doku>:pagename]],string wiki text,  string, (sum;summary text),(minor;n)
+        case 'wiki.putPage':(string) [[doku>:pagename]] (string) Wiki text,  string, (sum;summary text),(minor;n) 
+            break;
+        case 'wiki.getPageVersions': (string) [[doku>:pagename]] , (int) offset
+            break;
+        case 'wiki.getAttachments': (String) namespace, (array) options (#pattern#)
+            break;
+        case 'plugin.acl.addAcl': (String) scope, (String) user|@group 
+            break;	
+        case 'plugin.acl.delAcl':String) scope, (String) user|@group, (int) permission 
+            break;	
+        case 'plugin.xcom.listNamespaces':(String) namespace id, (Array) (id1;id2. . .)
+            break;	*/
+        default:
+          		
+    }
+    return true;
 }
 
 function xcom_params() {
@@ -340,7 +396,7 @@ function xcom_params() {
     if(optstring) opts = optstring.split(/,/);          
    
      
-    for(var p=0; i<opts.length; p++) { 
+    for(var p=0; p<opts.length; p++) {	
         if(!opts[p] || !opts[p].match(/^\s*\(/)) break;    
         var isarray = xcom_getArray(opts[p]);    
          if(isarray) {
@@ -384,7 +440,9 @@ function xcom_params() {
     }     
      
     var page = document.getElementById('xcom_pageid').value;
-     
+	
+    var opstatus = xcom_check_opts(params[i],page,optstring);
+	if(!opstatus) return false;
     if(page)  {       
        if(params[0] == 'dokuwiki.search') {  // add page to search query
              opts[0] =  opts[0] + " " + page;            
@@ -535,6 +593,14 @@ function xcom_setValue(item,val) {
    d.value = val; 
 }
 
+/* used for checking options */
+function xcom_msg(msg) {
+  id ='xcom_pre';
+   xcom_show('xcom_results');   
+  var d = document.getElementById(id);  
+  d.innerHTML = msg;
+  xcom_show('xcom_pre');
+}
 
 /**
    JSON.stringify combines elements from both of below:
