@@ -58,7 +58,7 @@ function xmlrpc() {
        xcom_remote_url = xcom_getInputValue('xcom_url'); 	   
        xcom_remote_url = xcom_remote_url.replace(/[\/\\]$/,"");
 	   xcom_remote_url += '/doku.php?';
-       	   
+   // alert(latinize('??A??lΙ αινσϊύcdenrtu'));  	   
        xcom_clear('xcom_qstatus',false); 
        var options =  xcom_params(); 
        xcom_query_status(options);

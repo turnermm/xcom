@@ -20,6 +20,7 @@ class action_plugin_xcom extends DokuWiki_Action_Plugin {
     public function register(Doku_Event_Handler $controller) {
 
        $controller->register_hook('DOKUWIKI_STARTED', 'AFTER', $this, 'handle_dokuwiki_started');
+	   $controller->register_hook('TPL_METAHEADER_OUTPUT', 'BEFORE', $this,'handle_meta_headers'); 
    
     }
 
@@ -83,7 +84,16 @@ class action_plugin_xcom extends DokuWiki_Action_Plugin {
             'plugin.xcom.listNamespaces'=>'list all namespaces, or sub-namespaces of ID'
         );
         
-    }        
+    }
+
+    public function handle_meta_headers(Doku_Event &$event, $param){
+		//msg(DOKU_BASE."lib/plugins/xcom/scripts/latinize-cmpr.js");
+	    $event->data["script"][] = array (
+           "type" => "text/javascript",
+           "src" => DOKU_BASE."lib/plugins/xcom/scripts/latinize-cmpr.js",
+            "_data" => ""
+         );
+	}		
 }
 
 // vim:ts=4:sw=4:et:
