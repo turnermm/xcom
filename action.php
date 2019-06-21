@@ -91,8 +91,8 @@ class action_plugin_xcom extends DokuWiki_Action_Plugin {
            "type" => "text/javascript",
            "src" => DOKU_BASE."lib/plugins/xcom/scripts/xcom_latinize-cmpr.js",
             "_data" => ""
-         );
-		 $event->data["script"][] = array (
+          );
+ 	  $event->data["script"][] = array (
            "type" => "text/javascript",
            "src" => DOKU_BASE."lib/plugins/xcom/scripts/safeFN_class-cmpr.js",
             "_data" => ""

@@ -58,8 +58,9 @@ function xmlrpc() {
        xcom_remote_url = xcom_getInputValue('xcom_url'); 	   
        xcom_remote_url = xcom_remote_url.replace(/[\/\\]$/,"");
 	   xcom_remote_url += '/doku.php?';
-	  // alert(SafeFN_encode('????????'));
-       //alert(xcom_latinize('??A??lÉ áéíóúýcdenrštžu'));  	   
+	 //  console.log(SafeFN_encode('????????'));
+   // console.log(SafeFN_encode( '???'));
+    //   console.log(SafeFN_encode('??A??lÉ áéíóúýcdenrštžu'));          
        xcom_clear('xcom_qstatus',false); 
        var options =  xcom_params(); 
        xcom_query_status(options);
@@ -317,9 +318,11 @@ function xcom_srch_opts() {  // for search function
   return result;
 }
 function xcom_check_opts(fn,page,opts) {
-	  page = xcom_latinize(page);
+      page = page.trim();
+	  page =SafeFN_encode(page);
       alert('fn=' +fn + " page=" + page  + " opts=" +opts);
-	
+	//SafeFN_encode
+    console.log(page);
     var regex;
 
     switch(fn) {
@@ -342,8 +345,10 @@ function xcom_check_opts(fn,page,opts) {
                 xcom_msg("Wrong parameter count: " + fn + " does not take parameters")
                 return false;
             }
-            regex = RegExp('^[\\w_:\.]+$');
-			console.log(regex.test(page));
+            
+            regex = RegExp('^[%0-9\\w_:\.\\]]+$');
+            //console.log(regex);
+			//console.log(regex.test(page));
             if(!regex.test(page)) {
                 xcom_msg("Bad page ID");
                 return false;
