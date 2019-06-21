@@ -9,7 +9,15 @@
 
 ^ Name        | ''dokuwiki.search'' |
 ^ Parameters  | (string) a query string as described on [[doku>search]] |
-^ Description | Performs a fulltext search based on the query string |
+^ Description | Performs a fulltext search based on the raw string |
+
+==== dokuwiki.getTitle ====
+
+^ Name        | ''dokuwiki.getTitle'' |
+^ Parameters  | - |
+^ Data        | (string) the title of the wiki |
+^ Description | Returns the title of the wiki. |
+
 
 ==== dokuwiki.appendPage ====
 ^ Name        | ''dokuwiki.appendPage '' |
