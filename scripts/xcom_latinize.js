@@ -10,21 +10,21 @@
     module.exports = factory();
   } else {
     // running in browser
-    root.latinize = factory();
+    root.xcom_latinize = factory();
   }
 })(this, function() {
 
-  function latinize(str) {
+  function xcom_latinize(str) {
     if (typeof str === 'string') {
       return str.replace(/[^A-Za-z0-9]/g, function(x) {
-        return latinize.characters[x] || x;
+        return xcom_latinize.characters[x] || x;
       });
     } else {
       return str;
     }
   }
 
-  latinize.characters = {
+  xcom_latinize.characters = {
     'Á': 'A',
     'Ă': 'A',
     'Ắ': 'A',
@@ -918,5 +918,5 @@
     'ю': 'yu'
   };
 
-  return latinize;
+  return xcom_latinize;
 });

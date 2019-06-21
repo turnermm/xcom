@@ -58,7 +58,8 @@ function xmlrpc() {
        xcom_remote_url = xcom_getInputValue('xcom_url'); 	   
        xcom_remote_url = xcom_remote_url.replace(/[\/\\]$/,"");
 	   xcom_remote_url += '/doku.php?';
-   // alert(latinize('??A??lΙ αινσϊύcdenrtu'));  	   
+	  // alert(SafeFN_encode('????????'));
+       //alert(xcom_latinize('??A??lΙ αινσϊύcdenrtu'));  	   
        xcom_clear('xcom_qstatus',false); 
        var options =  xcom_params(); 
        xcom_query_status(options);
@@ -316,6 +317,7 @@ function xcom_srch_opts() {  // for search function
   return result;
 }
 function xcom_check_opts(fn,page,opts) {
+	  page = xcom_latinize(page);
       alert('fn=' +fn + " page=" + page  + " opts=" +opts);
 	
     var regex;

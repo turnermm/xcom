@@ -87,10 +87,14 @@ class action_plugin_xcom extends DokuWiki_Action_Plugin {
     }
 
     public function handle_meta_headers(Doku_Event &$event, $param){
-		//msg(DOKU_BASE."lib/plugins/xcom/scripts/latinize-cmpr.js");
 	    $event->data["script"][] = array (
            "type" => "text/javascript",
-           "src" => DOKU_BASE."lib/plugins/xcom/scripts/latinize-cmpr.js",
+           "src" => DOKU_BASE."lib/plugins/xcom/scripts/xcom_latinize-cmpr.js",
+            "_data" => ""
+         );
+		 $event->data["script"][] = array (
+           "type" => "text/javascript",
+           "src" => DOKU_BASE."lib/plugins/xcom/scripts/safeFN_class-cmpr.js",
             "_data" => ""
          );
 	}		
