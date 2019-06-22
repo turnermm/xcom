@@ -58,8 +58,6 @@ function xmlrpc() {
        xcom_remote_url = xcom_getInputValue('xcom_url'); 	   
        xcom_remote_url = xcom_remote_url.replace(/[\/\\]$/,"");
 	   xcom_remote_url += '/doku.php?';
-	 //  console.log(SafeFN_encode('????????'));
-   // console.log(SafeFN_encode( '???'));
     //   console.log(SafeFN_encode('??A??lÉ áéíóúýcdenrštžu'));          
        xcom_clear('xcom_qstatus',false); 
        var options =  xcom_params(); 
@@ -80,7 +78,7 @@ function xmlrpc() {
           } catch(e) {
           }
        }
-       var array_types = {'dokuwiki.getPagelist':1,'wiki.getPageVersions':1,'wiki.getPageInfo':1,'wiki.getAllPages':1, 'wiki.getAttachmentInfo':1,'wiki.getAttachments':1,'wiki.listLinks':1,'dokuwiki.search':1,'plugin.xcom.getMedia':1, 'plugin.xcom.listNamespaces':1};       
+       var array_types = {'dokuwiki.getPagelist':1,'wiki.getPageVersions':1,'wiki.getPageInfo':1,'wiki.getAllPages':1, 'wiki.getAttachmentInfo':1,'wiki.getAttachments':1, 'wiki.getRecentChanges':1,'wiki.listLinks':1,'dokuwiki.search':1,'plugin.xcom.getMedia':1, 'plugin.xcom.listNamespaces':1};       
        var jobj = xcom_json_ini('xcom_pwd','xcom_url','xcom_user');
        str =JSON.stringify(jobj); 
        params += '&credentials=' + str;      
@@ -120,6 +118,7 @@ function xcom_print_data(fn, data,other) {
      'wiki_listLinks': ['type', 'page','href'], 
      'wiki_getAttachmentInfo': ['id','lastModified','size'],
      'plugin_xcom_listNamespaces': ['Namespace Directories'],
+     'wiki_getRecentChanges': ['name', 'lastModified', 'author','version','size'],
    };
    xcomHeaders = table_calls;
    
@@ -141,7 +140,8 @@ function xcom_print_data(fn, data,other) {
             case 'wiki.getAttachments':
             case  'wiki.listLinks':
             case  'wiki.getAttachmentInfo':    
-            case  'plugin.xcom.listNamespaces':         
+            case  'plugin.xcom.listNamespaces':  
+            case  'wiki.getRecentChanges':
                  id = 'xcom_htm';
                  try {
                      var obj = jQuery.parseJSON(data);                                           
@@ -243,7 +243,11 @@ function xcom_td(type,val,fn) {
         }    
         if(!is_header) return;
     }
-    
+         if(type == 'version') {
+ var current_datetime = new Date(val * 1000);
+ val = current_datetime.getFullYear() + "-" + (current_datetime.getMonth() + 1) + "-" + current_datetime.getDate() + " " + current_datetime.getHours() + ":" + current_datetime.getMinutes() + ":" + current_datetime.getSeconds() 
+
+     }
     if(type == 'modified' || type == 'lastModified' && typeof val == 'object') {    
         var min =val['minute'] ?  val['minute'] : val['minut'];
         var d = new Date( val['year'],val['month']-1,val['day'],val['hour'],val['minute'], val['second']);
