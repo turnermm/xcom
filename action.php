@@ -63,7 +63,7 @@ class action_plugin_xcom extends DokuWiki_Action_Plugin {
     }
        /* tooltips  for  function select menu */
         $JSINFO['xcom_qtitles'] = array(
-            'dokuwiki.getPagelist'=>"get pages in given namespace",
+             'dokuwiki.getPagelist'=>'get pages in given namespace',
             'dokuwiki.search'=>'fulltext search',
             'dokuwiki.getTitle'=>'Wiki title',
             'dokuwiki.appendPage'=>'Append text to wiki page',
@@ -76,6 +76,8 @@ class action_plugin_xcom extends DokuWiki_Action_Plugin {
             'wiki.putPage'=>'Save page',
             'wiki.listLinks'=>'all links in page',
             'wiki.getAllPages'=>'all wiki pages in remote wiki',
+			'wiki.getBackLinks'=>'list of backlinks to selected page',
+			'wiki.getRecentChanges'=>'list of recent changes since given timestamp',
             'wiki.getAttachments'=>'list media files in namespace',
             'wiki.getAttachmentInfo'=>'info about a media file',
             'plugin.acl.addAcl'=>false,
@@ -92,7 +94,7 @@ class action_plugin_xcom extends DokuWiki_Action_Plugin {
            "src" => DOKU_BASE."lib/plugins/xcom/scripts/xcom_latinize-cmpr.js",
             "_data" => ""
           );
- 	  $event->data["script"][] = array (
+ 	      $event->data["script"][] = array (
            "type" => "text/javascript",
            "src" => DOKU_BASE."lib/plugins/xcom/scripts/safeFN_class-cmpr.js",
             "_data" => ""

@@ -323,6 +323,7 @@ function xcom_check_opts(fn,page,opts) {
       alert('fn=' +fn + " page=" + page  + " opts=" +opts);
 	//SafeFN_encode
     console.log(page);
+    console.log(opts);
     var regex;
 
     switch(fn) {
@@ -344,8 +345,7 @@ function xcom_check_opts(fn,page,opts) {
             if(opts) {
                 xcom_msg("Wrong parameter count: " + fn + " does not take parameters")
                 return false;
-            }
-            
+            }            
             regex = RegExp('^[%0-9\\w_:\.\\]]+$');
             //console.log(regex);
 			//console.log(regex.test(page));
@@ -355,10 +355,20 @@ function xcom_check_opts(fn,page,opts) {
             }
             return true;
            
-      /*  case 'wiki.getRecentChanges':(int) timestamp
-        case 'wiki.getRecentMediaChanges':(int) timestamp
+        case 'wiki.getRecentChanges': 
+        case 'wiki.getRecentMediaChanges':
+             if(page || page.length) {              
+                xcom_msg("Wrong parameter count: " + fn + "does not take an ID or any parameters but a date formatted for a timestamp");
+                return true;
+            }     
+		    regex = RegExp('^\\d\\d\\d\\d-\\d\\d-\\d$');	
+            if(!regex.test(opts.trim())) {
+                xcom_msg("Bad date format");
+                return false;
+            }            
             break	
-        case 'dokuwiki.getPagelist': (hash),(depth:n)
+/*      
+	  case 'dokuwiki.getPagelist': (hash),(depth:n)
             break;
         case 'dokuwiki.search': string query
             break;
@@ -647,15 +657,15 @@ JSON.stringify = JSON.stringify || function (obj) {
 
 jQuery( document ).ready(function() {     
        /* drop-down function menu with tool tips */
-	   /* xcom_opts is array of xmlrpc functions below */ 
+	   /* xcom_query_types is array of xmlrpc functions below */ 
        var sel = document.getElementById('xcom_sel');   
        if(sel) {
        var titles = JSINFO['xcom_qtitles'];
-       for(i=0; i<xcom_opts.length; i++) {
-           var text = xcom_opts[i].match(/^plugin\./) ? xcom_opts[i].replace(/^plugin\./,"") : (xcom_opts[i].split('.'))[1]; 
-            var newopt = new Option(text,xcom_opts[i]);
-            if(titles[xcom_opts[i]]) newopt.title = titles[xcom_opts[i]];
-            else newopt.title = xcom_opts[i];
+       for(i=0; i<xcom_query_types.length; i++) {
+           var text = xcom_query_types[i].match(/^plugin\./) ? xcom_query_types[i].replace(/^plugin\./,"") : (xcom_query_types[i].split('.'))[1]; 
+            var newopt = new Option(text,xcom_query_types[i]);
+            if(titles[xcom_query_types[i]]) newopt.title = titles[xcom_query_types[i]];
+            else newopt.title = xcom_query_types[i];
             sel.add(newopt);
        }
 
@@ -714,7 +724,7 @@ if(underline)
 else el.style.textDecoration = 'none';
 
 }
-var xcom_opts=new Array(
+var xcom_query_types=new Array(
 'dokuwiki.getPagelist',
 'dokuwiki.search',
 'dokuwiki.getTitle',
@@ -728,6 +738,8 @@ var xcom_opts=new Array(
 'wiki.putPage',
 'wiki.listLinks',
 'wiki.getAllPages',
+'wiki.getBackLinks',
+'wiki.getRecentChanges',
 'wiki.getAttachments',
 'wiki.getAttachmentInfo',
 'wiki.getRecentMediaChanges',
