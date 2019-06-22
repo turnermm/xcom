@@ -82,7 +82,7 @@ function xmlrpc() {
        var jobj = xcom_json_ini('xcom_pwd','xcom_url','xcom_user');
        str =JSON.stringify(jobj); 
        params += '&credentials=' + str;      
-       if(!confirm(params)) return;
+     //  if(!confirm(params)) return;
 
          jQuery.ajax({
             url: DOKU_BASE + 'lib/plugins/xcom/scripts/xml.php',
@@ -196,7 +196,15 @@ function xcom_multidim(obj,func) {
          data +="\n<tr>";                                                        
          for(var j in obj[i]) {                                 
              var r = obj[i][j];
-             row = xcom_td(j,r,func);            
+              if(j == 'lastModified' && func == 'wiki.getRecentChanges') {
+                 r = obj[i]['version'];        
+                var date_time = new Date(r * 1000);
+                var month = (date_time.getMonth() + 1) > 9 ? (date_time.getMonth() + 1) : '0' + (date_time.getMonth() + 1);
+                var day =  date_time.getDate() > 9  ? date_time.getDate() : '0'+ date_time.getDate();
+                r = date_time.getFullYear() + "-" + month + "-" + day + " " + date_time.getHours() + ":" + date_time.getMinutes() + ":" + date_time.getSeconds() 
+                 
+              }
+             row = xcom_td(j,r,func);            //type, value, function
              if(row) data += row;
          } 
        }
@@ -243,11 +251,8 @@ function xcom_td(type,val,fn) {
         }    
         if(!is_header) return;
     }
-         if(type == 'version') {
- var current_datetime = new Date(val * 1000);
- val = current_datetime.getFullYear() + "-" + (current_datetime.getMonth() + 1) + "-" + current_datetime.getDate() + " " + current_datetime.getHours() + ":" + current_datetime.getMinutes() + ":" + current_datetime.getSeconds() 
 
-     }
+    
     if(type == 'modified' || type == 'lastModified' && typeof val == 'object') {    
         var min =val['minute'] ?  val['minute'] : val['minut'];
         var d = new Date( val['year'],val['month']-1,val['day'],val['hour'],val['minute'], val['second']);
@@ -324,10 +329,10 @@ function xcom_srch_opts() {  // for search function
 function xcom_check_opts(fn,page,opts) {
       page = page.trim();
 	  page =SafeFN_encode(page);
-      alert('fn=' +fn + " page=" + page  + " opts=" +opts);
+   //   alert('fn=' +fn + " page=" + page  + " opts=" +opts);
 	//SafeFN_encode
-    console.log(page);
-    console.log(opts);
+   // console.log(page);
+   // console.log(opts);
     var regex;
 
     switch(fn) {
