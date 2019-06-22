@@ -331,7 +331,7 @@ function xcom_check_opts(fn,page,opts) {
             if((!page || page.trim().length === 0) && !opts) {              
                 return true;
             }          
-             xcom_msg("Wrong parameter count: wiki.getAllPages does not take parameters")
+             xcom_msg("Wrong parameter count: wiki.getAllPages does not take options")
              return false;           
         case 'wiki.aclCheck': 
         case 'wiki.getPage':  
@@ -343,14 +343,14 @@ function xcom_check_opts(fn,page,opts) {
         case 'wiki.getPageInfo':
         case 'wiki.getPageHTML': 
             if(opts) {
-                xcom_msg("Wrong parameter count: " + fn + " does not take parameters")
+                xcom_msg("Wrong parameter count: " + fn + " does not take options")
                 return false;
             }            
             regex = RegExp('^[%0-9\\w_:\.\\]]+$');
             //console.log(regex);
 			//console.log(regex.test(page));
             if(!regex.test(page)) {
-                xcom_msg("Bad page ID");
+                xcom_msg("Bad DokuWiki ID");
                 return false;
             }
             return true;
@@ -358,10 +358,10 @@ function xcom_check_opts(fn,page,opts) {
         case 'wiki.getRecentChanges': 
         case 'wiki.getRecentMediaChanges':
              if(page || page.length) {              
-                xcom_msg("Wrong parameter count: " + fn + "does not take an ID or any parameters but a date formatted for a timestamp");
+                xcom_msg("Wrong parameter count: " + fn + "does not take an ID or any options but a date formatted for a timestamp");
                 return true;
             }     
-		    regex = RegExp('^\\d\\d\\d\\d-\\d\\d-\\d$');	
+		     regex = RegExp('^\\d\\d\\d\\d-\\d\\d-\\d\\d$');
             if(!regex.test(opts.trim())) {
                 xcom_msg("Bad date format");
                 return false;
