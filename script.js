@@ -254,9 +254,12 @@ function xcom_td(type,val,fn) {
 
     
     if(type == 'modified' || type == 'lastModified' && typeof val == 'object') {    
-        var min =val['minute'] ?  val['minute'] : val['minut'];
+      //  var min =val['minute'] ?  val['minute'] : val['minut'];
+	    if (typeof val !== 'undefined' && val['year']) {
         var d = new Date( val['year'],val['month']-1,val['day'],val['hour'],val['minute'], val['second']);
         val = d.toUTCString();
+	      }	
+
     }
     else if(type == 'rev' || type == 'mtime') {
        var d = new Date(val*1000);

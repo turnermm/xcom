@@ -78,6 +78,12 @@ if($client)
 	   if($fn == 'wiki.getAttachmentInfo' && isset($params[1])) {
 	      $retv = array_merge(array('id' => $params[1]), $retv); 
 	  }
+	  else 	if($fn == 'wiki.getPageVersions') {
+          for($i=0; $i<count($retv);$i++) {             
+              $retv[$i]['modified'] =  get_ixrdate($retv[$i]['modified']);	        
+          }
+	  }	
+    
        $retv = json_encode($retv);
        echo $retv;
        exit;
@@ -143,3 +149,19 @@ function xcom_lock($page, $lock, $client) {
    return false;
 
 }
+function get_ixrdate($text) {
+    static $i = 0;
+    $i++;    
+   $text = print_r($text,1); 
+    file_put_contents("debugadd_$i.txt",$text);	 
+ 
+	$text = preg_replace_callback(           
+    "/^([\s\S]+)\[date\]\s*=>\s*(\d{4,}[\s\d\-\.\:]+)(([\s\S]+))$/ms",
+    function ($matches) {      ;
+         return  $matches[2];
+		},
+	   $text
+	);
+// file_put_contents("debugbdd_$i.txt",$text);
+   return $text;
+ }
