@@ -252,7 +252,7 @@ function xcom_td(type,val,fn) {
         if(!is_header) return;
     }
 
-    
+    //alert(type + '=' + val);
     if(type == 'modified' || type == 'lastModified' && typeof val == 'object') {    
       //  var min =val['minute'] ?  val['minute'] : val['minut'];
 	    if (typeof val !== 'undefined' && val['year']) {
@@ -333,7 +333,6 @@ function xcom_check_opts(fn,page,opts) {
       page = page.trim();
 	  page =SafeFN_encode(page);
    //   alert('fn=' +fn + " page=" + page  + " opts=" +opts);
-	//SafeFN_encode
    // console.log(page);
    // console.log(opts);
     var regex;

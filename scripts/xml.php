@@ -63,6 +63,7 @@ if($client)
   
  
    $retv = $client->getResponse();
+    //file_put_contents("debugb.txt",print_r($retv,true));
        if($fn =='wiki.putPage' || $fn=='dokuwiki.appendPage') {
          $retv = "retv: $retv resp: $resp";
        }
@@ -83,7 +84,10 @@ if($client)
               $retv[$i]['modified'] =  get_ixrdate($retv[$i]['modified']);	        
           }
 	  }	
-    
+     elseif($fn == 'wiki.getPageInfo') {
+		  $retv['lastModified'] =  get_ixrdate($retv['lastModified']);
+		 // file_put_contents("debugbde.txt",print_r($retv['lastodified'],true));
+	}
        $retv = json_encode($retv);
        echo $retv;
        exit;
@@ -153,7 +157,6 @@ function get_ixrdate($text) {
     static $i = 0;
     $i++;    
    $text = print_r($text,1); 
-    file_put_contents("debugadd_$i.txt",$text);	 
  
 	$text = preg_replace_callback(           
     "/^([\s\S]+)\[date\]\s*=>\s*(\d{4,}[\s\d\-\.\:]+)(([\s\S]+))$/ms",
@@ -162,6 +165,7 @@ function get_ixrdate($text) {
 		},
 	   $text
 	);
-// file_put_contents("debugbdd_$i.txt",$text);
+
+   $text = preg_replace("/000\s*$/","",$text);
    return $text;
  }
