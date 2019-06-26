@@ -358,8 +358,6 @@ function xcom_check_opts(fn,page,opts) {
                 return false;
             }            
             regex = RegExp('^[%0-9\\w_:\.\\]]+$');
-            //console.log(regex);
-			//console.log(regex.test(page));
             if(!regex.test(page)) {
                 xcom_msg("Bad DokuWiki ID");
                 return false;
@@ -369,20 +367,23 @@ function xcom_check_opts(fn,page,opts) {
         case 'wiki.getRecentChanges': 
         case 'wiki.getRecentMediaChanges':
              if(page || page.length) {              
-                xcom_msg("Wrong parameter count: " + fn + "does not take an ID or any options but a date formatted for a timestamp");
-                return true;
+                xcom_msg("Wrong parameter count: " + fn + "does not take an ID, only a date formatted for a timestamp");
+                return false;
             }     
-		     regex = RegExp('^\\d\\d\\d\\d-\\d\\d-\\d\\d$');
-            if(!regex.test(opts.trim())) {
-                xcom_msg("Bad date format");
+		     regex = RegExp('^\s*\\d\\d\\d\\d-\\d\\d-\\d\\d\s*$');
+			opt = opts.trim(); 
+            if(!regex.test(opt)) {
+                xcom_msg("Bad date format. Use yyyy-mm-dd");
                 return false;
             }            
             break	
-/*      
-	  case 'dokuwiki.getPagelist': (hash),(depth:n)
+     
+	  case 'dokuwiki.getPagelist': //(hash),(depth:n)	    
             break;
-        case 'dokuwiki.search': string query
+			
+        case 'dokuwiki.search': //string query
             break;
+/*     
         case 'dokuwiki.appendPage': string [[doku>:pagename]],string wiki text,  string, (sum;summary text),(minor;n)
         case 'wiki.putPage':(string) [[doku>:pagename]] (string) Wiki text,  string, (sum;summary text),(minor;n) 
             break;
@@ -518,6 +519,7 @@ function xcom_timeStamp(opt) {
            var d = new Date(opt);
            var unixtime = parseInt(d.getTime() / 1000);
            if(unixtime) {
+			   unixtime += 86400;	//needs added day for accurate time		  
                return unixtime;
            }
         }
