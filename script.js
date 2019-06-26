@@ -194,7 +194,7 @@ function xcom_multidim(obj,func) {
         
         for(var i in obj) {      
          data +="\n<tr>";                                                        
-         for(var j in obj[i]) {                                 
+         for(var j in obj[i]) {                        
              var r = obj[i][j];
               if(j == 'lastModified' && func == 'wiki.getRecentChanges') {
                  r = obj[i]['version'];        
@@ -375,14 +375,18 @@ function xcom_check_opts(fn,page,opts) {
             if(!regex.test(opt)) {
                 xcom_msg("Bad date format. Use yyyy-mm-dd");
                 return false;
-            }            
+            }  
             break	
      
-	  case 'dokuwiki.getPagelist': //(hash),(depth:n)	    
+	    case 'dokuwiki.getPagelist': //(hash),(depth:n)	    
             break;
 			
         case 'dokuwiki.search': //string query
-            break;
+		if(!opts) {
+			xcom_msg("Required search string missing");
+		        return false;
+			}
+               break;
 /*     
         case 'dokuwiki.appendPage': string [[doku>:pagename]],string wiki text,  string, (sum;summary text),(minor;n)
         case 'wiki.putPage':(string) [[doku>:pagename]] (string) Wiki text,  string, (sum;summary text),(minor;n) 
