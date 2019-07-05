@@ -340,7 +340,7 @@ function xcom_params() {
     if(optstring) opts = optstring.split(/,/);          
    
      
-    for(var p=0; i<opts.length; p++) { 
+    for(var p=0; p<opts.length; p++) { 
         if(!opts[p] || !opts[p].match(/^\s*\(/)) break;    
         var isarray = xcom_getArray(opts[p]);    
          if(isarray) {
