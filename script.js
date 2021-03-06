@@ -84,8 +84,9 @@ function xmlrpc() {
        var jobj = xcom_json_ini('xcom_pwd','xcom_url','xcom_user');
        str =JSON.stringify(jobj); 
        params += '&credentials=' + str;      
-   //    if(!confirm(params)) return;
+       params += '&debug=' + document.getElementById('xcom_debug').checked;
 
+         if(!confirm(params)) return;
          jQuery.ajax({
             url: DOKU_BASE + 'lib/plugins/xcom/scripts/xml.php',
             data: params,         

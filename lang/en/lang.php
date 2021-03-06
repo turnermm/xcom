@@ -62,3 +62,4 @@ $lang['msave'] = 'Saved to local wiki:';
 $lang['fsize'] = 'file size:';
 $lang['ismedia'] = 'is a media file:';
 $lang['savelocalfile'] = 'Click OK to save file to the local wiki:';
+$lang['debug'] = 'Debug:';

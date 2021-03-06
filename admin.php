@@ -97,7 +97,7 @@ class admin_plugin_xcom extends DokuWiki_Admin_Plugin {
    
       ptln('<div class="xcom_sites">');     
       ptln('<select id = "xcom_selsites" onchange="xcom_select(this);"><option value="none">' .  $this->getLang('sel_sites')  .'</option></select>&nbsp;' );           
-
+      ptln('&nbsp;&nbsp;' . $this->getLang('debug') . ' <input type = "checkbox" name = "xcom_debug" id = "xcom_debug">');
       // Local User and Password 
       ptln ('<div class="local_side">&nbsp;&nbsp;&nbsp;'); 
       ptln( '<button   onclick="xcom_localSave(this.form.xcom_pageid.value);" title="' . $this->getLang('locsave_title') . '">'. $this->getLang('locsave') .  '</button>&nbsp;');
