@@ -1,7 +1,7 @@
 base   xcom
 author Myron Turner
 email  turnermm02@shaw.ca
-date 2020-01-14
+date   2020-03-10
 name   xcom
 desc   XMLRPC Interface
 url    https://www.dokuwiki.org/plugin:xcom
