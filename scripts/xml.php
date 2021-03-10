@@ -5,9 +5,11 @@ session_write_close();
 $helper =  plugin_load('helper', 'xcom');
 $credentials = json_decode($_REQUEST['credentials']);
 $url = rtrim ($credentials->url,'/') . '/';
+/*
 if($helper->getConf('https')) {
   $url = preg_replace("/^https:/","http:",$url);
 }
+*/
 
 $params = json_decode($_REQUEST['params']);
 if($_REQUEST['debug'] == 'false'){

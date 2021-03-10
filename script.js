@@ -86,7 +86,7 @@ function xmlrpc() {
        params += '&credentials=' + str;      
        params += '&debug=' + document.getElementById('xcom_debug').checked;
 
-         if(!confirm(params)) return;
+       //  if(!confirm(params)) return;
          jQuery.ajax({
             url: DOKU_BASE + 'lib/plugins/xcom/scripts/xml.php',
             data: params,         
