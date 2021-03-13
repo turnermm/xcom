@@ -333,12 +333,15 @@ function xcom_check_opts(fn,page,opts) {
       page = page.trim();
 	  page =SafeFN_encode(page);
    //   alert('fn=' +fn + " page=" + page  + " opts=" +opts);
-   // console.log(page);
-   // console.log(opts);
+    console.log(page);
+    console.log(opts);
+    console.log(fn);
+    console.log(opts.length);
     var regex;
 
     switch(fn) {
          case 'wiki.getAllPages':
+         case 'dokuwiki.getTitle':
             if((!page || page.trim().length === 0) && !opts) {              
                 return true;
             }          
@@ -387,6 +390,17 @@ function xcom_check_opts(fn,page,opts) {
 		        return false;
 			}
                break;
+        case 'wiki.putPage':  //(string) [[doku>:pagename]] (string) Wiki text,  string, (sum;summary text),(minor;n) 
+            if(!page) {
+                alert("Page id missing");
+                return false;
+            }
+            var regex_m = RegExp('\(minor;\s*(1|true)\s*\)');
+            var regex_s = RegExp('\\(sum;[\\w\\s\\d;\\.\\:\\[\\]\\{\\}]+\\)');              
+            if(regex_m.test(opts) || regex_s.test(opts)) break;
+            alert("needs sum or minor edit statement");
+            return false;
+                  
 /*     
         case 'dokuwiki.appendPage': string [[doku>:pagename]],string wiki text,  string, (sum;summary text),(minor;n)
         case 'wiki.putPage':(string) [[doku>:pagename]] (string) Wiki text,  string, (sum;summary text),(minor;n) 
