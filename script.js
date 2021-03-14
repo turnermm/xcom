@@ -99,8 +99,8 @@ function xmlrpc() {
             }
         });
       
-        var fn_sel = document.getElementById('xcom_sel');
-         fn_sel.selectedIndex = 0;
+       // var fn_sel = document.getElementById('xcom_sel');
+        // fn_sel.selectedIndex = 0;
          return false;
 }
 
@@ -403,7 +403,7 @@ function xcom_check_opts(fn,page,opts) {
                   
 /*     
         case 'dokuwiki.appendPage': string [[doku>:pagename]],string wiki text,  string, (sum;summary text),(minor;n)
-        case 'wiki.putPage':(string) [[doku>:pagename]] (string) Wiki text,  string, (sum;summary text),(minor;n) 
+
             break;
         case 'wiki.getPageVersions': (string) [[doku>:pagename]] , (int) offset
             break;

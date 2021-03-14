@@ -40,13 +40,13 @@ class remote_plugin_xcom extends DokuWiki_Remote_Plugin {
        if($rootns == 'data') {
            $rootns = DOKU_INC . $rootns;
        }
-     
+      // echo "root = $rootns\n";
       if(!$namespace) {
         $namespace = $rootns; 
       }
-       else $namespace = $rootns . '/pages/'. $namespace;      
-      $namespace = rtrim($namespace, '/');
+       else $namespace = $rootns . '/pages/'. $namespace;
       
+      $namespace = rtrim($namespace, '/');
       $folder_list = array();  
        
     $regex='';
@@ -68,7 +68,7 @@ class remote_plugin_xcom extends DokuWiki_Remote_Plugin {
    
      $result =$this->find_all_files($namespace,$regex);
      
-     $regex  = '#' . preg_quote($rootns) .'#';  
+     $regex  = '#' . preg_quote($conf['mediadir']) .'#';  
 
     for($i=0;$i<count($result); $i++) {
           $result[$i] = preg_replace($regex,"",$result[$i]);
@@ -87,6 +87,7 @@ class remote_plugin_xcom extends DokuWiki_Remote_Plugin {
   function find_all_files($dir,$regex="")
   {     
     $root = scandir($dir);
+    
    foreach($root as $value)
     {
         if($value === '.' || $value === '..') {continue;}

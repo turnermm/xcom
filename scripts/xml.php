@@ -63,9 +63,11 @@ if($client)
   
  
    $retv = $client->getResponse();
-    //file_put_contents("debugb.txt",print_r($retv,true));
+    
        if($fn =='wiki.putPage' || $fn=='dokuwiki.appendPage') {
-         $retv = "retv: $retv resp: $resp";
+         $resp = print_r($resp,1);
+         $_retv =print_r($retv,1);
+         $retv = "retv: $_retv resp: $resp";
        }
    if($fn =='wiki.putPage' || $fn=='dokuwiki.appendPage') {
         xcom_lock($params[1], false, $client);
