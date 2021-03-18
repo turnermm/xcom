@@ -72,7 +72,8 @@ class remote_plugin_xcom extends DokuWiki_Remote_Plugin {
 
     for($i=0;$i<count($result); $i++) {
           $result[$i] = preg_replace($regex,"",$result[$i]);
-         $result[$i] = str_replace('/',':',$result[$i]);
+          $result[$i] = preg_replace("/\/?pages/","",$result[$i]);
+          $result[$i] = str_replace('/',':',$result[$i]);
           
    }
       return $result;
