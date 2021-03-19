@@ -9,8 +9,14 @@ $url = rtrim ($credentials->url,'/') . '/';
 
 
 $params = json_decode($_REQUEST['params']);
-$client = xcom_connect($url,$credentials->user,$credentials->pwd ,0);
+if($_REQUEST['debug'] == 'false'){
+    $debug = 0;    
+}   
+elseif ($_REQUEST['debug'] == 'true') {
+    $debug = 1;
+}
 
+$client = xcom_connect($url,$credentials->user,$credentials->pwd ,$debug);
 $secs = 15;
 $fn = $params[0] ;
     
