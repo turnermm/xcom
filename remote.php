@@ -35,13 +35,18 @@ class remote_plugin_xcom extends DokuWiki_Remote_Plugin {
     
      public function listNamespaces($namespace="",$mask="") {  
       global $conf;       
+       $rootns =  $conf['savedir'];
+       $rootns = ltrim($rootns,'./');
+       if($rootns == 'data') {
+           $rootns = DOKU_INC . $rootns;
+       }
      
       if(!$namespace) {
-        $namespace = $conf['mediadir']; 
+        $namespace = $rootns; 
       }
-       else $namespace = $conf['mediadir'] . '/'. $namespace;
-      
+       else $namespace = $rootns . '/pages/'. $namespace;      
       $namespace = rtrim($namespace, '/');
+      
       $folder_list = array();  
        
     $regex='';
@@ -63,11 +68,12 @@ class remote_plugin_xcom extends DokuWiki_Remote_Plugin {
    
      $result =$this->find_all_files($namespace,$regex);
      
-     $regex  = '#' . preg_quote($conf['mediadir']) .'#';  
+     $regex  = '#' . preg_quote($rootns) .'#';  
 
     for($i=0;$i<count($result); $i++) {
           $result[$i] = preg_replace($regex,"",$result[$i]);
-         $result[$i] = str_replace('/',':',$result[$i]);
+          $result[$i] = preg_replace("/\/?pages/","",$result[$i]);
+          $result[$i] = str_replace('/',':',$result[$i]);
           
    }
       return $result;
@@ -82,7 +88,6 @@ class remote_plugin_xcom extends DokuWiki_Remote_Plugin {
   function find_all_files($dir,$regex="")
   {     
     $root = scandir($dir);
-    
    foreach($root as $value)
     {
         if($value === '.' || $value === '..') {continue;}

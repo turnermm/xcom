@@ -5,21 +5,12 @@ session_write_close();
 $helper =  plugin_load('helper', 'xcom');
 $credentials = json_decode($_REQUEST['credentials']);
 $url = rtrim ($credentials->url,'/') . '/';
-/*
-if($helper->getConf('https')) {
-  $url = preg_replace("/^https:/","http:",$url);
-}
-*/
+
+
 
 $params = json_decode($_REQUEST['params']);
-if($_REQUEST['debug'] == 'false'){
-    $debug = 0;    
-}   
-elseif ($_REQUEST['debug'] == 'true') {
-    $debug = 1;
-}
+$client = xcom_connect($url,$credentials->user,$credentials->pwd ,0);
 
-$client = xcom_connect($url,$credentials->user,$credentials->pwd ,$debug);
 $secs = 15;
 $fn = $params[0] ;
     
@@ -33,7 +24,7 @@ if($client)
         }
     }    
 
-   $array_types = array('dokuwiki.getPagelist','wiki.getPageVersions','wiki.getPageInfo','wiki.getAllPages',  'wiki.getAttachmentInfo','wiki.getAttachments','wiki.listLinks','dokuwiki.search','plugin.xcom.getMedia', 'plugin.xcom.listNamespaces');
+   $array_types = array('dokuwiki.getPagelist','wiki.getPageVersions','wiki.getPageInfo','wiki.getAllPages','wiki.getAttachmentInfo','wiki.getAttachments', 'wiki.getRecentChanges', 'wiki.listLinks','dokuwiki.search','plugin.xcom.getMedia', 'plugin.xcom.listNamespaces');
    $time_start = time();   
    $resp = "";
    
@@ -72,8 +63,11 @@ if($client)
   
  
    $retv = $client->getResponse();
+    
        if($fn =='wiki.putPage' || $fn=='dokuwiki.appendPage') {
-         $retv = "retv: $retv resp: $resp";
+         $resp = print_r($resp,1);
+         $_retv =print_r($retv,1);
+         $retv = "retv: $_retv resp: $resp";
        }
    if($fn =='wiki.putPage' || $fn=='dokuwiki.appendPage') {
         xcom_lock($params[1], false, $client);
@@ -87,6 +81,15 @@ if($client)
 	   if($fn == 'wiki.getAttachmentInfo' && isset($params[1])) {
 	      $retv = array_merge(array('id' => $params[1]), $retv); 
 	  }
+	  else 	if($fn == 'wiki.getPageVersions') {
+          for($i=0; $i<count($retv);$i++) {             
+              $retv[$i]['modified'] =  get_ixrdate($retv[$i]['modified']);	        
+          }
+	  }	
+     elseif($fn == 'wiki.getPageInfo') {
+		  $retv['lastModified'] =  get_ixrdate($retv['lastModified']);
+		 // file_put_contents("debugbde.txt",print_r($retv['lastodified'],true));
+	}
        $retv = json_encode($retv);
        echo $retv;
        exit;
@@ -152,3 +155,19 @@ function xcom_lock($page, $lock, $client) {
    return false;
 
 }
+function get_ixrdate($text) {
+    static $i = 0;
+    $i++;    
+   $text = print_r($text,1); 
+ 
+	$text = preg_replace_callback(           
+    "/^([\s\S]+)\[date\]\s*=>\s*(\d{4,}[\s\d\-\.\:]+)(([\s\S]+))$/ms",
+    function ($matches) {      ;
+         return  $matches[2];
+		},
+	   $text
+	);
+
+   $text = preg_replace("/000\s*$/","",$text);
+   return $text;
+ }

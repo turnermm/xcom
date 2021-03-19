@@ -15,7 +15,7 @@
 
 ^ Name        | ''dokuwiki.getTitle'' |
 ^ Parameters  | - |
-^ Returns     | (string) the title of the wiki |
+^ Data        | (string) the title of the wiki |
 ^ Description | Returns the title of the wiki. |
 
 

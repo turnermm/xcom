@@ -97,7 +97,7 @@ class admin_plugin_xcom extends DokuWiki_Admin_Plugin {
    
       ptln('<div class="xcom_sites">');     
       ptln('<select id = "xcom_selsites" onchange="xcom_select(this);"><option value="none">' .  $this->getLang('sel_sites')  .'</option></select>&nbsp;' );           
-      ptln('&nbsp;&nbsp;' . $this->getLang('debug') . ' <input type = "checkbox" name = "xcom_debug" id = "xcom_debug">');
+
       // Local User and Password 
       ptln ('<div class="local_side">&nbsp;&nbsp;&nbsp;'); 
       ptln( '<button   onclick="xcom_localSave(this.form.xcom_pageid.value);" title="' . $this->getLang('locsave_title') . '">'. $this->getLang('locsave') .  '</button>&nbsp;');
@@ -132,7 +132,7 @@ class admin_plugin_xcom extends DokuWiki_Admin_Plugin {
       ptln('<a href="javascript:xcom_clear(\'xcom_editable\');void 0;">[' . $this->getLang('editable') . ']</a>&nbsp;&nbsp;');
       ptln('&nbsp;<span class="xcom_qslabel" id="xcom_qslabel">' . $this->getLang('query') . ':</span>');
       ptln('&nbsp;<span class="xcom_qstatus" id="xcom_qstatus"></span>');
-      ptln('<a href="javascript:xmlrpc();void 0;"><span class="xcom_send_link" onmouseover="xcom_rollover(this,1);" onmouseout="xcom_rollover(this,0);">[' .  $this->getLang('send') .']</span></a>&nbsp;&nbsp;');       
+     // ptln('<a href="javascript:xmlrpc();void 0;"><span class="xcom_send_link" onmouseover="xcom_rollover(this,1);" //onmouseout="xcom_rollover(this,0);">[' .  $this->getLang('send') .']</span></a>&nbsp;&nbsp;');       
       ptln( '</div>');        
     
     }
