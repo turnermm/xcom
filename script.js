@@ -58,12 +58,13 @@ function xmlrpc() {
        xcom_remote_url = xcom_getInputValue('xcom_url'); 	   
        xcom_remote_url = xcom_remote_url.replace(/[\/\\]$/,"");
 	   xcom_remote_url += '/doku.php?';
-    //   console.log(SafeFN_encode('??A??lÉ áéíóúıcdenrštu'));          
+       //alert(xcom_remote_url);	   
        xcom_clear('xcom_qstatus',false); 
        var options =  xcom_params(); 
        xcom_query_status(options);
-
-       if(!options) {		
+       var func = options[0];
+       if(!func || !options) {
+          alert('No function selected');
           return false; 
         }  
        var func = options[0];      
@@ -84,6 +85,7 @@ function xmlrpc() {
        params += '&credentials=' + str;      
        params += '&debug=' + document.getElementById('xcom_debug').checked;
 
+       //  if(!confirm(params)) return;
          jQuery.ajax({
             url: DOKU_BASE + 'lib/plugins/xcom/scripts/xml.php',
             data: params,         
@@ -360,7 +362,7 @@ function xcom_check_opts(fn,page,opts) {
                 xcom_msg("Wrong parameter count: " + fn + " does not take options")
                 return false;
             }            
-            regex = RegExp('^[%0-9\\w_:\.\\]]+$');
+            regex = RegExp('^[0-9\\a-z_:\|\.\\]]+$');
             if(!regex.test(page)) {
                 xcom_msg("Bad DokuWiki ID");
                 return false;
@@ -401,9 +403,9 @@ function xcom_check_opts(fn,page,opts) {
             alert("needs sum or minor edit statement");
             return false;
                   
+            break;                  
 /*     
         case 'dokuwiki.appendPage': string [[doku>:pagename]],string wiki text,  string, (sum;summary text),(minor;n)
-
             break;
         case 'wiki.getPageVersions': (string) [[doku>:pagename]] , (int) offset
             break;

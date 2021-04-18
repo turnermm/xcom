@@ -69,7 +69,6 @@ if($client)
   
  
    $retv = $client->getResponse();
-    
        if($fn =='wiki.putPage' || $fn=='dokuwiki.appendPage') {
          $resp = print_r($resp,1);
          $_retv =print_r($retv,1);
@@ -160,20 +159,4 @@ function xcom_lock($page, $lock, $client) {
 
    return false;
 
-}
-function get_ixrdate($text) {
-    static $i = 0;
-    $i++;    
-   $text = print_r($text,1); 
- 
-	$text = preg_replace_callback(           
-    "/^([\s\S]+)\[date\]\s*=>\s*(\d{4,}[\s\d\-\.\:]+)(([\s\S]+))$/ms",
-    function ($matches) {      ;
-         return  $matches[2];
-		},
-	   $text
-	);
-
-   $text = preg_replace("/000\s*$/","",$text);
-   return $text;
  }
