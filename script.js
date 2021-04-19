@@ -94,7 +94,12 @@ function xmlrpc() {
             success: function(data)
             {  
             if(!array_types.hasOwnProperty(func)) {
+                try {
                data = decodeURIComponent(data);                                              
+            }
+                catch(err){
+                    console.log("By-passed decoding string returned by " + func + ': ' + err.message );
+                }                
             }
                xcom_show('xcom_results');
                xcom_print_data(func, data,other); 
