@@ -20,7 +20,7 @@ class action_plugin_xcom extends DokuWiki_Action_Plugin {
     public function register(Doku_Event_Handler $controller) {
 
        $controller->register_hook('DOKUWIKI_STARTED', 'AFTER', $this, 'handle_dokuwiki_started');
-       $controller->register_hook('TPL_CONTENT_DISPLAY', 'AFTER', $this, 'handle_meta_headers'); 
+       $controller->register_hook('TPL_METAHEADER_OUTPUT', 'AFTER', $this, 'handle_meta_headers'); 
    
     }
 
