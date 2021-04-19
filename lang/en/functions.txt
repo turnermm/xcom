@@ -15,7 +15,6 @@
 
 ^Name  |''dokuwiki.getTitle'' |
 ^Parameters  |-|
-^Data  |(string) the title of the wiki|
 ^Description|Returns the title of the wiki.|
 
 
@@ -120,7 +119,7 @@
 
 ^Name|''plugin.xcom.listNamespaces''   |
 ^Parameters|(String) namespace id, (Array) exclusions|
-^Description|The array is a series of ids, separated by semi-colons and enclosed in parentheses: (id1;id2;id3)|
+^Description|Returns alistofsub-namespacesunderthespecified''namespaceid''.Ifthenamespaceid\\isleftblank,thelistingwillstartattherootdirectory.\\Toexcludesub-namespacesentertheexclusionsarray inthe''Options'':\\<code>(id1;id2;id3)</code>Notethatthearrayis a series of ids, separated by semi-colons and enclosed in parentheses |
 
 ==== Timestamp  ====
 
