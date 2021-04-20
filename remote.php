@@ -46,7 +46,6 @@ class remote_plugin_xcom extends DokuWiki_Remote_Plugin {
       }
        else $namespace = $rootns . '/pages/'. $namespace;      
       $namespace = rtrim($namespace, '/');
-      
       $folder_list = array();  
        
     $regex='';
@@ -88,6 +87,7 @@ class remote_plugin_xcom extends DokuWiki_Remote_Plugin {
   function find_all_files($dir,$regex="")
   {     
     $root = scandir($dir);
+    
    foreach($root as $value)
     {
         if($value === '.' || $value === '..') {continue;}
