@@ -63,11 +63,11 @@ function xmlrpc() {
        var options =  xcom_params(); 
        xcom_query_status(options);
        var func = options[0];
-       if(!func || !options) {
+       if(!func) {
           alert('No function selected');
           return false; 
         }  
-       var func = options[0];      
+     //  var func = options[0];      
        var other=false;
        var params =  'params=' + JSON.stringify(options);
        params = params.replace(/\s*__comma__\s*/g,',');
@@ -106,8 +106,8 @@ function xmlrpc() {
             }
         });
       
-       // var fn_sel = document.getElementById('xcom_sel');
-        // fn_sel.selectedIndex = 0;
+        var fn_sel = document.getElementById('xcom_sel');
+        fn_sel.selectedIndex = 0;
          return false;
 }
 
@@ -340,12 +340,12 @@ function xcom_check_opts(fn,page,opts) {
       page = page.trim();
 	  page =SafeFN_encode(page);
    //   alert('fn=' +fn + " page=" + page  + " opts=" +opts);
-    console.log(page);
-    console.log(opts);
-    console.log(fn);
-    console.log(opts.length);
+   // console.log(page);
+   // console.log(opts);
+   // console.log(fn);
+   // console.log(opts.length);
     var regex;
-
+    var skip_opts_cnt = false;
     switch(fn) {
          case 'wiki.getAllPages':
          case 'dokuwiki.getTitle':
@@ -355,6 +355,7 @@ function xcom_check_opts(fn,page,opts) {
              xcom_msg("Wrong parameter count: wiki.getAllPages does not take options")
              return false;           
         case 'wiki.aclCheck': 
+            skip_opts_cnt = true;
         case 'wiki.getPage':  
         case 'plugin.xcom.getMedia': 
         case 'wiki.getAttachmentInfo':
@@ -363,11 +364,11 @@ function xcom_check_opts(fn,page,opts) {
         case 'wiki.getBackLinks':
         case 'wiki.getPageInfo':
         case 'wiki.getPageHTML': 
-            if(opts) {
+            if(opts && !skip_opts_cnt) {
                 xcom_msg("Wrong parameter count: " + fn + " does not take options")
                 return false;
             }            
-            regex = RegExp('^[0-9\\a-z_:\|\.\\]]+$');
+            regex = RegExp('^[0-9\\a-z_:\.\\-]+');
             if(!regex.test(page)) {
                 xcom_msg("Bad DokuWiki ID");
                 return false;
