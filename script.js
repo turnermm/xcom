@@ -58,16 +58,17 @@ function xmlrpc() {
        xcom_remote_url = xcom_getInputValue('xcom_url'); 	   
        xcom_remote_url = xcom_remote_url.replace(/[\/\\]$/,"");
 	   xcom_remote_url += '/doku.php?';
-       //alert(xcom_remote_url);	   
+       	   
        xcom_clear('xcom_qstatus',false); 
        var options =  xcom_params(); 
+       if(!options) return;
        xcom_query_status(options);
        var func = options[0];
        if(!func) {
           alert('No function selected');
           return false; 
         }  
-     //  var func = options[0];      
+           
        var other=false;
        var params =  'params=' + JSON.stringify(options);
        params = params.replace(/\s*__comma__\s*/g,',');
@@ -368,7 +369,8 @@ function xcom_check_opts(fn,page,opts) {
                 xcom_msg("Wrong parameter count: " + fn + " does not take options")
                 return false;
             }            
-            regex = RegExp('^[0-9\\a-z_:\.\\-]+');
+            regex = RegExp('^[0-9\\a-z_:\\.\\-]+');
+          //  console.log(regex);
             if(!regex.test(page)) {
                 xcom_msg("Bad DokuWiki ID");
                 return false;
