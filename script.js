@@ -58,17 +58,21 @@ function xmlrpc() {
        xcom_remote_url = xcom_getInputValue('xcom_url'); 	   
        xcom_remote_url = xcom_remote_url.replace(/[\/\\]$/,"");
 	   xcom_remote_url += '/doku.php?';
-       //alert(xcom_remote_url);	   
+       	   
        xcom_clear('xcom_qstatus',false); 
-       var options =  xcom_params();       
-
+       var options =  xcom_params(); 
+       if(!options) return;
        xcom_query_status(options);
        var func = options[0];
-       if(!func || !options) {
+       if(!func) {
           alert('No function selected');
           return false; 
         }  
+<<<<<<< HEAD
        var func = options[0];      
+=======
+           
+>>>>>>> version_2
        var other=false;
        var params =  'params=' + JSON.stringify(options);
        params = params.replace(/\s*__comma__\s*/g,',');
@@ -80,7 +84,7 @@ function xmlrpc() {
           } catch(e) {
           }
        }
-       var array_types = {'dokuwiki.getPagelist':1,'wiki.getPageVersions':1,'wiki.getPageInfo':1,'wiki.getAllPages':1, 'wiki.getAttachmentInfo':1,'wiki.getAttachments':1,'wiki.listLinks':1,'dokuwiki.search':1,'plugin.xcom.getMedia':1, 'plugin.xcom.listNamespaces':1};       
+       var array_types = {'dokuwiki.getPagelist':1,'wiki.getPageVersions':1,'wiki.getPageInfo':1,'wiki.getAllPages':1, 'wiki.getAttachmentInfo':1,'wiki.getAttachments':1, 'wiki.getRecentChanges':1,'wiki.listLinks':1,'dokuwiki.search':1,'plugin.xcom.getMedia':1, 'plugin.xcom.listNamespaces':1};       
        var jobj = xcom_json_ini('xcom_pwd','xcom_url','xcom_user');
        str =JSON.stringify(jobj); 
        params += '&credentials=' + str;      
@@ -102,13 +106,17 @@ function xmlrpc() {
                     console.log("By-passed decoding string returned by " + func + ': ' + err.message );
                 }                
             }
+                catch(err){
+                    console.log("By-passed decoding string returned by " + func + ': ' + err.message );
+                }                
+            }
                xcom_show('xcom_results');
                xcom_print_data(func, data,other); 
             }
         });
       
         var fn_sel = document.getElementById('xcom_sel');
-         fn_sel.selectedIndex = 0;
+        fn_sel.selectedIndex = 0;
          return false;
 }
 
@@ -126,6 +134,7 @@ function xcom_print_data(fn, data,other) {
      'wiki_listLinks': ['type', 'page','href'], 
      'wiki_getAttachmentInfo': ['id','lastModified','size'],
      'plugin_xcom_listNamespaces': ['Namespace Directories'],
+     'wiki_getRecentChanges': ['name', 'lastModified', 'author','version','size'],
    };
    xcomHeaders = table_calls;
    
@@ -147,7 +156,8 @@ function xcom_print_data(fn, data,other) {
             case 'wiki.getAttachments':
             case  'wiki.listLinks':
             case  'wiki.getAttachmentInfo':    
-            case  'plugin.xcom.listNamespaces':         
+            case  'plugin.xcom.listNamespaces':  
+            case  'wiki.getRecentChanges':
                  id = 'xcom_htm';
                  try {
                      var obj = jQuery.parseJSON(data);                                           
@@ -200,9 +210,17 @@ function xcom_multidim(obj,func) {
         
         for(var i in obj) {      
          data +="\n<tr>";                                                        
-         for(var j in obj[i]) {                                 
+         for(var j in obj[i]) {                        
              var r = obj[i][j];
-             row = xcom_td(j,r,func);            
+              if(j == 'lastModified' && func == 'wiki.getRecentChanges') {
+                 r = obj[i]['version'];        
+                var date_time = new Date(r * 1000);
+                var month = (date_time.getMonth() + 1) > 9 ? (date_time.getMonth() + 1) : '0' + (date_time.getMonth() + 1);
+                var day =  date_time.getDate() > 9  ? date_time.getDate() : '0'+ date_time.getDate();
+                r = date_time.getFullYear() + "-" + month + "-" + day + " " + date_time.getHours() + ":" + date_time.getMinutes() + ":" + date_time.getSeconds() 
+                 
+              }
+             row = xcom_td(j,r,func);            //type, value, function
              if(row) data += row;
          } 
        }
@@ -249,11 +267,15 @@ function xcom_td(type,val,fn) {
         }    
         if(!is_header) return;
     }
-    
+
+    //alert(type + '=' + val);
     if(type == 'modified' || type == 'lastModified' && typeof val == 'object') {    
-        var min =val['minute'] ?  val['minute'] : val['minut'];
+      //  var min =val['minute'] ?  val['minute'] : val['minut'];
+	    if (typeof val !== 'undefined' && val['year']) {
         var d = new Date( val['year'],val['month']-1,val['day'],val['hour'],val['minute'], val['second']);
         val = d.toUTCString();
+	      }	
+
     }
     else if(type == 'rev' || type == 'mtime') {
        var d = new Date(val*1000);
@@ -294,12 +316,12 @@ function xcom_tclose() {
 function xcom_search_url(pageid) {
 	 if ( typeof xcom_srch_str == 'undefined' ) {        
         xcom_srch_str =xcom_getInputValue('xcom_opts');
-}	
-	 var qs = '&'+ xcom_srch_opts(xcom_srch_opts); 	 
+      }	
+	 var qs = '&'+ xcom_srch_opts(); 	 
 	 return '<a href = "' + xcom_remote_url + 'id=' +pageid + qs +'" target = \"_blank\">' + pageid + '</a>';
 }	
 
-function xcom_srch_opts(srch_str) {
+function xcom_srch_opts() {  // for search function
 	var srch_str =xcom_getInputValue('xcom_opts');
     srch_str = srch_str.replace(/^\s+/,"");
     srch_str = srch_str.replace(/\s+$/,"");
@@ -322,6 +344,99 @@ function xcom_srch_opts(srch_str) {
   result = result.replace(/=\s+/g, '='); 
   result = result.replace(/\s*&\s*/g, '&'); 
   return result;
+}
+function xcom_check_opts(fn,page,opts) {
+      page = page.trim();
+	  page =SafeFN_encode(page);
+   //   alert('fn=' +fn + " page=" + page  + " opts=" +opts);
+   // console.log(page);
+   // console.log(opts);
+   // console.log(fn);
+   // console.log(opts.length);
+    var regex;
+    var skip_opts_cnt = false;
+    switch(fn) {
+         case 'wiki.getAllPages':
+         case 'dokuwiki.getTitle':
+            if((!page || page.trim().length === 0) && !opts) {              
+                return true;
+            }          
+             xcom_msg("Wrong parameter count: wiki.getAllPages does not take options")
+             return false;           
+        case 'wiki.aclCheck': 
+            skip_opts_cnt = true;
+        case 'wiki.getPage':  
+        case 'plugin.xcom.getMedia': 
+        case 'wiki.getAttachmentInfo':
+        case 'wiki.deleteAttachment': 
+        case 'wiki.listLinks':
+        case 'wiki.getBackLinks':
+        case 'wiki.getPageInfo':
+        case 'wiki.getPageHTML': 
+            if(opts && !skip_opts_cnt) {
+                xcom_msg("Wrong parameter count: " + fn + " does not take options")
+                return false;
+            }            
+            regex = RegExp('^[0-9\\a-z_:\\.\\-]+');
+          //  console.log(regex);
+            if(!regex.test(page)) {
+                xcom_msg("Bad DokuWiki ID");
+                return false;
+            }
+            return true;
+           
+        case 'wiki.getRecentChanges': 
+        case 'wiki.getRecentMediaChanges':
+             if(page || page.length) {              
+                xcom_msg("Wrong parameter count: " + fn + "does not take an ID, only a date formatted for a timestamp");
+                return false;
+            }     
+		     regex = RegExp('^\s*\\d\\d\\d\\d-\\d\\d-\\d\\d\s*$');
+			opt = opts.trim(); 
+            if(!regex.test(opt)) {
+                xcom_msg("Bad date format. Use yyyy-mm-dd");
+                return false;
+            }  
+            break	
+     
+	    case 'dokuwiki.getPagelist': //(hash),(depth:n)	    
+            break;
+			
+        case 'dokuwiki.search': //string query
+		if(!opts) {
+			xcom_msg("Required search string missing");
+		        return false;
+			}
+               break;
+        case 'wiki.putPage':  //(string) [[doku>:pagename]] (string) Wiki text,  string, (sum;summary text),(minor;n) 
+            if(!page) {
+                alert("Page id missing");
+                return false;
+            }
+            var regex_m = RegExp('\(minor;\s*(1|true)\s*\)');
+            var regex_s = RegExp('\\(sum;[\\w\\s\\d;\\.\\:\\[\\]\\{\\}]+\\)');              
+            if(regex_m.test(opts) || regex_s.test(opts)) break;
+            alert("needs sum or minor edit statement");
+            return false;
+                  
+            break;                  
+/*     
+        case 'dokuwiki.appendPage': string [[doku>:pagename]],string wiki text,  string, (sum;summary text),(minor;n)
+            break;
+        case 'wiki.getPageVersions': (string) [[doku>:pagename]] , (int) offset
+            break;
+        case 'wiki.getAttachments': (String) namespace, (array) options (#pattern#)
+            break;
+        case 'plugin.acl.addAcl': (String) scope, (String) user|@group 
+            break;	
+        case 'plugin.acl.delAcl':String) scope, (String) user|@group, (int) permission 
+            break;	
+        case 'plugin.xcom.listNamespaces':(String) namespace id, (Array) (id1;id2. . .)
+            break;	*/
+        default:
+          		
+    }
+    return true;
 }
 
 function xcom_params() {
@@ -346,7 +461,7 @@ function xcom_params() {
     if(optstring) opts = optstring.split(/,/);          
    
      
-    for(var p=0; p<opts.length; p++) { 
+    for(var p=0; p<opts.length; p++) {	
         if(!opts[p] || !opts[p].match(/^\s*\(/)) break;    
         var isarray = xcom_getArray(opts[p]);    
          if(isarray) {
@@ -390,7 +505,9 @@ function xcom_params() {
     }     
      
     var page = document.getElementById('xcom_pageid').value;
-     
+	
+    var opstatus = xcom_check_opts(params[i],page,optstring);
+	if(!opstatus) return false;
     if(page)  {       
        if(params[0] == 'dokuwiki.search') {  // add page to search query
              opts[0] =  opts[0] + " " + page;            
@@ -438,6 +555,7 @@ function xcom_timeStamp(opt) {
            var d = new Date(opt);
            var unixtime = parseInt(d.getTime() / 1000);
            if(unixtime) {
+			   unixtime += 86400;	//needs added day for accurate time		  
                return unixtime;
            }
         }
@@ -541,6 +659,14 @@ function xcom_setValue(item,val) {
    d.value = val; 
 }
 
+/* used for checking options */
+function xcom_msg(msg) {
+  id ='xcom_pre';
+   xcom_show('xcom_results');   
+  var d = document.getElementById(id);  
+  d.innerHTML = msg;
+  xcom_show('xcom_pre');
+}
 
 /**
    JSON.stringify combines elements from both of below:
@@ -580,15 +706,15 @@ JSON.stringify = JSON.stringify || function (obj) {
 
 jQuery( document ).ready(function() {     
        /* drop-down function menu with tool tips */
-	   /* xcom_opts is array of xmlrpc functions below */ 
+	   /* xcom_query_types is array of xmlrpc functions below */ 
        var sel = document.getElementById('xcom_sel');   
        if(sel) {
        var titles = JSINFO['xcom_qtitles'];
-       for(i=0; i<xcom_opts.length; i++) {
-           var text = xcom_opts[i].match(/^plugin\./) ? xcom_opts[i].replace(/^plugin\./,"") : (xcom_opts[i].split('.'))[1]; 
-            var newopt = new Option(text,xcom_opts[i]);
-            if(titles[xcom_opts[i]]) newopt.title = titles[xcom_opts[i]];
-            else newopt.title = xcom_opts[i];
+       for(i=0; i<xcom_query_types.length; i++) {
+           var text = xcom_query_types[i].match(/^plugin\./) ? xcom_query_types[i].replace(/^plugin\./,"") : (xcom_query_types[i].split('.'))[1]; 
+            var newopt = new Option(text,xcom_query_types[i]);
+            if(titles[xcom_query_types[i]]) newopt.title = titles[xcom_query_types[i]];
+            else newopt.title = xcom_query_types[i];
             sel.add(newopt);
        }
 
@@ -647,7 +773,7 @@ if(underline)
 else el.style.textDecoration = 'none';
 
 }
-var xcom_opts=new Array(
+var xcom_query_types=new Array(
 'dokuwiki.getPagelist',
 'dokuwiki.search',
 'dokuwiki.getTitle',
@@ -661,6 +787,8 @@ var xcom_opts=new Array(
 'wiki.putPage',
 'wiki.listLinks',
 'wiki.getAllPages',
+'wiki.getBackLinks',
+'wiki.getRecentChanges',
 'wiki.getAttachments',
 'wiki.getAttachmentInfo',
 'wiki.getRecentMediaChanges',

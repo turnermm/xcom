@@ -20,6 +20,7 @@ class action_plugin_xcom extends DokuWiki_Action_Plugin {
     public function register(Doku_Event_Handler $controller) {
 
        $controller->register_hook('DOKUWIKI_STARTED', 'AFTER', $this, 'handle_dokuwiki_started');
+       $controller->register_hook('TPL_METAHEADER_OUTPUT', 'BEFORE', $this, 'handle_meta_headers'); 
    
     }
 
@@ -62,7 +63,7 @@ class action_plugin_xcom extends DokuWiki_Action_Plugin {
     }
        /* tooltips  for  function select menu */
         $JSINFO['xcom_qtitles'] = array(
-            'dokuwiki.getPagelist'=>"get pages in given namespace",
+             'dokuwiki.getPagelist'=>'get pages in given namespace',
             'dokuwiki.search'=>'fulltext search',
             'dokuwiki.getTitle'=>'Wiki title',
             'dokuwiki.appendPage'=>'Append text to wiki page',
@@ -75,6 +76,8 @@ class action_plugin_xcom extends DokuWiki_Action_Plugin {
             'wiki.putPage'=>'Save page',
             'wiki.listLinks'=>'all links in page',
             'wiki.getAllPages'=>'all wiki pages in remote wiki',
+			'wiki.getBackLinks'=>'list of backlinks to selected page',
+			'wiki.getRecentChanges'=>'list of recent changes since given timestamp',
             'wiki.getAttachments'=>'list media files in namespace',
             'wiki.getAttachmentInfo'=>'info about a media file',
             'plugin.acl.addAcl'=>false,
@@ -84,6 +87,19 @@ class action_plugin_xcom extends DokuWiki_Action_Plugin {
         );
         
     }        
+
+    public function handle_meta_headers(Doku_Event $event, $param){              
+	    $event->data["script"][] = array (
+           "type" => "text/javascript",
+           "src" => DOKU_BASE."lib/plugins/xcom/scripts/xcom_latinize-cmpr.js",
+            "_data" => ""
+          );
+ 	      $event->data["script"][] = array (
+           "type" => "text/javascript",
+           "src" => DOKU_BASE."lib/plugins/xcom/scripts/safeFN_class-cmpr.js",
+            "_data" => ""
+         );
+	}		
 }
 
 // vim:ts=4:sw=4:et:
