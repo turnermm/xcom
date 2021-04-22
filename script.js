@@ -353,7 +353,7 @@ function xcom_check_opts(fn,page,opts) {
             if((!page || page.trim().length === 0) && !opts) {              
                 return true;
             }          
-             xcom_msg("Wrong parameter count: wiki.getAllPages does not take options")
+             xcom_msg("Wrong parameter count: " + fn + " does not take options")
              return false;           
         case 'wiki.aclCheck': 
             skip_opts_cnt = true;
@@ -370,7 +370,6 @@ function xcom_check_opts(fn,page,opts) {
                 return false;
             }            
             regex = RegExp('^[0-9\\a-z_:\\.\\-]+');
-          //  console.log(regex);
             if(!regex.test(page)) {
                 xcom_msg("Bad DokuWiki ID");
                 return false;
@@ -401,7 +400,7 @@ function xcom_check_opts(fn,page,opts) {
 			}
                break;
         case 'dokuwiki.appendPage':         
-        case 'wiki.putPage':  //(string) [[doku>:pagename]] (string) Wiki text,  string, (sum;summary text),(minor;n) 
+        case 'wiki.putPage':  
             if(!page) {
                 alert("Page id missing");
                 return false;
