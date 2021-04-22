@@ -68,11 +68,7 @@ function xmlrpc() {
           alert('No function selected');
           return false; 
         }  
-<<<<<<< HEAD
-       var func = options[0];      
-=======
            
->>>>>>> version_2
        var other=false;
        var params =  'params=' + JSON.stringify(options);
        params = params.replace(/\s*__comma__\s*/g,',');
@@ -102,10 +98,6 @@ function xmlrpc() {
                 try {
                data = decodeURIComponent(data);                                              
                 }   
-                catch(err){
-                    console.log("By-passed decoding string returned by " + func + ': ' + err.message );
-                }                
-            }
                 catch(err){
                     console.log("By-passed decoding string returned by " + func + ': ' + err.message );
                 }                
@@ -408,6 +400,7 @@ function xcom_check_opts(fn,page,opts) {
 		        return false;
 			}
                break;
+        case 'dokuwiki.appendPage':         
         case 'wiki.putPage':  //(string) [[doku>:pagename]] (string) Wiki text,  string, (sum;summary text),(minor;n) 
             if(!page) {
                 alert("Page id missing");
@@ -421,8 +414,7 @@ function xcom_check_opts(fn,page,opts) {
                   
             break;                  
 /*     
-        case 'dokuwiki.appendPage': string [[doku>:pagename]],string wiki text,  string, (sum;summary text),(minor;n)
-            break;
+
         case 'wiki.getPageVersions': (string) [[doku>:pagename]] , (int) offset
             break;
         case 'wiki.getAttachments': (String) namespace, (array) options (#pattern#)
