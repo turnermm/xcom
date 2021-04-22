@@ -400,6 +400,7 @@ function xcom_check_opts(fn,page,opts) {
 		        return false;
 			}
                break;
+        case 'dokuwiki.appendPage':         
         case 'wiki.putPage':  //(string) [[doku>:pagename]] (string) Wiki text,  string, (sum;summary text),(minor;n) 
             if(!page) {
                 alert("Page id missing");
@@ -413,8 +414,7 @@ function xcom_check_opts(fn,page,opts) {
                   
             break;                  
 /*     
-        case 'dokuwiki.appendPage': string [[doku>:pagename]],string wiki text,  string, (sum;summary text),(minor;n)
-            break;
+
         case 'wiki.getPageVersions': (string) [[doku>:pagename]] , (int) offset
             break;
         case 'wiki.getAttachments': (String) namespace, (array) options (#pattern#)
