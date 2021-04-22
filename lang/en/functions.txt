@@ -1,9 +1,10 @@
-
+F
 ==== dokuwiki.getPagelist ====
 
 ^Name|''dokuwiki.getPagelist''   |
 ^Parameters|(string) namespace, (array) options|
-^Description|Lists all pages within a given namespace. The options are passed directly to [[https://xref.dokuwiki.org/reference/dokuwiki/nav.html?_functions/search_allpages.html|search_allpages()]]. The options array must have one of two items, either ''depth'' or ''hash'' enclosed in parentheses. If ''hash'' is specified, the results will include a column containing a hash of the raw wiki contents of each page found. The ''depth'' option determines the level of recursion. A depth of 1, returns the results the top level of the specified directory, a depth of 2 includes the directories two level below, and so forth. This option is set as follows: (depth:<num>), where num is the number of levels to recurse.|
+^Description|Lists all pages within a given namespace.  Use a single colon '':'' for the root namespace. The options are passed directly to [[https://xref.dokuwiki.org/reference/dokuwiki/nav.html?_functions/search_allpages.html|search_allpages()]]. The options array must have one of two items, either ''depth'' or ''hash'' enclosed in parentheses. If ''hash'' is specified, the results will include a column containing a hash of the raw wiki contents of each page found. The ''depth'' option determines the level of recursion. A depth of 1, returns the results the top level of the specified directory, a depth of 2 includes the directories two level below, and so forth. This option is set as follows: (depth:<num>), where num is the number of levels to recurse.  |
+
 
 ==== dokuwiki.search ====
 
