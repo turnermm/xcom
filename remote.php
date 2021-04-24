@@ -17,6 +17,11 @@ class remote_plugin_xcom extends DokuWiki_Remote_Plugin {
                 'return' => 'array',
                 'doc' => 'returns list of wiki namespaces'
             ),             
+            'pageVersions' => array(
+                'args' => array('string','int'),
+                'return' => 'array',
+                'doc' => 'returns list of page versions'
+            ),             
         );
     }
      
@@ -27,8 +32,9 @@ class remote_plugin_xcom extends DokuWiki_Remote_Plugin {
            }
      }     
     public function getTime($a) {  
-        if($a[0]) return strftime('%Y. %B %d. %A', $this->getApi()->toDate(time()));
-        return $this->getApi()->toDate(time());
+        return date("Y-m-d",$a);
+       // if($a[0]) return strftime('%Y. %B %d. %A', $this->getApi()->toDate(time()));
+      //  return $this->getApi()->toDate(time());
     }
     
     
@@ -147,4 +153,89 @@ class remote_plugin_xcom extends DokuWiki_Remote_Plugin {
           }       
           return "no data for $id";
     }
+    
+          /**
+     * Returns a list of available revisions of a given wiki page
+     * Number of returned pages is set by $conf['recent']
+     * However not accessible pages are skipped, so less than $conf['recent'] could be returned
+     *
+     * @author Michael Klier <chi@chimeric.de>
+     *
+     * @param string $id page id
+     * @param int $first skip the first n changelog lines
+     *                      0 = from current(if exists)
+     *                      1 = from 1st old rev
+     *                      2 = from 2nd old rev, etc
+     * @return array
+     */
+    public function pageVersions($id, $first = 0)
+    {
+      //  header("Access-Control-Allow-Origin: *");
+        $id = $this->resolvePageId($id);
+        if (auth_quickaclcheck($id) < AUTH_READ) {
+            //throw new AccessDeniedException('You are not allowed to read this page', 111);
+            return false;
+        }
+        global $conf;
+
+        $versions = array();
+
+        if (empty($id)) {
+           // throw new RemoteException('Empty page ID', 131);
+           return false;
+        }
+
+        $first = (int) $first;
+        $first_rev = $first - 1;
+        $first_rev = $first_rev < 0 ? 0 : $first_rev;
+        $pagelog = new PageChangeLog($id);
+        $revisions = $pagelog->getRevisions($first_rev, $conf['recent']);
+
+        if ($first == 0) {
+            array_unshift($revisions, '');  // include current revision
+            if (count($revisions) > $conf['recent']) {
+                array_pop($revisions);          // remove extra log entry
+            }
+        }
+
+        if (!empty($revisions)) {
+            foreach ($revisions as $rev) {
+                $file = wikiFN($id, $rev);
+                $time = @filemtime($file);
+                // we check if the page actually exists, if this is not the
+                // case this can lead to less pages being returned than
+                // specified via $conf['recent']
+                if ($time) {
+                    $pagelog->setChunkSize(1024);
+                    $info = $pagelog->getRevisionInfo($rev ? $rev : $time);
+                    if (!empty($info)) {
+                        $data = array();
+                        $data['user'] = $info['user'];
+                        $data['ip'] = $info['ip'];
+                        $data['type'] = $info['type'];
+                        $data['sum'] = $info['sum'];
+                     //   $data['modified'] = $this->api->toDate($info['date']);
+                        $data['modified'] = $this->getTime($info['date']);
+                        $data['version'] = $info['date'];
+                        array_push($versions, $data);
+                    }
 }
+            }
+            return json_encode($versions);
+        } else {
+            return array();
+        }
+    }
+    
+        private function resolvePageId($id)
+    {
+        $id = cleanID($id);
+        if (empty($id)) {
+            global $conf;
+            $id = cleanID($conf['start']);
+        }
+        return $id;
+    }
+  
+}
+

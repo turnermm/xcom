@@ -80,7 +80,7 @@ function xmlrpc() {
           } catch(e) {
           }
        }
-       var array_types = {'dokuwiki.getPagelist':1,'wiki.getPageVersions':1,'wiki.getPageInfo':1,'wiki.getAllPages':1, 'wiki.getAttachmentInfo':1,'wiki.getAttachments':1, 'wiki.getRecentChanges':1,'wiki.listLinks':1,'dokuwiki.search':1,'plugin.xcom.getMedia':1, 'plugin.xcom.listNamespaces':1};       
+       var array_types = {'dokuwiki.getPagelist':1,'plugin.xcom.pageVersions':1,'wiki.getPageInfo':1,'wiki.getAllPages':1, 'wiki.getAttachmentInfo':1,'wiki.getAttachments':1, 'wiki.getRecentChanges':1,'wiki.listLinks':1,'dokuwiki.search':1,'plugin.xcom.getMedia':1, 'plugin.xcom.listNamespaces':1};       
        var jobj = xcom_json_ini('xcom_pwd','xcom_url','xcom_user');
        str =JSON.stringify(jobj); 
        params += '&credentials=' + str;      
@@ -117,7 +117,7 @@ function xcom_print_data(fn, data,other) {
 
    var table_calls = {     
      'dokuwiki_getPagelist': (other=='hash') ? ['id','rev', 'mtime' ,'size','hash'] : ['id','rev', 'mtime' ,'size'] ,      
-     'wiki_getPageVersions': ['user','ip','type','sum','modified','version' ],
+     'plugin_xcom_pageVersions': ['user','ip','type','sum','modified','version' ],
      'wiki_getPageInfo': ['name','lastModified','author','version'],
      'wiki_getAllPages': ['id', 'perms', 'size', 'lastModified'],
      'dokuwiki_search': ['id', 'score', 'rev', 'mtime','size','snippet'],
@@ -140,7 +140,7 @@ function xcom_print_data(fn, data,other) {
                  id = 'xcom_htm';
                  break;
             case 'dokuwiki.getPagelist':
-            case 'wiki.getPageVersions':
+            case 'plugin.xcom.pageVersions':
             case 'wiki.getPageInfo':
             case 'wiki.getAllPages':
             case 'dokuwiki.search':
@@ -353,7 +353,7 @@ function xcom_check_opts(fn,page,opts) {
             if((!page || page.trim().length === 0) && !opts) {              
                 return true;
             }          
-             xcom_msg("Wrong parameter count: wiki.getAllPages does not take options")
+             xcom_msg("Wrong parameter count: " + fn + " does not take options")
              return false;           
         case 'wiki.aclCheck': 
             skip_opts_cnt = true;
@@ -401,7 +401,7 @@ function xcom_check_opts(fn,page,opts) {
 			}
                break;
         case 'dokuwiki.appendPage':         
-        case 'wiki.putPage':  //(string) [[doku>:pagename]] (string) Wiki text,  string, (sum;summary text),(minor;n) 
+        case 'wiki.putPage':  
             if(!page) {
                 alert("Page id missing");
                 return false;
@@ -415,7 +415,7 @@ function xcom_check_opts(fn,page,opts) {
             break;                  
 /*     
 
-        case 'wiki.getPageVersions': (string) [[doku>:pagename]] , (int) offset
+        case 'plugin.xcom.pageVersions': (string) [[doku>:pagename]] , (int) offset
             break;
         case 'wiki.getAttachments': (String) namespace, (array) options (#pattern#)
             break;
@@ -773,7 +773,7 @@ var xcom_query_types=new Array(
 'wiki.aclCheck',
 'wiki.getPage',
 'wiki.getPageVersion',
-'wiki.getPageVersions',
+'plugin.xcom.pageVersions',
 'wiki.getPageInfo',
 'wiki.getPageHTML',
 'wiki.putPage',
