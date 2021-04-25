@@ -339,12 +339,6 @@ function xcom_srch_opts() {  // for search function
 }
 function xcom_check_opts(fn,page,opts) {
       page = page.trim();
-	  page =SafeFN_encode(page);
-   //   alert('fn=' +fn + " page=" + page  + " opts=" +opts);
-   // console.log(page);
-   // console.log(opts);
-   // console.log(fn);
-   // console.log(opts.length);
     var regex;
     var skip_opts_cnt = false;
     switch(fn) {
@@ -353,7 +347,7 @@ function xcom_check_opts(fn,page,opts) {
             if((!page || page.trim().length === 0) && !opts) {              
                 return true;
             }          
-             xcom_msg("Wrong parameter count: " + fn + " does not take options")
+           xcom_err_msg('wrong_count',fn,'no_opts');
              return false;           
         case 'wiki.aclCheck': 
             skip_opts_cnt = true;
@@ -366,13 +360,12 @@ function xcom_check_opts(fn,page,opts) {
         case 'wiki.getPageInfo':
         case 'wiki.getPageHTML': 
             if(opts && !skip_opts_cnt) {
-                xcom_msg("Wrong parameter count: " + fn + " does not take options")
+                xcom_err_msg('wrong_count',fn,'no_opts');
                 return false;
             }            
-            regex = RegExp('^[0-9\\a-z_:\\.\\-]+');
-          //  console.log(regex);
-            if(!regex.test(page)) {
-                xcom_msg("Bad DokuWiki ID");
+
+             if(page.match(/[^0-9a-z_\:\.\-]+/g)) { 
+                xcom_err_msg('bad_id');
                 return false;
             }
             return true;
@@ -380,23 +373,27 @@ function xcom_check_opts(fn,page,opts) {
         case 'wiki.getRecentChanges': 
         case 'wiki.getRecentMediaChanges':
              if(page || page.length) {              
-                xcom_msg("Wrong parameter count: " + fn + "does not take an ID, only a date formatted for a timestamp");
+                xcom_err_msg('wrong_count',fn, 'date_only');
                 return false;
             }     
 		     regex = RegExp('^\s*\\d\\d\\d\\d-\\d\\d-\\d\\d\s*$');
 			opt = opts.trim(); 
             if(!regex.test(opt)) {
-                xcom_msg("Bad date format. Use yyyy-mm-dd");
+                xcom_err_msg('date_err');               
                 return false;
             }  
             break	
      
 	    case 'dokuwiki.getPagelist': //(hash),(depth:n)	    
+            if(!page  || !opts) {
+                xcom_err_msg(fn,'param-err');
+                return false;
+            }
             break;
 			
         case 'dokuwiki.search': //string query
 		if(!opts) {
-			xcom_msg("Required search string missing");
+                xcom_err_msg('srch_string');
 		        return false;
 			}
                break;
@@ -789,3 +786,19 @@ var xcom_query_types=new Array(
 'plugin.xcom.getMedia',
 'plugin.xcom.listNamespaces'
 );
+
+function xcom_err_msg() {
+    var i,msg="";
+    if(arguments.length == 1) {
+        xcom_msg(LANG.plugins.xcom[arguments[0]]);
+        return;
+    } 
+    
+    for(i=0; i<arguments.length;i++) {  
+       if(typeof LANG.plugins.xcom[arguments[i]] == 'undefined') {
+           msg += '<b>'+ arguments[i] + "</b> ";
+       }
+       else msg+=LANG.plugins.xcom[arguments[i]] + " ";       
+    }
+    xcom_msg(msg);
+}
