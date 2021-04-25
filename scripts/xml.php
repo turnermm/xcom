@@ -30,7 +30,7 @@ if($client)
         }
     }    
 
-   $array_types = array('dokuwiki.getPagelist','wiki.getPageVersions','wiki.getPageInfo','wiki.getAllPages','wiki.getAttachmentInfo','wiki.getAttachments', 'wiki.getRecentChanges', 'wiki.listLinks','dokuwiki.search','plugin.xcom.getMedia', 'plugin.xcom.listNamespaces');
+   $array_types = array('dokuwiki.getPagelist','plugin.xcom.pageVersions','wiki.getPageInfo','wiki.getAllPages','wiki.getAttachmentInfo','wiki.getAttachments', 'wiki.getRecentChanges', 'wiki.listLinks','dokuwiki.search','plugin.xcom.getMedia', 'plugin.xcom.listNamespaces');
    $time_start = time();   
    $resp = "";
    
@@ -86,7 +86,7 @@ if($client)
 	   if($fn == 'wiki.getAttachmentInfo' && isset($params[1])) {
 	      $retv = array_merge(array('id' => $params[1]), $retv); 
 	  }
-	  else 	if($fn == 'wiki.getPageVersions') {
+	  else 	if($fn == 'plugin.xcom.pageVersions') {
           for($i=0; $i<count($retv);$i++) {             
               $retv[$i]['modified'] =  get_ixrdate($retv[$i]['modified']);	        
           }

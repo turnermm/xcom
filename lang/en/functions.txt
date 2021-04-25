@@ -35,9 +35,9 @@
 ^Parameters  |(string) [[doku>:pagename]]|
 ^Description|Returns the raw Wiki text for a page.|
 
-==== wiki.getPageVersions ====
+==== plugin.xcom.pageVersions ====
 
-^Name  |''wiki.getPageVersions'' |
+^Name  |''plugin.xcom.pageVersions'' |
 ^Parameters  |(string) [[doku>:pagename]] , (int) offset|
 ^Description|Returns the available versions of a Wiki page. The number of pages in the result is controlled \\ via the [[doku>:config:recent]] configuration setting. The offset can be used to list earlier versions in the history.|
 
