@@ -30,7 +30,7 @@ if($client)
         }
     }    
 
-   $array_types = array('dokuwiki.getPagelist','plugin.xcom.pageVersions','wiki.getPageInfo','wiki.getAllPages','wiki.getAttachmentInfo','wiki.getAttachments', 'wiki.getRecentChanges', 'wiki.listLinks','dokuwiki.search','plugin.xcom.getMedia', 'plugin.xcom.listNamespaces');
+   $array_types = array('dokuwiki.getPagelist','plugin.xcom.pageVersions','plugin.xcom.getPageInfo','wiki.getAllPages','wiki.getAttachmentInfo','wiki.getAttachments', 'wiki.getRecentChanges', 'wiki.listLinks','dokuwiki.search','plugin.xcom.getMedia', 'plugin.xcom.listNamespaces');
    $time_start = time();   
    $resp = "";
    
@@ -91,7 +91,7 @@ if($client)
               $retv[$i]['modified'] =  get_ixrdate($retv[$i]['modified']);	        
           }
 	  }	
-     elseif($fn == 'wiki.getPageInfo') {
+     elseif($fn == 'plugin.xcom.getPageInfo') {
 		  $retv['lastModified'] =  get_ixrdate($retv['lastModified']);
 		 // file_put_contents("debugbde.txt",print_r($retv['lastodified'],true));
 	}

@@ -71,7 +71,7 @@ class action_plugin_xcom extends DokuWiki_Action_Plugin {
             'wiki.getPage'=>'get raw wiki text',
             'wiki.getPageVersion'=>'get wiki text for specific revision ',
             'plugin.xcom.pageVersions'=>'available versions of a wiki page',
-            'wiki.getPageInfo'=>false,
+            'plugin.xcom.getPageInfo'=>false,
             'wiki.getPageHTML'=>'get XHTML body of wiki page',
             'wiki.putPage'=>'Save page',
             'wiki.listLinks'=>'all links in page',

@@ -1,6 +1,16 @@
 <?php 
+use dokuwiki;
+if(!defined('DOKU_INC')) define('DOKU_INC',realpath(dirname(__FILE__).'/../../../').'/');
+require_once(DOKU_INC . 'inc/init.php');
+require_once(DOKU_INC . 'inc/Remote/ApiCore.php'); 
+use dokuwiki\Remote\Api;
+use dokuwiki\Remote\ApiCore;
+require_once(DOKU_INC . 'inc/Remote/Api.php');
+
+
+
 class remote_plugin_xcom extends DokuWiki_Remote_Plugin {
-    
+    private $api;
     public function _getMethods() {
         return array(
             'getTime' => array(
@@ -22,6 +32,12 @@ class remote_plugin_xcom extends DokuWiki_Remote_Plugin {
                 'return' => 'array',
                 'doc' => 'returns list of page versions'
             ),             
+           'getPageInfo' => array(
+                'args' => array('string'),
+                'return' => 'array',
+                'doc' => 'Returns a struct with info about the page, latest version.',
+                'name' => 'pageInfo'
+            ),            
         );
     }
      
@@ -30,6 +46,7 @@ class remote_plugin_xcom extends DokuWiki_Remote_Plugin {
           if(!defined('DIRECTORY_SEPARATOR')) {
              $iswin ? define("DIRECTORY_SEPARATOR", "\\") : define("DIREC TORY_SEPARATOR", "/");
            }
+           $this->api = new ApiCore(new Api());
      }     
     public function getTime($a) {  
         return date("Y-m-d",$a);
@@ -38,6 +55,9 @@ class remote_plugin_xcom extends DokuWiki_Remote_Plugin {
     }
     
     
+    public function pageInfo($id, $rev = '') {
+       return json_encode($this->api-> pageInfo($id, $rev = ''));      
+    }
     
      public function listNamespaces($namespace="",$mask="") {  
       global $conf;       
@@ -171,6 +191,7 @@ class remote_plugin_xcom extends DokuWiki_Remote_Plugin {
     public function pageVersions($id, $first = 0)
     {
       //  header("Access-Control-Allow-Origin: *");
+       // return  json_encode($this->api->pageVersions($id, $first));
         $id = $this->resolvePageId($id);
         if (auth_quickaclcheck($id) < AUTH_READ) {
             //throw new AccessDeniedException('You are not allowed to read this page', 111);
@@ -227,6 +248,19 @@ class remote_plugin_xcom extends DokuWiki_Remote_Plugin {
         }
     }
     
+        /**
+     * Return some basic data about a page
+     *
+     * @param string $id page id
+     * @param string|int $rev revision timestamp or empty string
+     * @return array
+     * @throws AccessDeniedException no access for page
+     * @throws RemoteException page not exist
+     */
+    public function pageInfo($id, $rev = '') {
+       return json_encode($this->api-> pageInfo($id, $rev = ''));   
+    }
+    
         private function resolvePageId($id)
     {
         $id = cleanID($id);
@@ -239,3 +273,5 @@ class remote_plugin_xcom extends DokuWiki_Remote_Plugin {
   
 }
 
+//$rem = new remote_plugin_xcom();
+//print_r($rem->pageVersions('start'));

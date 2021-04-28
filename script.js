@@ -80,7 +80,7 @@ function xmlrpc() {
           } catch(e) {
           }
        }
-       var array_types = {'dokuwiki.getPagelist':1,'plugin.xcom.pageVersions':1,'wiki.getPageInfo':1,'wiki.getAllPages':1, 'wiki.getAttachmentInfo':1,'wiki.getAttachments':1, 'wiki.getRecentChanges':1,'wiki.listLinks':1,'dokuwiki.search':1,'plugin.xcom.getMedia':1, 'plugin.xcom.listNamespaces':1};       
+       var array_types = {'dokuwiki.getPagelist':1,'plugin.xcom.pageVersions':1,'plugin.xcom.getPageInfo':1,'wiki.getAllPages':1, 'wiki.getAttachmentInfo':1,'wiki.getAttachments':1, 'wiki.getRecentChanges':1,'wiki.listLinks':1,'dokuwiki.search':1,'plugin.xcom.getMedia':1, 'plugin.xcom.listNamespaces':1};       
        var jobj = xcom_json_ini('xcom_pwd','xcom_url','xcom_user');
        str =JSON.stringify(jobj); 
        params += '&credentials=' + str;      
@@ -141,7 +141,7 @@ function xcom_print_data(fn, data,other) {
                  break;
             case 'dokuwiki.getPagelist':
             case 'plugin.xcom.pageVersions':
-            case 'wiki.getPageInfo':
+            case 'plugin.xcom.getPageInfo':
             case 'wiki.getAllPages':
             case 'dokuwiki.search':
             case 'plugin.xcom.getMedia':
@@ -165,7 +165,7 @@ function xcom_print_data(fn, data,other) {
                     {   
                         var fncall = fn.replace(/\./g,'_');                      
                         data = xcom_thead(table_calls[fncall]); 
-                         if(fn == 'wiki.getPageInfo' || fn ==  'wiki.getAttachmentInfo') {
+                         if(fn == 'plugin.xcom.getPageInfo' || fn ==  'wiki.getAttachmentInfo') {
                                 data +=  xcom_hash(obj);  //straight single hash
                            }     
                           else if (fn == 'plugin.xcom.getMedia' || fn =='plugin.xcom.listNamespaces') {
@@ -357,7 +357,7 @@ function xcom_check_opts(fn,page,opts) {
         case 'wiki.deleteAttachment': 
         case 'wiki.listLinks':
         case 'wiki.getBackLinks':
-        case 'wiki.getPageInfo':
+        case 'plugin.xcom.getPageInfo':
         case 'wiki.getPageHTML': 
             if(opts && !skip_opts_cnt) {
                 xcom_err_msg('wrong_count',fn,'no_opts');
@@ -771,7 +771,7 @@ var xcom_query_types=new Array(
 'wiki.getPage',
 'wiki.getPageVersion',
 'plugin.xcom.pageVersions',
-'wiki.getPageInfo',
+'plugin.xcom.getPageInfo',
 'wiki.getPageHTML',
 'wiki.putPage',
 'wiki.listLinks',
