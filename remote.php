@@ -274,4 +274,4 @@ class remote_plugin_xcom extends DokuWiki_Remote_Plugin {
 }
 
 //$rem = new remote_plugin_xcom();
-//print_r($rem->pageVersions('start'));
+//print_r($rem->pageInfo('start'));

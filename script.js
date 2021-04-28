@@ -118,7 +118,7 @@ function xcom_print_data(fn, data,other) {
    var table_calls = {     
      'dokuwiki_getPagelist': (other=='hash') ? ['id','rev', 'mtime' ,'size','hash'] : ['id','rev', 'mtime' ,'size'] ,      
      'plugin_xcom_pageVersions': ['user','ip','type','sum','modified','version' ],
-     'wiki_getPageInfo': ['name','lastModified','author','version'],
+     'plugin_xcom_getPageInfo': ['name','lastModified','author','version'],
      'wiki_getAllPages': ['id', 'perms', 'size', 'lastModified'],
      'dokuwiki_search': ['id', 'score', 'rev', 'mtime','size','snippet'],
      'plugin_xcom_getMedia': ['Media files'],
