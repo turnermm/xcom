@@ -1,5 +1,5 @@
 <?php 
-//use dokuwiki;
+
 if(!defined('DOKU_INC')) define('DOKU_INC',realpath(dirname(__FILE__).'/../../../').'/');
 include_once(DOKU_INC . 'inc/init.php');
 if(file_exists(DOKU_INC . 'inc/Remote/Api.php')) {
@@ -48,8 +48,8 @@ class remote_plugin_xcom extends DokuWiki_Remote_Plugin {
           if(!defined('DIRECTORY_SEPARATOR')) {
              $iswin ? define("DIRECTORY_SEPARATOR", "\\") : define("DIREC TORY_SEPARATOR", "/");
            }
-         if(class_exists ('Api')) {           
-           $this->api = new ApiCore(new Api());
+          if(class_exists("dokuwiki\Remote\APICore")) {
+              $this->api = new dokuwiki\Remote\APICore(new dokuwiki\Remote\Api());
          }
          else $this->api = new RemoteAPICore(new RemoteApi());
      }     
