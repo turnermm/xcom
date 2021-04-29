@@ -80,7 +80,8 @@ function xmlrpc() {
           } catch(e) {
           }
        }
-       var array_types = {'dokuwiki.getPagelist':1,'plugin.xcom.pageVersions':1,'plugin.xcom.getPageInfo':1,'wiki.getAllPages':1, 'wiki.getAttachmentInfo':1,'wiki.getAttachments':1, 'wiki.getRecentChanges':1,'wiki.listLinks':1,'dokuwiki.search':1,'plugin.xcom.getMedia':1, 'plugin.xcom.listNamespaces':1};       
+       var array_types = {'dokuwiki.getPagelist':1,'plugin.xcom.pageVersions':1,'plugin.xcom.getPageInfo':1,'wiki.getAllPages':1, 'wiki.getAttachmentInfo':1,'wiki.getAttachments':1, 'wiki.getBackLinks':1,
+       'wiki.getRecentChanges':1,'wiki.listLinks':1,'dokuwiki.search':1,'plugin.xcom.getMedia':1, 'plugin.xcom.listNamespaces':1};       
        var jobj = xcom_json_ini('xcom_pwd','xcom_url','xcom_user');
        str =JSON.stringify(jobj); 
        params += '&credentials=' + str;      
@@ -127,6 +128,7 @@ function xcom_print_data(fn, data,other) {
      'wiki_getAttachmentInfo': ['id','lastModified','size'],
      'plugin_xcom_listNamespaces': ['Namespace Directories'],
      'wiki_getRecentChanges': ['name', 'lastModified', 'author','version','size'],
+     'wiki_getBackLinks' : ['Backlinks'], 
    };
    xcomHeaders = table_calls;
    
@@ -150,6 +152,7 @@ function xcom_print_data(fn, data,other) {
             case  'wiki.getAttachmentInfo':    
             case  'plugin.xcom.listNamespaces':  
             case  'wiki.getRecentChanges':
+            case 'wiki.getBackLinks':
                  id = 'xcom_htm';
                  try {
                      var obj = jQuery.parseJSON(data);                                           
@@ -168,7 +171,10 @@ function xcom_print_data(fn, data,other) {
                          if(fn == 'plugin.xcom.getPageInfo' || fn ==  'wiki.getAttachmentInfo') {
                                 data +=  xcom_hash(obj);  //straight single hash
                            }     
-                          else if (fn == 'plugin.xcom.getMedia' || fn =='plugin.xcom.listNamespaces') {
+                          else if (fn == 'plugin.xcom.getMedia' ||
+                                   fn =='plugin.xcom.listNamespaces' ||
+                                   fn == 'wiki.getBackLinks'                     
+                                 ) {
                                data +=  xcom_onedim(obj);
                            }                          
                           else {
