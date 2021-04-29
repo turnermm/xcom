@@ -55,10 +55,6 @@ class remote_plugin_xcom extends DokuWiki_Remote_Plugin {
     }
     
     
-    public function pageInfo($id, $rev = '') {
-       return json_encode($this->api-> pageInfo($id, $rev = ''));      
-    }
-    
      public function listNamespaces($namespace="",$mask="") {  
       global $conf;       
        $rootns =  $conf['savedir'];
@@ -210,7 +206,7 @@ class remote_plugin_xcom extends DokuWiki_Remote_Plugin {
        return json_encode($this->api-> pageInfo($id, $rev = ''));   
     }
     
-        private function resolvePageId($id)
+    private function resolvePageId($id)
     {
         $id = cleanID($id);
         if (empty($id)) {
