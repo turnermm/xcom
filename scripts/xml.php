@@ -30,7 +30,7 @@ if($client)
         }
     }    
 
-   $array_types = array('dokuwiki.getPagelist','plugin.xcom.pageVersions','plugin.xcom.getPageInfo','wiki.getAllPages','wiki.getAttachmentInfo','wiki.getAttachments', 'wiki.getRecentChanges', 'wiki.listLinks','dokuwiki.search','plugin.xcom.getMedia', 'plugin.xcom.listNamespaces');
+   $array_types = array('dokuwiki.getPagelist','plugin.xcom.pageVersions','plugin.xcom.getPageInfo','wiki.getAllPages','wiki.getAttachmentInfo','wiki.getAttachments', 'wiki.getRecentChanges', 'wiki.listLinks','dokuwiki.search','plugin.xcom.getMedia', 'plugin.xcom.listNamespaces','wiki.getBackLinks');
    $time_start = time();   
    $resp = "";
    
