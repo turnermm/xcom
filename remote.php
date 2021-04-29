@@ -1,13 +1,16 @@
 <?php 
-use dokuwiki;
+//use dokuwiki;
 if(!defined('DOKU_INC')) define('DOKU_INC',realpath(dirname(__FILE__).'/../../../').'/');
-require_once(DOKU_INC . 'inc/init.php');
+include_once(DOKU_INC . 'inc/init.php');
+if(file_exists(DOKU_INC . 'inc/Remote/Api.php')) {
+    
 require_once(DOKU_INC . 'inc/Remote/ApiCore.php'); 
-use dokuwiki\Remote\Api;
-use dokuwiki\Remote\ApiCore;
 require_once(DOKU_INC . 'inc/Remote/Api.php');
-
-
+}
+else {
+    require_once(DOKU_INC . 'inc/remote.php'); 
+    require_once(DOKU_INC . 'inc/RemoteAPICore.php');
+}    
 
 class remote_plugin_xcom extends DokuWiki_Remote_Plugin {
     private $api;
@@ -46,7 +49,8 @@ class remote_plugin_xcom extends DokuWiki_Remote_Plugin {
           if(!defined('DIRECTORY_SEPARATOR')) {
              $iswin ? define("DIRECTORY_SEPARATOR", "\\") : define("DIREC TORY_SEPARATOR", "/");
            }
-           $this->api = new ApiCore(new Api());
+          // $this->api = new ApiCore(new Api());
+          $this->api = new RemoteAPICore(new RemoteApi());
      }     
     public function getTime($a) {  
         return date("Y-m-d",$a);
