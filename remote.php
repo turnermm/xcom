@@ -3,7 +3,6 @@
 if(!defined('DOKU_INC')) define('DOKU_INC',realpath(dirname(__FILE__).'/../../../').'/');
 include_once(DOKU_INC . 'inc/init.php');
 if(file_exists(DOKU_INC . 'inc/Remote/Api.php')) {
-    
 require_once(DOKU_INC . 'inc/Remote/ApiCore.php'); 
 require_once(DOKU_INC . 'inc/Remote/Api.php');
 }
@@ -49,8 +48,10 @@ class remote_plugin_xcom extends DokuWiki_Remote_Plugin {
           if(!defined('DIRECTORY_SEPARATOR')) {
              $iswin ? define("DIRECTORY_SEPARATOR", "\\") : define("DIREC TORY_SEPARATOR", "/");
            }
-          // $this->api = new ApiCore(new Api());
-          $this->api = new RemoteAPICore(new RemoteApi());
+         if(class_exists ('Api')) {           
+           $this->api = new ApiCore(new Api());
+         }
+         else $this->api = new RemoteAPICore(new RemoteApi());
      }     
     public function getTime($a) {  
         return date("Y-m-d",$a);
