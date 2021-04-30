@@ -55,9 +55,9 @@ class remote_plugin_xcom extends DokuWiki_Remote_Plugin {
          else $this->api = new RemoteAPICore(new RemoteApi());
      }     
     public function getTime($a) {  
-        return date("Y-m-d",$a);
-       // if($a[0]) return strftime('%Y. %B %d. %A', $this->getApi()->toDate(time()));
-      //  return $this->getApi()->toDate(time());
+        //return date("Y-m-d s",$a); 
+        return date("Y-m-d H:i:s",$a); 
+        
     }
     
     
