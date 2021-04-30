@@ -80,8 +80,7 @@ function xmlrpc() {
           } catch(e) {
           }
        }
-       var array_types = {'dokuwiki.getPagelist':1,'plugin.xcom.pageVersions':1,'plugin.xcom.getPageInfo':1,'wiki.getAllPages':1, 'wiki.getAttachmentInfo':1,'wiki.getAttachments':1, 'wiki.getBackLinks':1,
-       'wiki.getRecentChanges':1,'wiki.listLinks':1,'dokuwiki.search':1,'plugin.xcom.getMedia':1, 'plugin.xcom.listNamespaces':1};       
+       var array_types = {'dokuwiki.getPagelist':1,'plugin.xcom.pageVersions':1,'plugin.xcom.getPageInfo':1,'wiki.getAllPages':1, 'wiki.getAttachmentInfo':1,'wiki.getAttachments':1, 'wiki.getRecentChanges':1,'wiki.listLinks':1,'dokuwiki.search':1,'plugin.xcom.getMedia':1, 'plugin.xcom.listNamespaces':1,'wiki.getBackLinks':1,};       
        var jobj = xcom_json_ini('xcom_pwd','xcom_url','xcom_user');
        str =JSON.stringify(jobj); 
        params += '&credentials=' + str;      
@@ -127,6 +126,7 @@ function xcom_print_data(fn, data,other) {
      'wiki_listLinks': ['type', 'page','href'], 
      'wiki_getAttachmentInfo': ['id','lastModified','size'],
      'plugin_xcom_listNamespaces': ['Namespace Directories'],
+     'wiki_getBackLinks': ['Backlinks'],
      'wiki_getRecentChanges': ['name', 'lastModified', 'author','version','size'],
      'wiki_getBackLinks' : ['Backlinks'], 
    };
@@ -158,23 +158,21 @@ function xcom_print_data(fn, data,other) {
                      var obj = jQuery.parseJSON(data);                                           
                  } catch(e) {
                     id = 'xcom_pre';   // not a table, use code view, probably error msg                                 
-                    data = decodeURIComponent(data);                    
+                        obj = decodeURIComponent(data); 
                      break;
                  }
                     /** 
                        handle tables
                     */
-                     if(obj) 
+                     if(obj || fn == 'wiki.getBackLinks') 
                     {   
                         var fncall = fn.replace(/\./g,'_');                      
                         data = xcom_thead(table_calls[fncall]); 
                          if(fn == 'plugin.xcom.getPageInfo' || fn ==  'wiki.getAttachmentInfo') {
                                 data +=  xcom_hash(obj);  //straight single hash
                            }     
-                          else if (fn == 'plugin.xcom.getMedia' ||
-                                   fn =='plugin.xcom.listNamespaces' ||
-                                   fn == 'wiki.getBackLinks'                     
-                                 ) {
+                          else if (fn == 'plugin.xcom.getMedia' || fn =='plugin.xcom.listNamespaces'
+                                  || fn == 'wiki.getBackLinks') {                              
                                data +=  xcom_onedim(obj);
                            }                          
                           else {
