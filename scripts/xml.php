@@ -92,8 +92,8 @@ if($client)
           }
 	  }	
      elseif($fn == 'plugin.xcom.getPageInfo') {
-		  $retv['lastModified'] =  get_ixrdate($retv['lastModified']);
-		 // file_put_contents("debugbde.txt",print_r($retv['lastodified'],true));
+		//  $retv['lastModified'] = date("Y-m-d", $retv['lastModified']);// get_ixrdate($retv['lastModified']);
+		//  file_put_contents("debugbde.txt",print_r($retv,true));
 	}
        $retv = json_encode($retv);
        echo $retv;

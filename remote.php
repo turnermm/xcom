@@ -5,6 +5,7 @@ include_once(DOKU_INC . 'inc/init.php');
 if(file_exists(DOKU_INC . 'inc/Remote/Api.php')) {
 require_once(DOKU_INC . 'inc/Remote/ApiCore.php'); 
 require_once(DOKU_INC . 'inc/Remote/Api.php');
+require_once(DOKU_INC . 'inc/IXR_Library.php');
 }
 else {
     require_once(DOKU_INC . 'inc/remote.php'); 
@@ -12,7 +13,7 @@ else {
 }    
 
 class remote_plugin_xcom extends DokuWiki_Remote_Plugin {
-    private $api;
+    private $api, $server;
     public function _getMethods() {
         return array(
             'getTime' => array(
@@ -208,7 +209,9 @@ class remote_plugin_xcom extends DokuWiki_Remote_Plugin {
      * @throws RemoteException page not exist
      */
     public function pageInfo($id, $rev = '') {
-       return json_encode($this->api-> pageInfo($id, $rev = ''));   
+       $info =  $this->api-> pageInfo($id, $rev = '');
+       $info['lastModified'] = $this->getTime($info['lastModified']);         
+       return json_encode($info);     
     }
     
     private function resolvePageId($id)
@@ -222,6 +225,3 @@ class remote_plugin_xcom extends DokuWiki_Remote_Plugin {
     }
   
 }
-
-//$rem = new remote_plugin_xcom();
-//print_r($rem->pageVersions('start'));
