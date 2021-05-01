@@ -61,6 +61,9 @@ function xmlrpc() {
        	   
        xcom_clear('xcom_qstatus',false); 
        var options =  xcom_params(); 
+       if(!options) {    
+           return;
+       }    
        var func = options[0];
        if(!func) {
           alert('No function selected');

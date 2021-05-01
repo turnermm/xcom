@@ -8,7 +8,7 @@
 ==== dokuwiki.search ====
 
 ^Name  |''dokuwiki.search'' |
-^Parameters  |(string) a query string as described on [[doku>www.dokuwiki.org/www.dokuwiki.org/www.dokuwiki.org/search|search]]|
+^Parameters  |(string) a query string as described on [[doku>search|search]]|
 ^Description|Performs a fulltext search based on the raw string|
 
 ==== dokuwiki.getTitle ====
@@ -41,9 +41,10 @@
 ^Parameters  |(string) [[doku>:pagename]] , (int) offset|
 ^Description|Returns the available versions of a Wiki page. The number of pages in the result is controlled \\ via the [[doku>:config:recent]] configuration setting. The offset can be used to list earlier versions in the history.|
 
-==== wiki.getPageInfo ====
 
-^Name  |''wiki.getPageInfo'' |
+==== plugin.xcom.getPageInfo ====
+
+^Name  |''plugin.xcom.getPageInfo'' |
 ^Parameters  |(string) [[doku>:pagename]]|
 ^Description|Returns information about a Wiki page.|
 
@@ -62,7 +63,7 @@
 ==== wiki.listLinks ====
 
 ^Name  |''wiki.listLinks'' |
-^Parameters  |(string) [[doku>www.dokuwiki.org/:pagename|:pagename]]|
+^Parameters  |(string) [[doku>pagename|pagename]]|
 ^Description|Returns a list of all links contained in a Wiki page.|
 
 ==== wiki.getAllPages ====
@@ -80,7 +81,7 @@
 
 ^Name  |''wiki.getRecentChanges'' |
 ^Parameters  |(int) timestamp (See below: [[#timestamp|timestamp]])|
-^Description|Returns a list of recent changes since given timestamp. \\ As stated in [[doku>www.dokuwiki.org/:recent_changes|:recent_changes]]: Only the most recent change for each page is listed, \\  regardless of how many times that page was changed.|
+^Description|Returns a list of recent changes since given timestamp. \\ As stated in [[doku>:recent_changes|:recent_changes]]: Only the most recent change for each page is listed, \\  regardless of how many times that page was changed.|
 
 ==== wiki.getRecentMediaChanges ====
 
