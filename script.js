@@ -61,13 +61,12 @@ function xmlrpc() {
        	   
        xcom_clear('xcom_qstatus',false); 
        var options =  xcom_params(); 
-       if(!options) return;
-       xcom_query_status(options);
        var func = options[0];
        if(!func) {
           alert('No function selected');
           return false; 
         }  
+       xcom_query_status(options);       
            
        var other=false;
        var params =  'params=' + JSON.stringify(options);
