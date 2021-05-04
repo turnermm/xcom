@@ -4,28 +4,6 @@
 ///home/samba/html/mturner/devel/data/pages
 define ('PAGES', '/home/samba/html/mturner/devel/data/pages');
 echo "<pre>";
-/** 
-@Auth Myron Turner <turnermm02@shaw.ca>
-find your timezone here http://php.net/manual/en/timezones.php
-This script can be run from the command line without parameters and will use the current directory as its starting point:
-     chk_date  or ./chk+date (if the script is in your current directory)
-It can also be run with a directory:  
-    chk_date /var/www/html/dolkuwiki/meta 
-    
- Sample outut   
- 
-./test/links.meta
-Date created: Mon, 24 Oct 2016 00:17:36 +0000 (1477268256)  //installed from an external source and never modfied
-
-./functions.meta
-Date created: Tue, 25 Oct 2016 01:37:53 +0000 (1477359473)  UTC date and (UNIX timestamp)
-Last modified: Tue, 25 Oct 2016 01:58:33 +0000  (1477360713)
-
-./changes.meta
-Date created: Tue, 25 Oct 2016 10:25:15 +0000 (1477391115)
-Last modified: Tue, 25 Oct 2016 11:09:56 +0000  (1477393796)
-
-*/
 global $timezone, $current;
 
 $timezone = 'UTC'; // default timezone is set to Coordinated Univeral Time. You can reset your timezone here , for instance "America/Chicago", "Europe/Berlin"
@@ -50,39 +28,53 @@ function get_data($file) {
     global $current;
     $data = file_get_contents($file);
     $data_array = @unserialize(file_get_contents($file));
-
+   // echo print_r($data_array); return;
+    $creator =""; $creator_id="";
   
     if ($data_array === false || !is_array($data_array)) return; 
     if (!isset($data_array['current'])) return;
   
-   $current = $data_array['current'];
-   echo "---------START OUTPUT--------------------\n\n";   
-  //  echo print_r($current,1) ."\n";
+    $current = $data_array['current'];
+    echo "---------START OUTPUT--------------------\n\n";   
+
     $keys = array_keys($data_array['current']);
     echo "Headers\n" . print_r($keys,1) ."\n";
 
     foreach ($keys AS $header) {
         switch($header) {
             case 'title':
-                 break;
+                 echo "========= Title ======\n";
+                 $title = getcurrent($header, null);
+                 echo "$title\n";
+                 break;                     
+                
             case 'date':
+                   echo "========= Date ======\n";          
                  process_dates(getcurrent('date', 'created'),getcurrent('date', 'modified'));  
                  break;                 
             case 'user':
-            case 'creator':                            
+            case 'creator': 
+                if($creator || $creator_id) break;             
                 $creator = getcurrent('creator', null);
                 $creator_id = getcurrent('user', null);
                 process_users($creator,$creator_id);  
                  break;
           //  case  'plugin_move':
-            case 'description':  break;
-            case 'internal':  break;     
+           // case 'description':  break;
+           // case 'internal':  break;     
             
-            case 'last_change':                               
+            case 'last_change': 
+                echo "=========Last_Change======\n";
+                $last_change = processLastChange(getcurrent($header, null));
+                break;              
             case 'contributor':
-            case 'title':         
+                 echo "=========Contributor======\n";
+                 break;             
+            case 'title':     
+                echo "=========Title======\n";
+                 break;                
             case 'relation': 
-                echo "=====Relation======\n";
+              //  echo "=====Relation======\n";
                 $isreferencedby = getcurrent($header,'isreferencedby');
                 $references = getcurrent($header,'references');
                 $media = getcurrent($header,'media');
@@ -92,9 +84,9 @@ function get_data($file) {
                 process_relation($isreferencedby,$references,$media,$firstimage,$haspart,$subject);
                 break;
             default:
-                 echo "----> $header START<----- \n";
-                 echo print_r($current[$header],1) . "\n";
-                  echo "----> $header END <----- \n";
+               //  echo "----> $header START<----- \n";
+                // echo print_r($current[$header],1) . "\n";
+                // echo "----> $header END <----- \n";
                  break;
             }
 
@@ -126,19 +118,27 @@ function get_data($file) {
     $current = array();
 }
 
+function processLastChange($ar) {
+    foreach ($ar As $key=>$val) {
+        echo "$key: $val\n";
+    }
+}
 function process_relation($isreferencedby,$references,$media,$firstimage,$haspart,$subject) {
    
     if(!empty($isreferencedby)) {
-        echo "--Backlinks--\n";
-        echo print_r(array_keys($isreferencedby,1)) . "\n";
+        echo "--Backlinks--\n";    
+        $list = create_list(array_keys($isreferencedby));
+        echo $list;
     }
     if(!empty($references)) {
-       echo "--Links--\n";
-       echo print_r(array_keys($references,1)) . "\n";
+       echo "--Links--\n";      
+       $list = create_list(array_keys($references));
+       echo $list;       
     }
     if(!empty($media)) {
-       echo "--Media--\n";
-       echo print_r(array_keys($media,1)) . "\n";
+       echo "--Media--\n";      
+       $list = create_list(array_keys($media));
+        echo $list;        
     }
     if(!empty($firstimage)) {
        echo "--First Image--\n";
@@ -156,8 +156,12 @@ function process_relation($isreferencedby,$references,$media,$firstimage,$haspar
 }
 
 function create_list($ar) {
-    
-    
+    $list = "<ol>\n";
+    for($i=0; $i<count($ar); $i++) {
+        $list .= '<li>'. $ar[$i] . "</li>\n";
+    }
+     $list .= "</ol>\n";
+     return $list;
 }   
 
 function process_dates($created, $modified) {   
@@ -220,8 +224,8 @@ function recurse($dir) {
             echo "ID NAME $id_name\n";
             if(!file_exists($id_name)) continue;
             echo "storage name = $store_name\n";
-            $store_name = str_replace('/', ':', $store_name);
-            echo "storage name = $store_name\n";
+           // $store_name = str_replace('/', ':', $store_name);
+           // echo "storage name = $store_name\n";
             echo "($count) $dir/$file\n";
             $count++;
             echo "NEW FILE: $dir/$file\n";
