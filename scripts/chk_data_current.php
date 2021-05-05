@@ -15,11 +15,10 @@ if ($argc > 1) {
 }
 global $prefix;
 $realpath = realpath('.');
-echo "realpath=$realpath\n";
+echo "\nrealpath=$realpath\n";
 $prefix = preg_replace("/.*?\/data\/meta/", "", $realpath);
 $prefix = ($depth = str_replace('/', ':', $prefix)) ? $depth : '';
-
-echo "prefix = $prefix\n";
+//echo "prefix = $prefix\n";
 
 recurse('.');
 
@@ -33,12 +32,10 @@ function get_data($file) {
   
     if ($data_array === false || !is_array($data_array)) return; 
     if (!isset($data_array['current'])) return;
-  
+    echo "\n---------START OUTPUT--------------\n\n";   
     $current = $data_array['current'];
-    echo "---------START OUTPUT--------------------\n\n";   
-
     $keys = array_keys($data_array['current']);
-    echo "Headers\n" . print_r($keys,1) ."\n";
+   // echo "Headers\n" . print_r($keys,1) ."\n";
 
     foreach ($keys AS $header) {
         switch($header) {
@@ -53,8 +50,9 @@ function get_data($file) {
                  process_dates(getcurrent('date', 'created'),getcurrent('date', 'modified'));  
                  break;                 
             case 'user':
-            case 'creator': 
-                if($creator || $creator_id) break;             
+            case 'creator':                         
+                if($creator || $creator_id) break;  
+                echo "=========Creator======\n";            
                 $creator = getcurrent('creator', null);
                 $creator_id = getcurrent('user', null);
                 process_users($creator,$creator_id);  
@@ -65,16 +63,14 @@ function get_data($file) {
             
             case 'last_change': 
                 echo "=========Last_Change======\n";
-                $last_change = processLastChange(getcurrent($header, null));
+                $last_change = getSimpleKeyValue(getcurrent($header, null));
                 break;              
             case 'contributor':
                  echo "=========Contributor======\n";
-                 break;             
-            case 'title':     
-                echo "=========Title======\n";
-                 break;                
+                 $contributors = getSimpleKeyValue(getcurrent($header, null));
+                 break;   
             case 'relation': 
-              //  echo "=====Relation======\n";
+                echo "=====Relation======\n";
                 $isreferencedby = getcurrent($header,'isreferencedby');
                 $references = getcurrent($header,'references');
                 $media = getcurrent($header,'media');
@@ -91,34 +87,12 @@ function get_data($file) {
             }
 
         }  
-    /*
-    
-    $creator = getcurrent('creator', null);
-    $creator_id = getcurrent('user', null);
-    echo "Created by: $creator  (userid: $creator_id)\n";
-
-    $contributors = getcurrent('contributor', null);
-    if (is_array($contributors)) {
-        echo "Contributors:\n";
-        print_key_values($contributors);
-    }
-    $last_change = getcurrent('last_change', null);
-    if (is_array($last_change)) {
-        echo "Last Change: \n";
-        print_key_values($last_change);
-    }
-
-    $relation = isset($data_array['current']['relation']) ? $data_array['current']['relation'] : array();
-    if (!empty($relation) && !empty($relation['references'])) {
-        echo "Internal links:\n";
-        print_key_values($relation['references'], true);
-    } 
-    */
+ 
   echo "========END OUTPUT==================\n\n";   
     $current = array();
 }
 
-function processLastChange($ar) {
+function getSimpleKeyValue($ar) {
     foreach ($ar As $key=>$val) {
         echo "$key: $val\n";
     }
@@ -223,7 +197,7 @@ function recurse($dir) {
             $id_name = PAGES . preg_replace("/\.meta$/","",$store_name) . '.txt';
             echo "ID NAME $id_name\n";
             if(!file_exists($id_name)) continue;
-            echo "storage name = $store_name\n";
+           // echo "storage name = $store_name\n";
            // $store_name = str_replace('/', ':', $store_name);
            // echo "storage name = $store_name\n";
             echo "($count) $dir/$file\n";
