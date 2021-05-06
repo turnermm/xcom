@@ -29,9 +29,9 @@ function recurse($dir) {
         if (preg_match("/\.meta$/", $file)) {            
             $store_name = preg_replace('/^\./', $prefix, "$dir/$file");
             $id_name = PAGES . preg_replace("/\.meta$/","",$store_name) . '.txt';
-            echo "ID NAME $id_name\n";
+            echo "$id_name<br />\n";
             if(!file_exists($id_name)) continue;
-            echo "NEW FILE: $dir/$file\n";
+            echo "$dir/$file<br />\n";
             get_data("$dir/$file");
             echo "\n";
         }
@@ -49,15 +49,15 @@ function get_data($file) {
     if (!isset($data_array['current'])) return;
    
     $current = $data_array['current'];
-    $keys = array_keys($data_array['current']);
- //   echo "Headers\n" . print_r($keys,1) ."\n";
-    $keys =  array('title','date','creator');
+    //$keys = array_keys($data_array['current']);
+    //echo "Headers\n" . print_r($keys,1) ."\n";
+    $keys =  array('title','date','creator','last_change');
     foreach ($keys AS $header) {
         switch($header) {
             case 'title':
-                 echo "========= Title ======\n";
+                 //echo "========= Title ======\n";
                  $title = getcurrent($header, null);
-                 echo "<h2>$title</h2><br />\n";
+                 echo "<h3>$title</h3>\n";
                  break;                     
                 
             case 'date':
@@ -68,19 +68,21 @@ function get_data($file) {
 			    if($creator || $creator_id) break; 
             case 'creator':                         
               //  if($creator || $creator_id) break;  
-                echo "=========Creator======\n";            
+                //echo "=========Creator======\n";            
                 $creator = getcurrent('creator', null);
                 $creator_id = getcurrent('user', null);
                 process_users($creator,$creator_id);  
                  break;
-
-            
-            case 'last_change': 
-                //echo "=========Last_Change======\n";
-               // $last_change = getSimpleKeyValue(getcurrent($header, null));
+           
+            case 'last_change':  
+                //                            
+                $last_change = getSimpleKeyValue(getcurrent($header, null),"Last Change");
+                 if($last_change) {
+                    echo "<table><tr><th colspan='2'>Last Change</th></tr>\n"; 
+                    echo "$last_change</table>\n"; 
+                }
                 break;              
-            case 'contributor':
-              //   echo "=========Contributor======\n";
+            case 'contributor':       
               //   $contributors = getSimpleKeyValue(getcurrent($header, null));
                  break;   
             case 'relation': 
@@ -99,11 +101,24 @@ function get_data($file) {
             }
 
         }  
- 
-  echo "========END OUTPUT==================\n\n";   
+    
     $current = array();
 }
 
+/*
+*  @param array $ar metadata field
+*  @param string $which which field  
+*/
+function getSimpleKeyValue($ar,$which="") {
+    $retv = "";
+    if(!is_array($ar)) return false;          
+    foreach ($ar As $key=>$val) {
+        if(!empty($val)) {
+           $retv .= "<tr><td>$key:</td><td>$val</td></tr>\n";
+       }
+    }
+    return $retv;
+}
 
 function process_users($creator,$user) {
         echo "Created by: $creator  (userid: $user)\n";
@@ -111,6 +126,7 @@ function process_users($creator,$user) {
 
 function process_dates($created, $modified) {   
     $retv = "";
+echo "<table>";
     if ($created) {
         $rfc_cr = date("r", $created);
         echo "<tr><td>Date created:</td><td>".$rfc_cr.
@@ -122,6 +138,7 @@ function process_dates($created, $modified) {
         echo "<tr><td>Last modified:</td><td>" . $rfc_mod .
         "</td><td>$modified</td></tr>\n"; 
      }
+echo "</table>";
 }
 function getcurrent($which, $other) {
     global $current;
