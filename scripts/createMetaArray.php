@@ -54,29 +54,24 @@ function get_data($file) {
     $keys =  array('title','date','creator','last_change');
     foreach ($keys AS $header) {
         switch($header) {
-            case 'title':
-                 //echo "========= Title ======\n";
+            case 'title':               
                  $title = getcurrent($header, null);
                  echo "<h3>$title</h3>\n";
                  break;                     
                 
-            case 'date':
-                  // echo "========= Date ======\n";          
+            case 'date':                        
                  process_dates(getcurrent('date', 'created'),getcurrent('date', 'modified'));  
                  break;                 
             case 'user':
 			    if($creator || $creator_id) break; 
-            case 'creator':                         
-              //  if($creator || $creator_id) break;  
-                //echo "=========Creator======\n";            
+            case 'creator':
                 $creator = getcurrent('creator', null);
                 $creator_id = getcurrent('user', null);
                 process_users($creator,$creator_id);  
                  break;
            
-            case 'last_change':  
-                //                            
-                $last_change = getSimpleKeyValue(getcurrent($header, null),"Last Change");
+            case 'last_change':                                           
+                $last_change = getSimpleKeyValue(getcurrent($header, null),"last_change");
                  if($last_change) {
                     echo "<table><tr><th colspan='2'>Last Change</th></tr>\n"; 
                     echo "$last_change</table>\n"; 
@@ -111,9 +106,19 @@ function get_data($file) {
 */
 function getSimpleKeyValue($ar,$which="") {
     $retv = "";
+    $types = array('C'=>'<u>C</u>reate','E'=>'<u>E</u><dit','e' =>'minor <u>e</u>dit','D'=>'<u>D</u>elete',
+    'R'=>'<u>R</u>evert');
     if(!is_array($ar)) return false;          
-    foreach ($ar As $key=>$val) {
+    foreach ($ar As $key=>$val) {       
         if(!empty($val)) {
+           if($which == 'last_change')  {  
+               if($key == 'date') {
+                   $val = date("r", $val);
+                }
+                else if($key == 'type')  {
+                   $val = $types[$val];  
+                }
+           }
            $retv .= "<tr><td>$key:</td><td>$val</td></tr>\n";
        }
     }
