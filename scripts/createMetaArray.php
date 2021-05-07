@@ -103,19 +103,21 @@ function get_data($file,$id_path) {
 */
 function getSimpleKeyValue($ar,$which="") {
     $retv = "";
-    $types = array('C'=>'<u>C</u>reate','E'=>'<u>E</u><dit','e' =>'minor <u>e</u>dit','D'=>'<u>D</u>elete',
+
+    $types = array('C'=>'<u>C</u>reate','E'=>'<u>E</u>dit','e' =>'minor <u>e</u>dit','D'=>'<u>D</u>elete',
     'R'=>'<u>R</u>evert');
-    if(!is_array($ar)) return false;          
+    if(!is_array($ar)) return false;         
     foreach ($ar As $key=>$val) {       
         if(!empty($val)) {
            if($which == 'last_change')  {  
                if($key == 'date') {
                    $val = date("r", $val);
                 }
-                else if($key == 'type')  {
-                   $val = $types[$val];  
+                if($key == 'type')  {
+                    $val = $types[$val];  
                 }
            }
+
            $retv .= "<tr><td>$key:</td><td>$val</td></tr>\n";
        }
     }
