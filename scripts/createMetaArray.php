@@ -122,6 +122,9 @@ function getSimpleKeyValue($ar,$which="") {
 }
 
 function process_users($creator,$user) {
+        if(empty($creator)) {
+            echo "\n"; return;
+         }
         echo "\nCreated by: $creator  (userid: $user)\n";
 }
 
@@ -148,14 +151,10 @@ function insertListInTable($list,$type) {
 function process_relation($isreferencedby,$references,$media,$firstimage,$haspart,$subject) {
     echo "<table>\n";
     if(!empty($isreferencedby)) {
-       // echo "--Backlinks--\n";    
         $list = create_list(array_keys($isreferencedby));
         insertListInTable($list,'Backlinks');
-        //if($list) echo "<th colspan='2'>Backlinks</th></tr><tr><td>$list</td></tr>";
-       // echo $list;
     }
     if(!empty($references)) {
-      // echo "--Links--\n";      
        $list = create_list(array_keys($references));
        insertListInTable($list,'Links');
       // echo $list;       
