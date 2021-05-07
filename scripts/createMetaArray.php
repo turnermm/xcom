@@ -4,24 +4,22 @@ global $timezone, $current;
 
 $timezone = 'UTC'; // default timezone is set to Coordinated Univeral Time. You can reset your timezone here
 date_default_timezone_set($timezone);
-if ($argc > 1) {
-    echo $argv[1].
-    "\n";
-    chdir($argv[1]);
-}
 
 $realpath = realpath('.');
 $prefix = preg_replace("/.*?\/data\/meta/", "", $realpath);
 $prefix = ($depth = str_replace('/', ':', $prefix)) ? $depth : '';
 
+ob_start();
 recurse('.');
+$contents = ob_get_contents();
+ob_end_clean();
+$contents = str_replace("<table>\n</table>","",$contents);
+echo $contents;
 
 function recurse($dir) {
     global $prefix;
-    static $count;
     $dh = opendir($dir);
     if (!$dh) return;
-    if (!isset($count)) $count = 1;
 
     while (($file = readdir($dh)) !== false) {
         if ($file == '.' || $file == '..') continue;
@@ -49,14 +47,12 @@ function get_data($file) {
     if (!isset($data_array['current'])) return;
    
     $current = $data_array['current'];
-    //$keys = array_keys($data_array['current']);
-    //echo "Headers\n" . print_r($keys,1) ."\n";
-    $keys =  array('title','date','creator','last_change');
+    $keys =  array('title','date','creator','last_change','relation');
     foreach ($keys AS $header) {
         switch($header) {
             case 'title':               
                  $title = getcurrent($header, null);
-                 echo "<h3>$title</h3>\n";
+                 echo "\n<h4>$title</h4>\n";
                  break;                     
                 
             case 'date':                        
@@ -78,7 +74,7 @@ function get_data($file) {
                 }
                 break;              
             case 'contributor':       
-              //   $contributors = getSimpleKeyValue(getcurrent($header, null));
+                 $contributors = getSimpleKeyValue(getcurrent($header, null));
                  break;   
             case 'relation': 
                // echo "=====Relation======\n";
@@ -88,7 +84,7 @@ function get_data($file) {
                 $firstimage = getcurrent($header,'firstimage');
                 $haspart = getcurrent($header,'haspart');
                 $subject = getcurrent($header,'subject');
-              //  process_relation($isreferencedby,$references,$media,$firstimage,$haspart,$subject);
+                process_relation($isreferencedby,$references,$media,$firstimage,$haspart,$subject);
                 break;
             default:
 
@@ -126,7 +122,7 @@ function getSimpleKeyValue($ar,$which="") {
 }
 
 function process_users($creator,$user) {
-        echo "Created by: $creator  (userid: $user)\n";
+        echo "\nCreated by: $creator  (userid: $user)\n";
 }
 
 function process_dates($created, $modified) {   
@@ -145,6 +141,56 @@ echo "<table>";
      }
 echo "</table>";
 }
+
+function insertListInTable($list,$type) {
+    if($list) echo "<tr><th colspan='1'>$type</th></tr><tr><td>$list</td></tr>\n";
+}
+function process_relation($isreferencedby,$references,$media,$firstimage,$haspart,$subject) {
+    echo "<table>\n";
+    if(!empty($isreferencedby)) {
+       // echo "--Backlinks--\n";    
+        $list = create_list(array_keys($isreferencedby));
+        insertListInTable($list,'Backlinks');
+        //if($list) echo "<th colspan='2'>Backlinks</th></tr><tr><td>$list</td></tr>";
+       // echo $list;
+    }
+    if(!empty($references)) {
+      // echo "--Links--\n";      
+       $list = create_list(array_keys($references));
+       insertListInTable($list,'Links');
+      // echo $list;       
+    }
+    if(!empty($media)) {
+      // echo "--Media--\n";      
+       $list = create_list(array_keys($media));
+       insertListInTable($list,'Media');
+       // echo $list;        
+    }
+    if(!empty($firstimage)) {
+       echo "<tr><th>First Image</th></tr><tr><td>$firstimage</td></tr>";
+      // echo print_r($firstimage,1) . "\n";
+    }   
+    if(!empty($haspart)) {      
+       $list = create_list(array_keys($haspart)); 
+       insertListInTable($list,'haspart');
+    }  
+    if(!empty($subject)) {
+       $list = create_list(array_keys($subject));
+       insertListInTable($list,'Subject');
+       //echo "-- Subject --\n";
+      // echo print_r($subject,1) . "\n";
+    }       
+    echo "</table>\n";
+}
+
+function create_list($ar) {
+    $list = "\n<ol>\n";
+    for($i=0; $i<count($ar); $i++) {
+        $list .= '<li>'. $ar[$i] . "</li>\n";
+    }
+     $list .= "</ol>\n";
+     return $list;
+}   
 function getcurrent($which, $other) {
     global $current;
     if (!isset($current)) return "";
