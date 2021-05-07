@@ -27,17 +27,17 @@ function recurse($dir) {
         if (preg_match("/\.meta$/", $file)) {            
             $store_name = preg_replace('/^\./', $prefix, "$dir/$file");
             $id_name = PAGES . preg_replace("/\.meta$/","",$store_name) . '.txt';
-            echo "$id_name<br />\n";
+            //echo "$id_name<br />\n";
             if(!file_exists($id_name)) continue;
-            echo "$dir/$file<br />\n";
-            get_data("$dir/$file");
+            //echo "$dir/$file\n";
+            get_data("$dir/$file","$id_name");
             echo "\n";
         }
     }
 
     closedir($dh);
 }
-function get_data($file) {
+function get_data($file,$id_path) {
     global $current;
     $data = file_get_contents($file);
     $data_array = @unserialize(file_get_contents($file));   
@@ -45,14 +45,16 @@ function get_data($file) {
   
     if ($data_array === false || !is_array($data_array)) return; 
     if (!isset($data_array['current'])) return;
-   echo "\n<table>\n";
+    echo "\n<table>\n";
+    echo "<tr><td colspan='3'>$id_path</td></tr>\n";
+    echo "<tr><td colspan='3'>$file</td></tr>\n";
     $current = $data_array['current'];
     $keys =  array('title','date','creator','last_change','relation');
     foreach ($keys AS $header) {
         switch($header) {
             case 'title':               
                  $title = getcurrent($header, null);
-                 echo "\nTitle: <b>$title</b>\n";
+                 echo "<tr><td colspan='3'>Title: <b>$title</b></td></tr>\n";
                  break;                     
                 
             case 'date':                        
@@ -148,7 +150,7 @@ function insertListInTable($list,$type) {
     if($list) echo "<tr><td>$type</td><td>$list</td></tr>\n";
 }
 function process_relation($isreferencedby,$references,$media,$firstimage,$haspart,$subject) {
-    echo "<table>\n";
+  
     if(!empty($isreferencedby)) {         
         $list = create_list(array_keys($isreferencedby));
         insertListInTable($list,'Backlinks');
@@ -162,7 +164,7 @@ function process_relation($isreferencedby,$references,$media,$firstimage,$haspar
        insertListInTable($list,'Media');           
     }
     if(!empty($firstimage)) {
-       echo "<tr><td>First Image</td></tr><tr><td>$firstimage</td></tr>";      
+       echo "<tr><td>First Image</td><td colspan='2'>$firstimage</td></tr>";      
     }   
     if(!empty($haspart)) {      
        $list = create_list(array_keys($haspart)); 
