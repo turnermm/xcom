@@ -45,14 +45,14 @@ function get_data($file) {
   
     if ($data_array === false || !is_array($data_array)) return; 
     if (!isset($data_array['current'])) return;
-   
+   echo "\n<table>\n";
     $current = $data_array['current'];
     $keys =  array('title','date','creator','last_change','relation');
     foreach ($keys AS $header) {
         switch($header) {
             case 'title':               
                  $title = getcurrent($header, null);
-                 echo "\n<h4>$title</h4>\n";
+                 echo "\nTitle: <b>$title</b>\n";
                  break;                     
                 
             case 'date':                        
@@ -69,15 +69,14 @@ function get_data($file) {
             case 'last_change':                                           
                 $last_change = getSimpleKeyValue(getcurrent($header, null),"last_change");
                  if($last_change) {
-                    echo "<table><tr><th colspan='2'>Last Change</th></tr>\n"; 
-                    echo "$last_change</table>\n"; 
+                    echo "<tr><td colspan='2'>Last Change</td>\n"; 
+                    echo "<td>$last_change</td></tr>\n"; 
                 }
                 break;              
             case 'contributor':       
                  $contributors = getSimpleKeyValue(getcurrent($header, null));
                  break;   
-            case 'relation': 
-               // echo "=====Relation======\n";
+            case 'relation':                
                 $isreferencedby = getcurrent($header,'isreferencedby');
                 $references = getcurrent($header,'references');
                 $media = getcurrent($header,'media');
@@ -92,8 +91,8 @@ function get_data($file) {
             }
 
         }  
-    
-    $current = array();
+       echo "\n</table>\n";
+       $current = array();
 }
 
 /*
@@ -130,7 +129,7 @@ function process_users($creator,$user) {
 
 function process_dates($created, $modified) {   
     $retv = "";
-echo "<table>";
+
     if ($created) {
         $rfc_cr = date("r", $created);
         echo "<tr><td>Date created:</td><td>".$rfc_cr.
@@ -142,32 +141,28 @@ echo "<table>";
         echo "<tr><td>Last modified:</td><td>" . $rfc_mod .
         "</td><td>$modified</td></tr>\n"; 
      }
-echo "</table>";
+
 }
 
 function insertListInTable($list,$type) {
-    if($list) echo "<tr><th colspan='1'>$type</th></tr><tr><td>$list</td></tr>\n";
+    if($list) echo "<tr><td>$type</td><td>$list</td></tr>\n";
 }
 function process_relation($isreferencedby,$references,$media,$firstimage,$haspart,$subject) {
     echo "<table>\n";
-    if(!empty($isreferencedby)) {
+    if(!empty($isreferencedby)) {         
         $list = create_list(array_keys($isreferencedby));
         insertListInTable($list,'Backlinks');
     }
-    if(!empty($references)) {
+    if(!empty($references)) {           
        $list = create_list(array_keys($references));
-       insertListInTable($list,'Links');
-      // echo $list;       
+       insertListInTable($list,'Links');           
     }
-    if(!empty($media)) {
-      // echo "--Media--\n";      
+    if(!empty($media)) {          
        $list = create_list(array_keys($media));
-       insertListInTable($list,'Media');
-       // echo $list;        
+       insertListInTable($list,'Media');           
     }
     if(!empty($firstimage)) {
-       echo "<tr><th>First Image</th></tr><tr><td>$firstimage</td></tr>";
-      // echo print_r($firstimage,1) . "\n";
+       echo "<tr><td>First Image</td></tr><tr><td>$firstimage</td></tr>";      
     }   
     if(!empty($haspart)) {      
        $list = create_list(array_keys($haspart)); 
@@ -176,10 +171,8 @@ function process_relation($isreferencedby,$references,$media,$firstimage,$haspar
     if(!empty($subject)) {
        $list = create_list(array_keys($subject));
        insertListInTable($list,'Subject');
-       //echo "-- Subject --\n";
-      // echo print_r($subject,1) . "\n";
     }       
-    echo "</table>\n";
+ 
 }
 
 function create_list($ar) {
