@@ -13,7 +13,7 @@ ob_start();
 recurse('.');
 $contents = ob_get_contents();
 ob_end_clean();
-$contents = str_replace("<table>\n</table>","",$contents);
+$contents = str_replace("<table.*?>\n</table>","",$contents);
 echo $contents;
 
 function recurse($dir) {
@@ -45,16 +45,16 @@ function get_data($file,$id_path) {
   
     if ($data_array === false || !is_array($data_array)) return; 
     if (!isset($data_array['current'])) return;
-    echo "\n<table>\n";
-    echo "<tr><td colspan='3'>$id_path</td></tr>\n";
-    echo "<tr><td colspan='3'>$file</td></tr>\n";
+    echo "\n" . '<table style="border-top:2px solid">' ."\n";
+    echo "<tr><td colspan='2'>$id_path</td></tr>\n";
+    echo "<tr><td colspan='2'>$file</td></tr>\n";
     $current = $data_array['current'];
     $keys =  array('title','date','creator','last_change','relation');
     foreach ($keys AS $header) {
         switch($header) {
             case 'title':               
                  $title = getcurrent($header, null);
-                 echo "<tr><td colspan='3'>Title: <b>$title</b></td></tr>\n";
+                 echo "<tr><td colspan='2'>Title: <b>$title</b></td></tr>\n";
                  break;                     
                 
             case 'date':                        
@@ -108,7 +108,7 @@ function getSimpleKeyValue($ar,$which="") {
     'R'=>'<u>R</u>evert');
     if(!is_array($ar)) return false;         
     foreach ($ar As $key=>$val) {       
-        if(!empty($val)) {
+        if(!empty($val)) {           
            if($which == 'last_change')  {  
                if($key == 'date') {
                    $val = date("r", $val);
@@ -128,7 +128,7 @@ function process_users($creator,$user) {
         if(empty($creator)) {
             echo "\n"; return;
          }
-        echo "\nCreated by: $creator  (userid: $user)\n";
+        echo "<tr><td>Created by:</td><td> $creator (userid: $user)</tr></td>\n";
 }
 
 function process_dates($created, $modified) {   
