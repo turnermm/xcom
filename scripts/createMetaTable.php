@@ -13,12 +13,19 @@ $prefix = ($depth = str_replace('/', ':', $prefix)) ? $depth : '';
 
 function xcom_GetMetaData($id) {
     global $conf;
+    if($id === ':' || preg_match("/\:\*$/",$id)) {        
     $id = rtrim($id,':*');
     $ns =  $conf['metadir'] . $id;  
     chdir($ns);
 
     ob_start();
     recurse('.');
+    }
+    else {
+        ob_start();
+        $file = metaFN($id,'.meta');
+        get_data($file,$id);
+    }
     $contents = ob_get_contents();
     ob_end_clean();
     $contents = str_replace("<table.*?>\n</table>","",$contents);
