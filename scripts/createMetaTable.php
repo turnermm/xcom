@@ -215,4 +215,4 @@ function getcurrent($which, $other) {
     }
     return "";
 }
-echo xcom_GetMetaData();
+//echo xcom_GetMetaData('playground:fonts_how_to');
