@@ -3,19 +3,19 @@ if(!defined('DOKU_INC')) {
     define('DOKU_INC', realpath(dirname(__FILE__)) . '/../../../../');
 }
 require_once(DOKU_INC.'inc/init.php');
-session_write_close();
-define ('PAGES', '/home/samba/html/mturner/devel/data/pages');
 global $timezone, $current,$prefix,$conf;
-
+session_write_close();
+define ('PAGES', realpath(DOKU_INC . $conf['savedir']));
 $timezone = 'UTC'; // default timezone is set to Coordinated Univeral Time. You can reset your timezone here
 date_default_timezone_set($timezone);
- 
-chdir($conf['metadir']);
-$realpath = realpath('.');
-$prefix = preg_replace("/.*?\/data\/meta/", "", $realpath);
+$prefix = preg_replace("/.*?\/data\/meta/", "", $conf['metadir']);
 $prefix = ($depth = str_replace('/', ':', $prefix)) ? $depth : '';
 
 function xcom_GetMetaData() {
+    global $conf;
+    $ns =  $conf['metadir'] . '/playground';   //testing
+    chdir($ns);
+
     ob_start();
     recurse('.');
     $contents = ob_get_contents();
@@ -27,15 +27,18 @@ function recurse($dir) {
     global $prefix;
     $dh = opendir($dir);
     if (!$dh) return;
-
+    $cur_dir = '/pages' . preg_replace('#^.*?data/meta#',"", getcwd());   
     while (($file = readdir($dh)) !== false) {
         if ($file == '.' || $file == '..') continue;
-        if (is_dir("$dir/$file")) recurse("$dir/$file");
+        
+        if (is_dir("$dir/$file")) {           
+          recurse("$dir/$file");
+         }
         if (preg_match("/\.meta$/", $file)) {            
             $store_name = preg_replace('/^\./', $prefix, "$dir/$file");
-            $id_name = PAGES . preg_replace("/\.meta$/","",$store_name) . '.txt';            
-            if(!file_exists($id_name)) continue;            
-            get_data("$dir/$file","$id_name");
+            $id_name = PAGES ."$cur_dir${store_name}";
+            $id_name = preg_replace('/\.meta$/', '.txt',$id_name);                  
+            get_data("$dir/$file",$id_name);
             echo "\n";
         }
     }
