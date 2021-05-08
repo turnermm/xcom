@@ -11,9 +11,10 @@ date_default_timezone_set($timezone);
 $prefix = preg_replace("/.*?\/data\/meta/", "", $conf['metadir']);
 $prefix = ($depth = str_replace('/', ':', $prefix)) ? $depth : '';
 
-function xcom_GetMetaData() {
+function xcom_GetMetaData($id) {
     global $conf;
-    $ns =  $conf['metadir'] . '/playground';   //testing
+    $id = rtrim($id,':*');
+    $ns =  $conf['metadir'] . $id;  
     chdir($ns);
 
     ob_start();
