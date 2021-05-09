@@ -140,6 +140,7 @@ function xcom_print_data(fn, data,other) {
             case 'wiki.getPageVersion':      // (string) raw Wiki text 
                   id = 'xcom_editable' ;
                   break;   
+            case 'plugin.xcom.GetMetaData':                   
             case 'wiki.getPageHTML':      // (string) rendered HTML 
                  id = 'xcom_htm';
                  break;
@@ -790,7 +791,8 @@ var xcom_query_types=new Array(
 'plugin.acl.addAcl',
 'plugin.acl.delAcl',
 'plugin.xcom.getMedia',
-'plugin.xcom.listNamespaces'
+'plugin.xcom.listNamespaces',
+'plugin.xcom.GetMetaData',
 );
 
 function xcom_err_msg() {

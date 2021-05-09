@@ -21,15 +21,15 @@ function xcom_GetMetaData($id) {
         recurse('.',$contents);
     }
     else {
-       // ob_start();
+      
         $file = metaFN($id,'.meta');
         get_data($file,$id,$contents);
     }
-    //$contents = ob_get_contents();
-   // ob_end_clean();
+
+
     $contents = str_replace("<table.*?>\n</table>","",$contents);
-   // return json_encode($contents);
-   return $contents;
+ 
+
 }
 
 

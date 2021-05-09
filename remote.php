@@ -11,7 +11,10 @@ else {
     require_once(DOKU_INC . 'inc/remote.php'); 
     require_once(DOKU_INC . 'inc/RemoteAPICore.php');
 }    
-
+//require_once('./scripts/createMetaTable.php');
+global $xcom_timezone, $xcom_current,$xcom_prefix,$conf;
+define ('PAGES', realpath(DOKU_INC . $conf['savedir']));
+$xcom_timezone = 'UTC'; // default timezone is set to Coordinated Univeral Time. You can reset your timezone here
 class remote_plugin_xcom extends DokuWiki_Remote_Plugin {
     private $api, $server;
     public function _getMethods() {
@@ -40,7 +43,13 @@ class remote_plugin_xcom extends DokuWiki_Remote_Plugin {
                 'return' => 'array',
                 'doc' => 'Returns a struct with info about the page, latest version.',
                 'name' => 'pageInfo'
-            ),            
+            ),
+           ' GetMetaData' => array(
+                'args' => 'string',
+                'return' => 'string',
+                'doc' => 'Returns metadata of one or more wiki pages',
+                'name' => 'GetMetaData'
+            ),          
         );
     }
      
@@ -224,4 +233,221 @@ class remote_plugin_xcom extends DokuWiki_Remote_Plugin {
         return $id;
     }
   
+  // function GetMetaData($id) {  
+  //   return xcom_GetMetaData($id);
+  // }
+   
+   function GetMetaData($id) {
+    global $xcom_timezone, $xcom_current,$xcom_prefix,$conf;
+    $contents="";
+    date_default_timezone_set($xcom_timezone); 
+    $xcom_prefix = preg_replace("/.*?\/data\/meta/", "", $conf['metadir']);
+    $xcom_prefix = ($depth = str_replace('/', ':', $xcom_prefix)) ? $depth : '';
+    if($id === ':' || preg_match("/\:\*$/",$id)) {        
+        $id = rtrim($id,':*');
+        $ns =  $conf['metadir'] . $id;  
+        chdir($ns);           
+        $this->recurse('.',$contents);
+    }
+    else {
+      
+        $file = metaFN($id,'.meta');
+        $this->get_data($file,$id,$contents);
+    }
+
+
+    $contents = str_replace("<table.*?>\n</table>","",$contents);
+     return $contents;
+
 }
+
+
+function recurse($dir,&$contents) {
+    global $xcom_prefix;
+    $dh = opendir($dir);
+    if (!$dh) return;
+    $cur_dir = '/pages' . preg_replace('#^.*?data/meta#',"", getcwd());   
+    while (($file = readdir($dh)) !== false) {
+        if ($file == '.' || $file == '..') continue;
+        
+        if (is_dir("$dir/$file")) {           
+          $this->recurse("$dir/$file",$contents);
+         }
+        if (preg_match("/\.meta$/", $file)) {          
+            $store_name = preg_replace('/^\./', $xcom_prefix, "$dir/$file");    
+            $id_name = PAGES ."$cur_dir${store_name}";
+            $id_name = preg_replace('/\.meta$/', '.txt',$id_name);           
+            $this->get_data("$dir/$file",$id_name,$contents);
+            $contents .= "\n";
+        }
+    }
+
+    closedir($dh);
+}
+function get_data($file,$id_path,&$contents) {
+    global $xcom_current;
+    $data = file_get_contents($file);
+    $data_array = @unserialize(file_get_contents($file));   
+    $creator =""; $creator_id="";
+  
+    if ($data_array === false || !is_array($data_array)) return; 
+    if (!isset($data_array['current'])) return;
+    $contents .= "\n" . '<table style="border-top:2px solid">' ."\n";
+    $contents .= "<tr><td colspan='2'>$id_path</td></tr>\n";
+    $contents .= "<tr><td colspan='2'>$file</td></tr>\n";
+    $xcom_current = $data_array['current'];
+    $keys =  array('title','date','creator','last_change','relation');
+    foreach ($keys AS $header) {
+        switch($header) {
+            case 'title':               
+                 $title = $this->getcurrent($header, null);
+                 $contents .= "<tr><td colspan='2'>Title: <b>$title</b></td></tr>\n";
+                 break;                     
+                
+            case 'date':                        
+                 $this->process_dates($this->getcurrent('date', 'created'),$this->getcurrent('date', 'modified'),$contents);  
+                 break;                 
+            case 'user':
+                if($creator || $creator_id) break; 
+            case 'creator':
+                $creator = $this->getcurrent('creator', null);
+                $creator_id = $this->getcurrent('user', null);
+                $this->process_users($creator,$creator_id,$contents);  
+                 break;
+           
+            case 'last_change':                                           
+                $last_change = $this->getSimpleKeyValue($this->getcurrent($header, null),"last_change",$contents);
+                 if($last_change) {
+                    $contents .= "<tr><td colspan='2'>Last Change</td>\n"; 
+                    $contents .= "<td>$last_change</td></tr>\n"; 
+                }
+                break;              
+            case 'contributor':       
+                 $this->contributors = $this->getSimpleKeyValue($this->getcurrent($header, null),$contents);
+                 break;   
+            case 'relation':                
+                $isreferencedby = $this->getcurrent($header,'isreferencedby');
+                $references = $this->getcurrent($header,'references');
+                $media = $this->getcurrent($header,'media');
+                $firstimage = $this->getcurrent($header,'firstimage');
+                $haspart = $this->getcurrent($header,'haspart');
+                $subject = $this->getcurrent($header,'subject');
+                $this->process_relation($isreferencedby,$references,$media,$firstimage,$haspart,$subject,$contents);
+                break;
+            default:
+
+                 break;
+            }
+
+        }  
+       $contents .= "\n</table>\n";
+       $xcom_current = array();
+}
+
+/*
+*  @param array $ar metadata field
+*  @param string $which which field  
+*/
+function getSimpleKeyValue($ar,$which="",&$contents) {
+    $retv = "";
+    $types = array('C'=>'<u>C</u>reate','E'=>'<u>E</u>dit','e' =>'minor <u>e</u>dit','D'=>'<u>D</u>elete',
+    'R'=>'<u>R</u>evert');
+    if(!is_array($ar)) return false;         
+    foreach ($ar As $key=>$val) {       
+        if(!empty($val)) {           
+           if($which == 'last_change')  {  
+               if($key == 'date') {
+                   $val = date("r", $val);
+                }
+                if($key == 'type')  {
+                    $val = $types[$val];  
+                }
+           }
+
+           $retv .= "<tr><td>$key:</td><td>$val</td></tr>\n";
+       }
+    }
+    return $retv;
+}
+
+function process_users($creator,$user,&$contents) {
+        if(empty($creator)) {
+            $contents .= "\n"; return;
+         }
+        $contents .= "<tr><td>Created by:</td><td> $creator (userid: $user)</tr></td>\n";
+}
+
+function process_dates($created, $modified,&$contents) {   
+    $retv = "";
+
+    if ($created) {
+        $rfc_cr = date("r", $created);
+        $contents .= "<tr><td>Date created:</td><td>".$rfc_cr.
+        "</td><td>$created</td></tr>\n";
+        }
+   
+    if ($modified) {
+        $rfc_mod = date("r", $modified);
+        $contents .= "<tr><td>Last modified:</td><td>" . $rfc_mod .
+        "</td><td>$modified</td></tr>\n"; 
+     }
+
+}
+
+function insertListInTable($list,$type,&$contents) {
+    if($list) $contents .= "<tr><td>$type</td><td>$list</td></tr>\n";
+}
+function process_relation($isreferencedby,$references,$media,$firstimage,$haspart,$subject,&$contents) {
+  
+    if(!empty($isreferencedby)) {         
+        $list =  $this->create_list(array_keys($isreferencedby),$contents);
+        $this->insertListInTable($list,'Backlinks',$contents);
+    }
+    if(!empty($references)) {           
+       $list =  $this->create_list(array_keys($references),$contents);
+        $this->insertListInTable($list,'Links',$contents);           
+    }
+    if(!empty($media)) {          
+       $list =  $this->create_list(array_keys($media),$contents);
+        $this->insertListInTable($list,'Media',$contents);           
+    }
+    if(!empty($firstimage)) {
+       $contents .= "<tr><td>First Image</td><td colspan='2'>$firstimage</td></tr>";      
+    }   
+    if(!empty($haspart)) {      
+       $list =  $this->create_list(array_keys($haspart),$contents); 
+        $this->insertListInTable($list,'haspart',$contents);
+    }  
+    if(!empty($subject)) {
+       $list =  $this->create_list(array_keys($subject),$contents);
+        $this->insertListInTable($list,'Subject',$contents);
+    }       
+ 
+}
+
+function create_list($ar,&$contents) {
+    $list = "\n<ol>\n";
+    for($i=0; $i<count($ar); $i++) {
+        $list .= '<li>'. $ar[$i] . "</li>\n";
+    }
+     $list .= "</ol>\n";
+     return $list;
+}   
+function getcurrent($which, $other) {
+    global $xcom_current;
+    if (!isset($xcom_current)) return "";
+    if ($other) {
+        if (isset($xcom_current[$which][$other])) {
+            return $xcom_current[$which][$other];
+        }
+    }
+    if (isset($xcom_current[$which]) && $other === null) {
+        return $xcom_current[$which];
+    }
+    return "";
+}
+}
+//$rem = new  remote_plugin_xcom();
+//echo print_r($rem->listNamespaces("devel"),1) . "\n";
+//echo $rem->GetMetaData(':*') ."\n";
+
