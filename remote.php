@@ -233,10 +233,6 @@ class remote_plugin_xcom extends DokuWiki_Remote_Plugin {
         return $id;
     }
   
-  // function GetMetaData($id) {  
-  //   return xcom_GetMetaData($id);
-  // }
-   
    function GetMetaData($id) {
     global $xcom_timezone, $xcom_current,$xcom_prefix,$conf;
     $contents="";
@@ -245,7 +241,8 @@ class remote_plugin_xcom extends DokuWiki_Remote_Plugin {
     $xcom_prefix = ($depth = str_replace('/', ':', $xcom_prefix)) ? $depth : '';
     if($id === ':' || preg_match("/\:\*$/",$id)) {        
         $id = rtrim($id,':*');
-        $ns =  $conf['metadir'] . $id;  
+        $ns =  $conf['metadir'] .'/'. $id;  
+        
         chdir($ns);           
         $this->recurse('.',$contents);
     }

@@ -136,6 +136,15 @@
 ^Name|''plugin.xcom.listNamespaces''   |
 ^Parameters|(String) namespace id, (Array) exclusions|
 ^Description|Returns a list of sub-namespaces under the specified namespace id. If the namespace id is left blank, the listing will start at the root namespace. To exclude sub-namespaces enter the exclusions array in the ''Options'': ''(id1;id2;id3)''. Note that the array is a series of ids separated by semi-colons and enclosed in parentheses |
+
+
+==== plugin.xcom.GetMetaData ====
+
+^Name|''plugin.xcom.GetMetaData''   |
+^Parameters|(String) namespace or page id|
+^Description|Returns either the metadata for a single page or the metadata for all the pages in a specified namespace. When choosing a namespace, it must end with colon. |
+
+
 ==== Timestamp ====
 
 Enter a date formatted all in numerals as follows: YYYY-MM-DD, e.g. // 2011-3-19 //. The timestamp will be created for you.
