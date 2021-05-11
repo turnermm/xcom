@@ -142,7 +142,7 @@
 
 ^Name|''plugin.xcom.GetMetaData''   |
 ^Parameters|(String) namespace or page id|
-^Description|Returns either the metadata for a single page or the metadata for all the pages in a specified namespace. When choosing a namespace, it must end with colon. |
+^Description|Returns either the metadata for a single page or the metadata for all the pages in a specified namespace and its subdirectories. When choosing a namespace, it must end with colon or a colon and asterisk, i.e.  '':*''. To start at the root directory, either a single colon or a colon followed by an asterisk.|
 
 
 ==== Timestamp ====

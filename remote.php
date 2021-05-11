@@ -315,7 +315,7 @@ function get_data($file,$id_path,&$contents) {
             case 'last_change':                                           
                 $last_change = $this->getSimpleKeyValue($this->getcurrent($header, null),"last_change",$contents);
                  if($last_change) {
-                    $contents .= "<tr><td colspan='2'>Last Change</td>\n"; 
+                    $contents .= "<tr><td colspan='2' style='border-left: 1.5px solid #4169E1; color:#4169E1' ><b>Last Change</b></td>\n"; 
                     $contents .= "<td>$last_change</td></tr>\n"; 
                 }
                 break;              
@@ -350,9 +350,11 @@ function getSimpleKeyValue($ar,$which="",&$contents) {
     $types = array('C'=>'<u>C</u>reate','E'=>'<u>E</u>dit','e' =>'minor <u>e</u>dit','D'=>'<u>D</u>elete',
     'R'=>'<u>R</u>evert');
     if(!is_array($ar)) return false;         
+    $border = "";    
     foreach ($ar As $key=>$val) {       
         if(!empty($val)) {           
            if($which == 'last_change')  {  
+               $border = " style='border-left: 1.5px solid #4169E1;'"; 
                if($key == 'date') {
                    $val = date("r", $val);
                 }
@@ -361,7 +363,10 @@ function getSimpleKeyValue($ar,$which="",&$contents) {
                 }
            }
 
-           $retv .= "<tr><td>$key:</td><td>$val</td></tr>\n";
+          if(empty($val))  {
+               $retv .= "<tr><td  $border>$key:</td><td>$val</td></tr>\n";
+            }
+            else  $retv .= "<tr><td $border>$key:</td><td>$val</td></tr>\n";
        }
     }
     return $retv;
@@ -444,7 +449,5 @@ function getcurrent($which, $other) {
     return "";
 }
 }
-//$rem = new  remote_plugin_xcom();
-//echo print_r($rem->listNamespaces("devel"),1) . "\n";
-//echo $rem->GetMetaData(':*') ."\n";
+
 
