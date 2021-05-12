@@ -289,6 +289,7 @@ function get_data($file,$id_path,&$contents) {
   
     if ($data_array === false || !is_array($data_array)) return; 
     if (!isset($data_array['current'])) return;
+      $contents .= "\n<p>\n";
     $contents .= "\n" . '<table style="border-top:2px solid">' ."\n";
     $contents .= "<tr><td colspan='2'>$id_path</td></tr>\n";
     $contents .= "<tr><td colspan='2'>$file</td></tr>\n";
@@ -315,7 +316,8 @@ function get_data($file,$id_path,&$contents) {
             case 'last_change':                                           
                 $last_change = $this->getSimpleKeyValue($this->getcurrent($header, null),"last_change",$contents);
                  if($last_change) {
-                    $contents .= "<tr><td colspan='2' style='border-left: 1.5px solid #4169E1; color:#4169E1' ><b>Last Change</b></td>\n"; 
+                    $contents .=  "<tr><td colspan='3'  ></td>\n";
+                    $contents .= "<tr><td colspan='2' style='border-left: 2px solid #4169E1; color:#4169E1' ><b>Last Change</b></td>\n"; 
                     $contents .= "<td>$last_change</td></tr>\n"; 
                 }
                 break;              
@@ -337,7 +339,7 @@ function get_data($file,$id_path,&$contents) {
             }
 
         }  
-       $contents .= "\n</table>\n";
+       $contents .= "\n</table></p>\n";
        $xcom_current = array();
 }
 
@@ -354,7 +356,7 @@ function getSimpleKeyValue($ar,$which="",&$contents) {
     foreach ($ar As $key=>$val) {       
         if(!empty($val)) {           
            if($which == 'last_change')  {  
-               $border = " style='border-left: 1.5px solid #4169E1;'"; 
+               $border = " style='border-left: 2px solid #4169E1;'"; 
                if($key == 'date') {
                    $val = date("r", $val);
                 }
@@ -397,24 +399,31 @@ function process_dates($created, $modified,&$contents) {
 }
 
 function insertListInTable($list,$type,&$contents) {
-    if($list) $contents .= "<tr><td>$type</td><td>$list</td></tr>\n";
+     $border = " style='border-left: 2px solid green;'";
+    if($list) $contents .= "<tr><td $border>$type</td><td>$list</td></tr>\n";
 }
 function process_relation($isreferencedby,$references,$media,$firstimage,$haspart,$subject,&$contents) {
-  
+      if(!empty($isreferencedby) || !empty($references) || !empty($media) || !empty($firstimage)
+           && !empty($haspart ) &&!empty($subject)) {          
+                $border = " style='border-left: 2px solid green;'";
+                $contents .=  "<tr><td colspan='3'  ></td>\n";
+                $contents .= "<tr><td colspan='2'  $border><b><span style='color:green'>Relation</span></b></td>\n";
+           }
+           else $border = "";
     if(!empty($isreferencedby)) {         
         $list =  $this->create_list(array_keys($isreferencedby),$contents);
-        $this->insertListInTable($list,'Backlinks',$contents);
+        $this->insertListInTable($list,'Backlinks (isreferencedby)',$contents);
     }
     if(!empty($references)) {           
        $list =  $this->create_list(array_keys($references),$contents);
-        $this->insertListInTable($list,'Links',$contents);           
+        $this->insertListInTable($list,'Links (references)',$contents);           
     }
     if(!empty($media)) {          
        $list =  $this->create_list(array_keys($media),$contents);
         $this->insertListInTable($list,'Media',$contents);           
     }
     if(!empty($firstimage)) {
-       $contents .= "<tr><td>First Image</td><td colspan='2'>$firstimage</td></tr>";      
+       $contents .= "<tr><td   $border>First Image</td><td>$firstimage</td></tr>";      
     }   
     if(!empty($haspart)) {      
        $list =  $this->create_list(array_keys($haspart),$contents); 
