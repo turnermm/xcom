@@ -86,15 +86,6 @@ if($client)
 	   if($fn == 'wiki.getAttachmentInfo' && isset($params[1])) {
 	      $retv = array_merge(array('id' => $params[1]), $retv); 
 	  }
-	  else 	if($fn == 'plugin.xcom.pageVersions') {
-          for($i=0; $i<count($retv);$i++) {             
-              $retv[$i]['modified'] =  get_ixrdate($retv[$i]['modified']);	        
-          }
-	  }	
-     elseif($fn == 'plugin.xcom.getPageInfo') {
-		//  $retv['lastModified'] = date("Y-m-d", $retv['lastModified']);// get_ixrdate($retv['lastModified']);
-		//  file_put_contents("debugbde.txt",print_r($retv,true));
-	}
        $retv = json_encode($retv);
        echo $retv;
        exit;

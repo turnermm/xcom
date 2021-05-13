@@ -211,7 +211,8 @@ function xcom_multidim(obj,func) {
          data +="\n<tr>";                                                        
          for(var j in obj[i]) {                        
              var r = obj[i][j];
-              if(j == 'lastModified' && func == 'wiki.getRecentChanges') {
+              if(j == 'lastModified' && func == 'wiki.getRecentChanges' 
+                    || j == 'modified' && func == 'plugin.xcom.pageVersions') {                  
                  r = obj[i]['version'];        
                 var date_time = new Date(r * 1000);
                 var month = (date_time.getMonth() + 1) > 9 ? (date_time.getMonth() + 1) : '0' + (date_time.getMonth() + 1);
