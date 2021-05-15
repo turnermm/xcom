@@ -140,6 +140,7 @@ function xcom_print_data(fn, data,other) {
             case 'wiki.getPageVersion':      // (string) raw Wiki text 
                   id = 'xcom_editable' ;
                   break;   
+            case 'plugin.xcom.GetMetaData':                   
             case 'wiki.getPageHTML':      // (string) rendered HTML 
                  id = 'xcom_htm';
                  break;
@@ -210,7 +211,8 @@ function xcom_multidim(obj,func) {
          data +="\n<tr>";                                                        
          for(var j in obj[i]) {                        
              var r = obj[i][j];
-              if(j == 'lastModified' && func == 'wiki.getRecentChanges') {
+              if(j == 'lastModified' && func == 'wiki.getRecentChanges' 
+                    || j == 'modified' && func == 'plugin.xcom.pageVersions') {                  
                  r = obj[i]['version'];        
                 var date_time = new Date(r * 1000);
                 var month = (date_time.getMonth() + 1) > 9 ? (date_time.getMonth() + 1) : '0' + (date_time.getMonth() + 1);
@@ -790,7 +792,8 @@ var xcom_query_types=new Array(
 'plugin.acl.addAcl',
 'plugin.acl.delAcl',
 'plugin.xcom.getMedia',
-'plugin.xcom.listNamespaces'
+'plugin.xcom.listNamespaces',
+'plugin.xcom.GetMetaData',
 );
 
 function xcom_err_msg() {
