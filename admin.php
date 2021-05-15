@@ -116,6 +116,7 @@ class admin_plugin_xcom extends DokuWiki_Admin_Plugin {
       ptln('<div>');      
      // ptln ('<div class="xcom_view_status" id="xcom_view"></div>');
       ptln('<div id = "xcom_results"  style ="display:none;border: 1px solid #ddd;" >');   //start results
+        ptln('<div id = "xcom_remote_title" style ="display:none;">' . 'Remote' . '</div><div id = "xcom_remote"  style ="display:none;" ></div>');  
       ptln('<div id = "xcom_editable_title" style ="display:none;">' . $this->getLang('editable') . '</div><div class="xcom_editdiv"><form><textarea  style ="display:none;margin:auto;"  name="xcom_editable" cols="120" rows="16" id = "xcom_editable" style="margin-bottom:8px;"></textarea></form></div>');    
       ptln('<div id = "xcom_pre_title" style ="display:none;">' . $this->getLang('pre') . '</div><div id = "xcom_pre"  style ="display:none;white-space:pre;" ></div>');  
       ptln('<div id = "xcom_htm_title" style ="display:none;">' . $this->getLang('html') . '</div><div id = "xcom_htm"  style ="display:none;" ></div>');          

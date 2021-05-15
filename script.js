@@ -6,12 +6,16 @@ var xcom_srch_str;
 function xcom_localSave(a_id) {
 
    var fn_sel = document.getElementById('xcom_sel');
+   /* if function selected, apply function to remote file */
    if(fn_sel.selectedIndex > 0) {
        xcom_setValue('xcom_pageid',a_id);
-        xmlrpc();
+        xmlrpc('xcom_remote');
         return;
    }
    
+   /* save remote file to local 
+   *  first ask if this is what is wanted
+   */
    if(a_id) {
       xcom_setValue('xcom_pageid',a_id);
       if(!window.confirm(JSINFO['savelocalfile']  + ' ' + a_id)) return;
@@ -44,17 +48,20 @@ function xcom_localSave(a_id) {
             {  
                data = decodeURIComponent(data);                      
                xcom_show('xcom_results');
-               xcom_print_data('dokuwiki.copy', data, false); 
+               xcom_print_data('dokuwiki.copy', data, false,""); 
             }
         });
 }
 
 function xmlrpc() {         
+       var xcom_remote = arguments.length ? 'xcom_remote' : "";
        xcom_hide_all_views();
+       xcom_hide('xcom_remote');
        xcom_hide('xcom_view');
        xcom_hide('xcom_pre_title');
        xcom_hide('xcom_htm_title');
        xcom_hide('xcom_editable_title');
+       xcom_hide('xcom_remote_title');
        xcom_remote_url = xcom_getInputValue('xcom_url'); 	   
        xcom_remote_url = xcom_remote_url.replace(/[\/\\]$/,"");
 	   xcom_remote_url += '/doku.php?';
@@ -105,7 +112,7 @@ function xmlrpc() {
                 }                
             }
                xcom_show('xcom_results');
-               xcom_print_data(func, data,other); 
+               xcom_print_data(func, data,other,xcom_remote); 
             }
         });
       
@@ -114,7 +121,7 @@ function xmlrpc() {
          return false;
 }
 
-function xcom_print_data(fn, data,other) {
+function xcom_print_data(fn, data,other,xcom_remote) {
    var id = 'xcom_pre';
 
    var table_calls = {     
@@ -156,7 +163,7 @@ function xcom_print_data(fn, data,other) {
             case  'plugin.xcom.listNamespaces':  
             case  'wiki.getRecentChanges':
             case 'wiki.getBackLinks':
-                 id = 'xcom_htm';
+                 id = xcom_remote ? 'xcom_remote':'xcom_htm';
                  try {
                      var obj = jQuery.parseJSON(data);                                           
                  } catch(e) {
@@ -616,7 +623,7 @@ function xcom_hide_all_views() {
     xcom_hide('xcom_pre_title');
     xcom_hide('xcom_htm_title');
     xcom_hide('xcom_results');
-    
+    xcom_hide('xcom_remote_title');    
 }
 
 function xcom_clear(which) {
