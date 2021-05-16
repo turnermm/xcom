@@ -63,6 +63,7 @@ $lang['fsize'] = 'file size:';
 $lang['ismedia'] = 'is a media file:';
 $lang['savelocalfile'] = 'Click OK to save file to the local wiki:';
 $lang['debug'] = 'Debug:';
+$lang['action_result'] = 'Action Link Results';
 $lang['js']['wrong_count'] = 'Wrong parameter count:';
 $lang['js']['no_opts'] = 'does not take options';
 $lang['js']['bad_id'] = 'Bad DokuWiki ID';

@@ -1,9 +1,15 @@
-#xcom_htm, #xcom_pre {
+#xcom_htm, #xcom_pre, #xcom_remote  {
    border: 1px solid gray;
    padding: 4px;
    margin-top: 8px;
    overflow:scroll;
    height: 450px;
+}
+#xcom_htm, #xcom_pre {
+   height: 450px;
+}
+#xcom_remote {
+   height: 250px;
 }
 
 div.xcom_editdiv, div.l_ocal_side  {

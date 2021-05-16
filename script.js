@@ -55,13 +55,13 @@ function xcom_localSave(a_id) {
 
 function xmlrpc() {         
        var xcom_remote = arguments.length ? 'xcom_remote' : "";
-       xcom_hide_all_views();
-       xcom_hide('xcom_remote');
+       xcom_hide_all_views(xcom_remote);
+      /* xcom_hide('xcom_remote');
        xcom_hide('xcom_view');
        xcom_hide('xcom_pre_title');
        xcom_hide('xcom_htm_title');
        xcom_hide('xcom_editable_title');
-       xcom_hide('xcom_remote_title');
+       xcom_hide('xcom_remote_title');*/
        xcom_remote_url = xcom_getInputValue('xcom_url'); 	   
        xcom_remote_url = xcom_remote_url.replace(/[\/\\]$/,"");
 	   xcom_remote_url += '/doku.php?';
@@ -615,10 +615,12 @@ function xcom_hide(which) {
   var d = document.getElementById(which);
   if(d) d.style.display = 'none'; 
 }
-function xcom_hide_all_views() {
+function xcom_hide_all_views(xcom_remote) {
     xcom_hide('xcom_editable');
     xcom_hide('xcom_pre');
+    if(!xcom_remote) {
     xcom_hide('xcom_htm');
+    }
     xcom_hide('xcom_editable_title');
     xcom_hide('xcom_pre_title');
     xcom_hide('xcom_htm_title');
