@@ -67,6 +67,7 @@ class admin_plugin_xcom extends DokuWiki_Admin_Plugin {
        ptln('<button style="float:right;margin-left:8px;"  onclick="xcom_toggle(\'#xcom_editable\');">' . $this->getLang('editable'). '</button>');
        ptln('<button style="float:right;margin-left:8px;"  onclick="xcom_toggle(\'#xcom_htm\');">' . $this->getLang('html'). '</button>');
        ptln('<button style="float:right;margin-left:8px;"  onclick="xcom_toggle(\'#xcom_pre\');">' . $this->getLang('pre'). '</button>');
+       ptln('<button style="float:right;margin-left:8px;"  onclick="xcom_toggle(\'#xcom_action\');">' . $this->getLang('action'). '</button>');
       ptln('<button style="float:right;margin-left:8px;"  title="' . $this->getLang('results_tip').  '" onclick="xcom_hide_all_views();">' . $this->getLang('hideallviews'). '</button>');      
       ptln('</div>');
       
@@ -116,7 +117,7 @@ class admin_plugin_xcom extends DokuWiki_Admin_Plugin {
       ptln('<div>');      
      // ptln ('<div class="xcom_view_status" id="xcom_view"></div>');
       ptln('<div id = "xcom_results"  style ="display:none;border: 1px solid #ddd;" >');   //start results
-       ptln('<div id = "xcom_remote_title" style ="display:none;">' . $this->getLang('action_result') . '</div><div id = "xcom_remote"  style ="display:none;" ></div>');  
+       ptln('<div id = "xcom_action_title" style ="display:none;">' . $this->getLang('action_result') . '</div><div id = "xcom_action"  style ="display:none;" ></div>');  
       ptln('<div id = "xcom_editable_title" style ="display:none;">' . $this->getLang('editable') . '</div><div class="xcom_editdiv"><form><textarea  style ="display:none;margin:auto;"  name="xcom_editable" cols="120" rows="16" id = "xcom_editable" style="margin-bottom:8px;"></textarea></form></div>');    
       ptln('<div id = "xcom_pre_title" style ="display:none;">' . $this->getLang('pre') . '</div><div id = "xcom_pre"  style ="display:none;white-space:pre;" ></div>');  
       ptln('<div id = "xcom_htm_title" style ="display:none;">' . $this->getLang('html') . '</div><div id = "xcom_htm"  style ="display:none;" ></div>');          
@@ -131,6 +132,7 @@ class admin_plugin_xcom extends DokuWiki_Admin_Plugin {
       ptln('<a href="javascript:xcom_clear(\'xcom_pre\');void 0;">[' . $this->getLang('pre') . ']</a>&nbsp;');
       ptln('<a href="javascript:xcom_clear(\'xcom_htm\');void 0;">[' . $this->getLang('html') . ']</a>&nbsp;');
       ptln('<a href="javascript:xcom_clear(\'xcom_editable\');void 0;">[' . $this->getLang('editable') . ']</a>&nbsp;&nbsp;');
+      ptln('<a href="javascript:xcom_clear(\'xcom_action\');void 0;">[' . $this->getLang('action') . ']</a>&nbsp;');     
       ptln('&nbsp;<span class="xcom_qslabel" id="xcom_qslabel">' . $this->getLang('query') . ':</span>');
       ptln('&nbsp;<span class="xcom_qstatus" id="xcom_qstatus"></span>');
      // ptln('<a href="javascript:xmlrpc();void 0;"><span class="xcom_send_link" onmouseover="xcom_rollover(this,1);" //onmouseout="xcom_rollover(this,0);">[' .  $this->getLang('send') .']</span></a>&nbsp;&nbsp;');       

@@ -1,4 +1,4 @@
-#xcom_htm, #xcom_pre, #xcom_remote  {
+#xcom_htm, #xcom_pre, #xcom_action  {
    border: 1px solid gray;
    padding: 4px;
    margin-top: 8px;
@@ -8,7 +8,7 @@
 #xcom_htm, #xcom_pre {
    height: 450px;
 }
-#xcom_remote {
+#xcom_action {
    height: 250px;
 }
 
@@ -31,7 +31,7 @@ div.xcom_sites {
    background-color: #eee
 }
 
-div.xcom_view_status, #xcom_htm_title, #xcom_pre_title, #xcom_editable_title, #xcom_remote_title  {
+div.xcom_view_status, #xcom_htm_title, #xcom_pre_title, #xcom_editable_title, #xcom_action_title  {
    background-color: #eee;
    text-align:center;
    margin-top: 8px;
