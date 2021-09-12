@@ -171,9 +171,9 @@ function xcom_print_data(fn, data,other,xcom_action) {
                         obj = decodeURIComponent(data); 
                      break;
                  }
-                    /** 
-                       handle tables
-                    */
+                     
+                     //  handle tables
+                    
                      if(obj || fn == 'wiki.getBackLinks') 
                     {   
                         var fncall = fn.replace(/\./g,'_');                      
@@ -397,7 +397,7 @@ function xcom_check_opts(fn,page,opts) {
                 xcom_err_msg('date_err');               
                 return false;
             }  
-            break	
+            break;	
      
 	    case 'dokuwiki.getPagelist': //(hash),(depth:n)	    
             if(!page  || !opts) {
