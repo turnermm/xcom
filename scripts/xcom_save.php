@@ -129,14 +129,7 @@ class xcom_save  {
             $this->logoff();
             exit;
         }
-        $info = $this->xcom_get_data( 'plugin.xcom.getPageInfo',$this->remoteClient,false,array($this->page));    
-           
-        if(!is_array($info)) {         
-            $this->msg('notonremote',false," $this->page\n");
-            $this->logoff();
-             exit;
-        }
-          
+        echo   $this->page . "\n";
         $this->data_buffer = "";
         $this->xcom_get_data( 'wiki.getPage',$this->remoteClient,true, array($this->page));              
          if(is_array($this->data_buffer)) {
