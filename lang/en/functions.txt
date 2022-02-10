@@ -3,7 +3,8 @@
 
 ^Name|''dokuwiki.getPagelist''   |
 ^Parameters|(string) namespace, (array) options|
-^Description|Lists all pages within a given namespace. Use a single colon '':'' for the root namespace. The options are passed directly to [[https://xref.dokuwiki.org/reference/dokuwiki/nav.html?_functions/search_allpages.html|search_allpages()]]. The options array must have one of two items, either ''depth'' or ''hash'' enclosed in parentheses. If ''hash'' is specified, the results will include a column containing a hash of the raw wiki contents of each page found. The ''depth'' option determines the level of recursion. A depth of 1, returns the results the top level of the specified directory, a depth of 2 includes the directories two level below, and so forth. This option is set as follows: (depth:<num>), where num is the number of levels to recurse.  |
+^Description|Lists all pages within a given namespace. Use a single colon '':'' for the root namespace. The namespace setting is required. The options are passed directly to [[https://xref.dokuwiki.org/reference/dokuwiki/nav.html?_functions/search_allpages.html|search_allpages()]]. The options array must have one of two items, either ''depth'' or ''hash'' enclosed in parentheses. If not set, it defaults to ''hash''. If ''hash'' is specified, the results will include a column containing a hash of the raw wiki contents of each page found. The ''depth'' option determines the level of recursion. A depth of 1, returns the results the top level of the specified directory, a depth of 2 includes the directories two level below, and so forth. This option is set as follows: (depth:<num>), where num is the number of levels to recurse. Its output is a table of [[https://www.dokuwiki.org/plugin:xcom#action_links|action links]]. |
+
 
 ==== dokuwiki.search ====
 
@@ -63,7 +64,7 @@
 ==== wiki.listLinks ====
 
 ^Name  |''wiki.listLinks'' |
-^Parameters  |(string) [[doku>pagename|pagename]]|
+^Parameters  |(string) [[doku>:pagename|pagename]]|
 ^Description|Returns a list of all links contained in a Wiki page.|
 
 ==== wiki.getAllPages ====

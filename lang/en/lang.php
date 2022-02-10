@@ -69,5 +69,5 @@ $lang['js']['wrong_count'] = 'Wrong parameter count:';
 $lang['js']['no_opts'] = 'does not take options';
 $lang['js']['bad_id'] = 'Bad DokuWiki ID';
 $lang['js']['date_err'] = 'Date format error. Use yyyy-mm-dd';
-$lang['js']['param-err'] = 'requires both a namespace and either a depth or hash option';
+$lang['js']['param-err'] = 'requires both a namespace and either a depth or hash entry';
 $lang['js']['srch_string'] = 'Required search string missing';
