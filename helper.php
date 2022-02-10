@@ -8,7 +8,7 @@
 
 // must be run within Dokuwiki
 if(!defined('DOKU_INC')) die();
-
+define('XCOM_ROOT', DOKU_INC . 'lib/plugins/xcom/');
 class helper_plugin_xcom extends DokuWiki_Plugin {
 
     /**
@@ -33,6 +33,19 @@ class helper_plugin_xcom extends DokuWiki_Plugin {
     }
    public function basic($namespace) {
        return array();
+   }
+   
+   function write_debug($data) {
+        // return;
+        if (!$handle = fopen(XCOM_ROOT .'xcom_dbg.txt', 'a')) {
+            return;
+        }
+        if(is_array($data)) {
+            $data = print_r($data,true);
+        }
+        // Write $somecontent to our opened file.
+        fwrite($handle, "$data\n");
+        fclose($handle);
    }
 }
 
