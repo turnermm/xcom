@@ -401,8 +401,8 @@ function xcom_check_opts(fn,page,opts) {
      
 	    case 'dokuwiki.getPagelist': //(hash),(depth:n)	    
             if(!page  || !opts) {
-                if(!page) page = ':';
-                if(!opts) opts = '(hash)';
+                xcom_err_msg(fn,'param-err');
+                return false;
             }
             break;
 			
