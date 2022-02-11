@@ -68,13 +68,14 @@ function xmlrpc() {
        	   
        xcom_clear('xcom_qstatus',false); 
        var options =  xcom_params(); 
-       if(!options) {    
+ 
+       var func = options[0]; 
+       var arobj = Array();       
+       if(typeof arobj.includes === "function"){
+           if(!xcom_query_types.includes(func)) {
+                xcom_err_msg('nofunc');
            return;
        }    
-       var func = options[0];
-       if(!func) {
-          alert('No function selected');
-          return false; 
         }  
        xcom_query_status(options);       
            

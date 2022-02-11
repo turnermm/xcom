@@ -71,3 +71,4 @@ $lang['js']['bad_id'] = 'Bad DokuWiki ID';
 $lang['js']['date_err'] = 'Date format error. Use yyyy-mm-dd';
 $lang['js']['param-err'] = 'requires both a namespace and either a depth or hash entry';
 $lang['js']['srch_string'] = 'Required search string missing';
+$lang['js']['nofunc'] = 'No Query selected';
