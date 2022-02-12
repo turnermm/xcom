@@ -97,6 +97,7 @@ function xmlrpc() {
             dataType: 'html',         
             success: function(data)
             {  
+            if(data.match(/XCOM_LAG/)) return;
             if(!array_types.hasOwnProperty(func)) {
                 try {
                data = decodeURIComponent(data);                                              

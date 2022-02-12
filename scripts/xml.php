@@ -98,6 +98,11 @@ if($client)
    else {
       
    }
+  
+   if($retv == '1') {
+       echo "XCOM_LAG\n";
+       exit;
+   }
    echo $retv;
   
    echo "\n";
