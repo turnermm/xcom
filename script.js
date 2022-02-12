@@ -346,7 +346,7 @@ function xcom_srch_opts() {  // for search function
   result = result.replace(/\s*&\s*/g, '&'); 
   return result;
 }
-function xcom_check_opts(fn,page,opts, params) { 
+function xcom_check_opts(fn,page,opts, tmp) { 
     page = page.trim();
     var regex;
     var skip_opts_cnt = false;
@@ -395,7 +395,7 @@ function xcom_check_opts(fn,page,opts, params) {
      
 	    case 'dokuwiki.getPagelist': //(hash),(depth:n)	    
             if(!opts) {
-                params.push('{hash:1}');
+                tmp.push({hash:1});
             }        
             if(!page) {
                 xcom_err_msg(fn,'param-err');
@@ -510,10 +510,13 @@ function xcom_params() {
        }
        return params[i] = opts;
     }     
-     
+    var tmpar = new Array(); 
     var page = document.getElementById('xcom_pageid').value;
-    var opstatus = xcom_check_opts(params[i],page,optstring,params);
-	
+    var opstatus = xcom_check_opts(params[i],page,optstring,tmpar);
+	if(tmpar.length > 0) {
+        opts = new Array();
+        opts.push(tmpar[0]);
+    }
 	if(!opstatus) return false;
     if(page)  {       
        if(params[0] == 'dokuwiki.search') {  // add page to search query
