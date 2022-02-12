@@ -506,7 +506,7 @@ function xcom_params() {
             return false; 
         }               
        else {
-           alert(optstring);
+          // alert(optstring);
        }
        return params[i] = opts;
     }     
