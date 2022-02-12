@@ -70,13 +70,6 @@ function xmlrpc() {
        var options =  xcom_params(); 
  
        var func = options[0]; 
-       var arobj = Array();       
-       if(typeof arobj.includes === "function"){
-           if(!xcom_query_types.includes(func)) {
-                xcom_err_msg('nofunc');
-           return;
-       }    
-        }  
        xcom_query_status(options);       
            
        var other=false;
@@ -354,7 +347,7 @@ function xcom_srch_opts() {  // for search function
   return result;
 }
 function xcom_check_opts(fn,page,opts, params) { 
-      page = page.trim();
+    page = page.trim();
     var regex;
     var skip_opts_cnt = false;
     switch(fn) {
@@ -507,8 +500,14 @@ function xcom_params() {
         }
      else 
      {
-        if(!opts) return false;       
-       
+        var regex = RegExp('(wiki|plugin|dokuwiki|xcom)\.');              
+        if(!optstring.match(regex)) {
+            xcom_err_msg('nofunc');
+            return false; 
+        }               
+       else {
+           alert(optstring);
+       }
        return params[i] = opts;
     }     
      
