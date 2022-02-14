@@ -72,3 +72,4 @@ $lang['js']['date_err'] = 'Date format error. Use yyyy-mm-dd';
 $lang['js']['param-err'] = 'requires both a namespace and either a depth or hash entry';
 $lang['js']['srch_string'] = 'Required search string missing';
 $lang['js']['nofunc'] = 'No Query selected';
+$lang['js']['nonamespace'] = 'requires a namespace id';

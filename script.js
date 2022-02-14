@@ -421,7 +421,11 @@ function xcom_check_opts(fn,page,opts, tmp) {
             if(regex_m.test(opts) || regex_s.test(opts)) break;
             alert("needs sum or minor edit statement");
             return false;
-                  
+         case 'plugin.xcom.listNamespaces':
+            if(!page) { 
+                xcom_err_msg(fn,'nonamespace');           
+                return false;
+            }
             break;                  
 /*     
 
