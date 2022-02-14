@@ -1,5 +1,4 @@
 <?php
-namespace dokuwiki\Remote\IXR;
 define('DOKU_INC', realpath(dirname(__FILE__)) . '/../../../../');
 require_once(DOKU_INC.'inc/init.php');
 session_write_close();
@@ -114,9 +113,16 @@ else {
 
 function xcom_connect($url,$user,$pwd, $debug=false) {
     $url = rtrim($url,'/') . '/lib/exe/xmlrpc.php';
-    $client = new Client($url);
-    $http = $client->getHttpClient();
-    $http ->debug = $debug; // enable for debugging
+
+    if(class_exists('IXR_Client')) {
+        $client = new IXR_Client($url); 
+        $client->debug = $debug;
+    }
+    else {
+        $client = new dokuwiki\Remote\IXR\Client($url);    
+        $http = $client->getHttpClient();
+        $http ->debug = $debug; // enable for debugging     
+    }
     $client->query('dokuwiki.login',$user,$pwd);
     $ok = $client->getResponse();
     if($ok) return $client;
