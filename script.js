@@ -427,12 +427,27 @@ function xcom_check_opts(fn,page,opts, tmp) {
                 return false;
             }
         case 'plugin.xcom.pageVersions':   //(string) [[doku>:pagename]] , (int) offset
+            if(!page) { 
+                xcom_err_msg(fn,'nopage');           
+                return false;
+            }
             break;                  
         case 'wiki.getAttachments':   //(String) namespace, (array) options (#pattern#)
+            if(!page) { 
+                xcom_err_msg(fn,'nopage');           
+                return false;
+            }
+            if(!opts) { 
+                xcom_err_msg(fn,'noregex');           
+                return false;
+            }            
             break;
         case 'plugin.acl.addAcl':   //(String) scope, (String) user|@group 
+        xcom_err_msg(fn,'scope'); 
+        return false;
             break;
         case 'plugin.acl.delAcl':  //(String) scope, (String) user|@group, (int) permission 
+        return false;
             break;	
         default:
             break;	

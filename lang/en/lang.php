@@ -73,3 +73,5 @@ $lang['js']['param-err'] = 'requires both a namespace and either a depth or hash
 $lang['js']['srch_string'] = 'Required search string missing';
 $lang['js']['nofunc'] = 'No Query selected';
 $lang['js']['nonamespace'] = 'requires a namespace id';
+$lang['js']['nopage'] = 'requires a page id';
+$lang['js']['noregex'] = 'requires a (#regex#) to select attachments';
