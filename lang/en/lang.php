@@ -75,3 +75,7 @@ $lang['js']['nofunc'] = 'No Query selected';
 $lang['js']['nonamespace'] = 'requires a namespace id';
 $lang['js']['nopage'] = 'requires a page id';
 $lang['js']['noregex'] = 'requires a (#regex#) to select attachments';
+$lang['js']['scope'] = 'requires scope of acl permissions: page or namespace id';
+$lang['js']['permissions'] = 'requires user or @group name and permission level as integer';
+
+

@@ -118,7 +118,8 @@
 
 ^Name  |''plugin.acl.addAcl'' |
 ^Parameters  |(String) scope, (String) username, (int) permission|
-^Description|Add an ACL rule. Use ''@groupname'' instead of ''user'' to add an ACL rule for a group|
+^Description|Add an ACL rule. Use ''@groupname'' instead of ''user'' to add an ACL rule for a group. Scope is entered in the ID field. The user and permissions are entered in the options field in this sequence:  user,permissions.|
+
 
 ==== plugin.acl.delAcl ====
 
@@ -143,7 +144,7 @@
 
 ^Name|''plugin.xcom.GetMetaData''   |
 ^Parameters|(String) namespace or page id|
-^Description|Returns either the metadata for a single page or the metadata for all the pages in a specified namespace and its subdirectories. When choosing a namespace, it must end with colon or a colon and asterisk, i.e.  '':*''. To start at the root directory, either a single colon or a colon followed by an asterisk.|
+^Description|Returns either the metadata for a single page or the metadata for all the pages in a specified namespace and its subdirectories. When choosing a namespace, it must end with a colon and asterisk, i.e. '':*''. To start at the root directory, either a single colon or a colon followed by an asterisk.|
 
 
 ==== Timestamp ====

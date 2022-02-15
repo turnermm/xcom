@@ -421,7 +421,7 @@ function xcom_check_opts(fn,page,opts, tmp) {
             if(regex_m.test(opts) || regex_s.test(opts)) break;
             alert("needs sum or minor edit statement");
             return false;
-         case 'plugin.xcom.listNamespaces':
+        case 'plugin.xcom.listNamespaces':
             if(!page) { 
                 xcom_err_msg(fn,'nonamespace');           
                 return false;
@@ -431,7 +431,7 @@ function xcom_check_opts(fn,page,opts, tmp) {
                 xcom_err_msg(fn,'nopage');           
                 return false;
             }
-            break;                  
+            break; 
         case 'wiki.getAttachments':   //(String) namespace, (array) options (#pattern#)
             if(!page) { 
                 xcom_err_msg(fn,'nopage');           
@@ -443,8 +443,15 @@ function xcom_check_opts(fn,page,opts, tmp) {
             }            
             break;
         case 'plugin.acl.addAcl':   //(String) scope, (String) user|@group 
-        xcom_err_msg(fn,'scope'); 
-        return false;
+            if(!page || !opts) {
+                if(!page) {
+                    xcom_err_msg(fn,'scope'); 
+                }
+                if(!opts) {
+                    xcom_err_msg(fn,'permissions'); 
+                }
+                return false;
+            }
             break;
         case 'plugin.acl.delAcl':  //(String) scope, (String) user|@group, (int) permission 
         return false;
