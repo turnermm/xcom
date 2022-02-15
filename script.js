@@ -426,21 +426,16 @@ function xcom_check_opts(fn,page,opts, tmp) {
                 xcom_err_msg(fn,'nonamespace');           
                 return false;
             }
+        case 'plugin.xcom.pageVersions':   //(string) [[doku>:pagename]] , (int) offset
             break;                  
-/*     
-
-        case 'plugin.xcom.pageVersions': (string) [[doku>:pagename]] , (int) offset
+        case 'wiki.getAttachments':   //(String) namespace, (array) options (#pattern#)
             break;
-        case 'wiki.getAttachments': (String) namespace, (array) options (#pattern#)
+        case 'plugin.acl.addAcl':   //(String) scope, (String) user|@group 
             break;
-        case 'plugin.acl.addAcl': (String) scope, (String) user|@group 
+        case 'plugin.acl.delAcl':  //(String) scope, (String) user|@group, (int) permission 
             break;	
-        case 'plugin.acl.delAcl':String) scope, (String) user|@group, (int) permission 
-            break;	
-        case 'plugin.xcom.listNamespaces':(String) namespace id, (Array) (id1;id2. . .)
-            break;	*/
         default:
-          		
+            break;	
     }
     return true;
 }
@@ -721,7 +716,8 @@ JSON.stringify = JSON.stringify || function (obj) {
 };
 
 
-jQuery( document ).ready(function() {     
+//jQuery( document ).ready(function() {     
+jQuery (function() { 
        /* drop-down function menu with tool tips */
 	   /* xcom_query_types is array of xmlrpc functions below */ 
        var sel = document.getElementById('xcom_sel');   
