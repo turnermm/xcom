@@ -36,6 +36,7 @@ class admin_plugin_xcom extends DokuWiki_Admin_Plugin {
      * output appropriate html
      */
     function html() {
+      global $ID;
    /** 
             info panels
    */
